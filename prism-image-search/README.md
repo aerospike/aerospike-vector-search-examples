@@ -39,7 +39,7 @@ To run using docker compose:
         - `proximus-meta` - for Proximus metadata like index definitions
         - `test` - for image records and Proximus index
 - [Proximus](https://github.com/citrusleaf/proximus/) - configured to talk to
-  the Aerospike cluster and running
+  the Aerospike cluster and running.
 - Python v3.10+
 
 ### How to index images
