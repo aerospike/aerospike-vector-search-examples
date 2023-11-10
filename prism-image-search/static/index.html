@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="https://aerospike.com/favicon.ico"
+          type="image/x-icon"/>
+    <link rel="icon" href="https://aerospike.com/favicon.ico"
+          type="image/x-icon"/>
+    <!-- Bootstrap core CSS -->
+    <link href="https://getbootstrap.com/docs/5.0/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+
+    <!-- VueJS -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
+    <script src="https://unpkg.com/vue-router@2.0.0"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <!-- Styles -->
+    <link href="/css/main.css" rel="stylesheet"/>
+    <title>Proximus Image search Demo</title>
+</head>
+
+<body>
+<div class="wrapper">
+    <div id="app" class="container" style="padding-top: 2em;">
+        <div>
+            <Navigation/>
+        </div>
+        <div class="text-center">
+            <router-view/>
+        </div>
+    </div>
+    <footer class="text-center"
+            style="
+          background-color: rgb(236, 236, 236);
+          position: fixed;
+          width: 100%;
+          font-size: 80%;
+          margin-top: 5em;
+          padding-top: 5px;
+          padding-bottom: 5px;
+          bottom: 0;
+        "
+    >
+        <div class="container">
+            <i>© Aerospike, Inc. 2023.</i>
+        </div>
+    </footer>
+</div>
+
+<script src="/components/navigation.vue.js"></script>
+<script src="/components/home.vue.js"></script>
+<script src="/components/search.vue.js"></script>
+<script src="/components/stats.vue.js"></script>
+
+<script>
+    Vue.component("Navigation", Navigation);
+    Vue.component("Home", Home);
+    Vue.component("Search", Search);
+    Vue.component("Stats", Stats);
+
+
+    const routes = [
+        {
+            path: "/",
+            component: Home,
+        },
+        {
+            path: "/search",
+            component: Search,
+        },
+        {
+            path: "/stats",
+            component: Stats,
+        }
+    ];
+
+    const router = new VueRouter({
+        routes: routes,
+        mode: "history",
+        base: "/",
+    });
+
+    var app = new Vue({
+        el: "#app",
+        router: router,
+        data: {
+            currentRoute: window.location.pathname,
+            apiurls: {
+                imageSearch: "./rest/v1/search",
+            },
+            errors: []
+        },
+        methods: {}
+    });
+</script>
+</body>
+</html>

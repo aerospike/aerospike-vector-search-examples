@@ -1,0 +1,1 @@
+name = "aerospike_vector"
