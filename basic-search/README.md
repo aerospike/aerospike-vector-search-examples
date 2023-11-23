@@ -23,5 +23,5 @@ python3 -m pip install -r requirements.txt
 ## Run the search demo
 
 ```shell
-
+python3 search.py
 ```
