@@ -55,23 +55,23 @@ already indexed.
 We must set up a Python environment with the dependencies to build and run the
 application
 
-#### Install dependencies
+#### Setup pip 
+Setup pip to use Aerospike PyPI repository following instructions [here](https://github.com/citrusleaf/aerospike-proximus-client-python/tree/main#using-the-client-from-your-application-using-pip).
+
+#### Setup Python Virtual Environment
 
 ```shell
 # Virtual environment to isolate dependencies.
-cd <proximus-repo>/client-python/examples/prism-image-search
 # Use your Operating system specific installation method
 sudo apt-get install python3-venv
 python3 -m venv .venv
 source .venv/bin/activate
+```
 
-# Install Proximus python client
-cd ../../
-python3 setup.py develop
+#### Install dependencies
 
-# Install remaining dependencies
-cd examples/prism-image-search
-pip install -r requirements.txt
+```shell
+python3 -m pip install -r requirements.txt
 ```
 
 #### Configuration

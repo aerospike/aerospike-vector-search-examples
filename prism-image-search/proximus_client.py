@@ -14,6 +14,3 @@ proximus_admin_client = vectordb_admin.VectorDbAdminClient(
                    Config.PROXIMUS_PORT,
                    Config.PROXIMUS_VERIFY_TLS),
     Config.PROXIMUS_ADVERTISED_LISTENER)
-
-proximus_client.connect()
-proximus_admin_client.connect()
