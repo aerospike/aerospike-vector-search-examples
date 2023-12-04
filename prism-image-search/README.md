@@ -19,16 +19,18 @@ The easiest way to get the demo app up and running is by using docker compose.
 
 To run using docker compose:
 
-1. Build the prism image and spin up the environment
-    ```
+1. Setup pip to use Aerospike PyPI repository following instructions [here](https://github.com/citrusleaf/aerospike-proximus-client-python/tree/main#using-the-client-from-your-application-using-pip).
+2. Build the prism image and spin up the environment
+    ```shell
+    sudo apt-get install python3-venv
+    python3 -m venv .venv
+    source .venv/bin/activate
     docker build -t prism . -f Dockerfile-prism
     docker compose up
     ```
-
-2. Add the images you would like indexed to static/images/data as described in
+3. Add the images you would like indexed to static/images/data as described in
    [How to index Images](#how-to-index-images).
-
-3. Navigate to http://127.0.0.1:8080
+4. Navigate to http://127.0.0.1:8080
 
 ## Running the demo app manually
 
@@ -55,23 +57,23 @@ already indexed.
 We must set up a Python environment with the dependencies to build and run the
 application
 
-#### Install dependencies
+#### Setup pip
+Setup pip to use Aerospike PyPI repository following instructions [here](https://github.com/citrusleaf/aerospike-proximus-client-python/tree/main#using-the-client-from-your-application-using-pip).
+
+#### Setup Python Virtual Environment
 
 ```shell
 # Virtual environment to isolate dependencies.
-cd <proximus-repo>/client-python/examples/prism-image-search
 # Use your Operating system specific installation method
 sudo apt-get install python3-venv
 python3 -m venv .venv
 source .venv/bin/activate
+```
 
-# Install Proximus python client
-cd ../../
-python3 setup.py develop
+#### Install dependencies
 
-# Install remaining dependencies
-cd examples/prism-image-search
-pip install -r requirements.txt
+```shell
+python3 -m pip install -r requirements.txt
 ```
 
 #### Configuration

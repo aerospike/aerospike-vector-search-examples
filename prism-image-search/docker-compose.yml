@@ -40,7 +40,7 @@ services:
   #   volumes:
   #     - grafana-storage:/var/lib/grafana
   proximus:
-    image: aerospike/aerospike-proximus-private:0.1.0-SNAPSHOT
+    image: aerospike/aerospike-proximus:0.2.0
     networks:
       - proximus-demo
     volumes:

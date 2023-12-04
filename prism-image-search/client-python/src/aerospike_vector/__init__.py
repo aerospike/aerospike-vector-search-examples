@@ -1,1 +1,0 @@
-name = "aerospike_vector"

@@ -1,7 +1,6 @@
 import glob
 import os
 import threading
-import warnings
 from multiprocessing import get_context
 from threading import Thread
 import logging
@@ -94,13 +93,13 @@ def index_image(filename):
     logger.debug(f"Opening file {filename}")
     image = Image.open(filename)
     doc['image_name'] = os.path.basename(filename)
-    logger.debug(f"Creating image vector imbedding {filename}")
+    logger.debug(f"Creating image vector embedding {filename}")
     embedding = encoder(image)
     doc['image_embedding'] = embedding.tolist()
     doc['relative_path'] = relative_path(filename)
     # Insert record
     try:
-        logger.info(f"Inserting vector imbedding into proximus {filename}")
+        logger.info(f"Inserting vector embedding into proximus {filename}")
         proximus_client.put(Config.PROXIMUS_NAMESPACE, "",
                             doc['image_id'], doc)
     except:
