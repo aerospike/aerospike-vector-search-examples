@@ -19,12 +19,11 @@ The easiest way to get the demo app up and running is by using docker compose.
 
 To run using docker compose:
 
-1. Setup pip to use Aerospike PyPI repository following instructions [here](https://github.com/citrusleaf/aerospike-proximus-client-python/tree/main#using-the-client-from-your-application-using-pip).
+1. Setup pip to use Aerospike PyPI repository by creating a pip.conf in your
+   working directory and following instructions
+   [here](https://github.com/citrusleaf/aerospike-proximus-client-python/tree/main#using-the-client-from-your-application-using-pip).
 2. Build the prism image and spin up the environment
     ```shell
-    sudo apt-get install python3-venv
-    python3 -m venv .venv
-    source .venv/bin/activate
     docker build -t prism . -f Dockerfile-prism
     docker compose up
     ```
