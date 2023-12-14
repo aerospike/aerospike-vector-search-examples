@@ -1,6 +1,6 @@
 services:
   aerospike:
-    image: aerospike/aerospike-server-enterprise:latest
+    image: aerospike/aerospike-server-enterprise:7.0.0.2
     # ports:
       # - "3000:3000"
     networks:
