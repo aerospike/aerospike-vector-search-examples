@@ -22,19 +22,19 @@ To run using docker compose:
 1. Setup pip to use Aerospike PyPI repository by creating a pip.conf in your
    working directory and following instructions
    [here](https://github.com/citrusleaf/aerospike-proximus-client-python/tree/main#using-the-client-from-your-application-using-pip).
-3. Login to Aerospike's jfrog artifactory
-  Your username is your email and your password is your generate jfrog identity token.
-  ```shell
-  docker login aerospike.jfrog.io 
-  ```
-2. Build the prism image and spin up the environment
+2. Login to Aerospike's jfrog artifactory
+   Your username is your email and your password is your generate jfrog identity token.
+    ```shell
+    docker login aerospike.jfrog.io 
+    ```
+3. Build the prism image and spin up the environment
     ```shell
     docker build -t prism . -f Dockerfile-prism
     docker compose up
     ```
-3. Add the images you would like indexed to static/images/data as described in
+4. Add the images you would like indexed to static/images/data as described in
    [How to index Images](#how-to-index-images).
-4. Navigate to http://127.0.0.1:8080
+5. Navigate to http://127.0.0.1:8080
 
 ## Running the demo app manually
 
