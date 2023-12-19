@@ -56,7 +56,7 @@ services:
       - PROXIMUS_PORT=5000
       - GRPC_DNS_RESOLVER=native
     volumes:
-      - ./static/images/data:/client-python/examples/prism-image-search/static/images/data
+      - ./static/images/data:/prism-image-search/static/images/data
 
   
 networks:
