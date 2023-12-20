@@ -32,8 +32,7 @@ To run using docker compose:
     docker build -t prism . -f Dockerfile-prism
     docker compose up
     ```
-4. Add the images you would like indexed to static/images/data as described in
-   [How to index Images](#how-to-index-images).
+4. Add the images you would like indexed to container-volumes/prism/images.
 5. Navigate to http://127.0.0.1:8080
 
 ## Running the demo app manually
