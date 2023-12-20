@@ -1,26 +1,15 @@
 # Prism Dockfile
-FROM ubuntu:latest
+FROM ubuntu:22.04
 
 RUN apt-get update \
-    && apt-get install -y python3 python3-pip python3-venv \
+    && apt-get install -y python3 python3-pip \
     && pip3 install setuptools sql
 
-RUN mkdir /prism-image-search
-COPY . /prism-image-search
+RUN mkdir /prism
+COPY ./prism /prism
+COPY ./pip.conf /prism/pip.conf
+WORKDIR /prism
+ENV PIP_CONFIG_FILE=/prism/pip.conf
+RUN python3 -m pip install -r requirements.txt && rm pip.conf
 
-# Since the proximus client depedency is in a private repository,
-# use the depdencies resolved in .venv folder
-WORKDIR /prism-image-search
-ENV PATH="$PWD/.venv/bin:$PATH"
-
-# Use the container's python3 installation
-RUN rm .venv/bin/python3 \
-    && ln -s /usr/bin/python3 .venv/bin/python3
-
-# Ensure all dependecies are installed
-RUN .venv/bin/python3 -m pip install -r requirements.txt
-
-# Relocate the virtual environment path from host to container
-RUN sed -i -e 's@^#!.*@#!/prism-image-search/.venv/bin/python3@g' .venv/bin/waitress-serve
-
-CMD /prism-image-search/.venv/bin/waitress-serve --host 0.0.0.0 --port 8080 --threads 32 prism:app
+CMD waitress-serve --host 0.0.0.0 --port 8080 --threads 32 prism:app

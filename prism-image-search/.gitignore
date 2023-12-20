@@ -1,2 +1,4 @@
 venv/
 .venv/
+pip.conf
+container-volumes/prism/images/*
