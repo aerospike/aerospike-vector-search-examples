@@ -5,10 +5,11 @@ RUN apt-get update \
     && apt-get install -y python3 python3-pip \
     && pip3 install setuptools sql
 
-RUN mkdir /prism-image-search
-COPY . /prism-image-search
-WORKDIR /prism-image-search
-ENV PIP_CONFIG_FILE=/prism-image-search/pip.conf
+RUN mkdir /prism
+COPY ./prism /prism
+COPY ./pip.conf /prism/pip.conf
+WORKDIR /prism
+ENV PIP_CONFIG_FILE=/prism/pip.conf
 RUN python3 -m pip install -r requirements.txt && rm pip.conf
 
 CMD waitress-serve --host 0.0.0.0 --port 8080 --threads 32 prism:app
