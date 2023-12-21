@@ -29,7 +29,6 @@ def create_index():
             return
     proximus_admin_client.indexCreate(Config.PROXIMUS_NAMESPACE,
                                       Config.PROXIMUS_INDEX_NAME,
-                                      "",
                                       "image_embedding", 512)
 
 
