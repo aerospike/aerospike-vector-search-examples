@@ -12,7 +12,8 @@ with vectordb_admin.VectorDbAdminClient(
         types.HostPort(host, port), listener_name=listener_name) as adminClient:
     try:
         print("creating index")
-        adminClient.indexCreate("test", indexName, setName, "vector", 2)
+        adminClient.indexCreate("test", indexName, "vector", 2,
+                                setFilter=setName)
     except Exception as e:
         print("failed creating index " + str(e))
         pass
