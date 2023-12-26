@@ -19,26 +19,18 @@ The easiest way to get the demo app up and running is by using docker compose.
 
 To run using docker compose:
 
-1. Navigate to [aerospike.jfrog.io](https://aerospike.jfrog.io) and click on edit profile, then "Generate Identity
-   Token".
-2. Add your token to pip.conf file locally in this folder using the example below. Your jfrog username will be your full
-   email.
-   ```
-   [global]
-   extra-index-url = https://aerospike.jfrog.io/artifactory/api/pypi/aerospike-pypi-dev/simple 
-   ```
-3. Docker login to Aerospike's jfrog artifactory
+1. Docker login to Aerospike's jfrog artifactory
    Your username is your email and your password is your generate jfrog identity token.
     ```shell
     docker login aerospike.jfrog.io 
     ```
-4. Build the prism image and spin up the environment
+2. Build the prism image and spin up the environment
     ```shell
     docker build -t prism . -f Dockerfile-prism
     docker compose up
     ```
-5. Add the images you would like indexed to `container-volumes/prism/images`.
-6. Navigate to http://127.0.0.1:8080
+3. Add the images you would like indexed to `container-volumes/prism/images`.
+4. Navigate to http://127.0.0.1:8080
 
 ## Running the demo app manually
 
