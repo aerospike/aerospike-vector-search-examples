@@ -19,11 +19,13 @@ The easiest way to get the demo app up and running is by using docker compose.
 
 To run using docker compose:
 
-1. Navigate to [aerospike.jfrog.io](https://aerospike.jfrog.io) and click on edit profile, then "Generate Identity Token".
-2. Add your token to pip.conf file locally in this folder using the example below. Your jfrog username will be your full email. 
+1. Navigate to [aerospike.jfrog.io](https://aerospike.jfrog.io) and click on edit profile, then "Generate Identity
+   Token".
+2. Add your token to pip.conf file locally in this folder using the example below. Your jfrog username will be your full
+   email.
    ```
    [global]
-   extra-index-url=https://<jfrog-username>:<jfrog-access-token>@aerospike.jfrog.io/artifactory/api/pypi/ecosystem-python-dev-local/simple 
+   extra-index-url = https://aerospike.jfrog.io/artifactory/api/pypi/aerospike-pypi-dev/simple 
    ```
 3. Docker login to Aerospike's jfrog artifactory
    Your username is your email and your password is your generate jfrog identity token.
@@ -64,7 +66,9 @@ We must set up a Python environment with the dependencies to build and run the
 application
 
 #### Setup pip
-Setup pip to use Aerospike PyPI repository following instructions [here](https://github.com/citrusleaf/aerospike-proximus-client-python/tree/main#using-the-client-from-your-application-using-pip).
+
+Setup pip to use Aerospike PyPI repository following
+instructions [here](https://github.com/citrusleaf/aerospike-proximus-client-python/tree/main#using-the-client-from-your-application-using-pip).
 
 #### Setup Python Virtual Environment
 
@@ -87,16 +91,16 @@ python3 -m pip install -r requirements.txt
 The application can be configured by setting the following environment variable.
 If not set defaults are used.
 
-| Environment Variable        | Default            | Description                                                     |
-|-----------------------------|--------------------|-----------------------------------------------------------------|
-| PRISM_APP_USERNAME          |                    | If set, the username for basic authentication                   |
-| PRISM_APP_USERNAME          |                    | If set, the password for basic authentication                   |
-| PROXIMUS_HOST               | localhost          | Proximus server seed host                                       |
-| PROXIMUS_PORT               | 5000               | Proximus server seed host port                                  |
-| PROXIMUS_ADVERTISED_LISTENER|                    | An optional advertised listener to use if configured on the proximus server                              |
-| PROXIMUS_NAMESPACE          | test               | The aerospike namespace for storing the image records and index |
-| PROXIMUS_INDEX_NAME         | prism-image-search | The name of the  index                                          |
-| PROXIMUS_MAX_RESULTS        | 20                 | Maximum number of vector search results to return               |
+| Environment Variable         | Default            | Description                                                                 |
+|------------------------------|--------------------|-----------------------------------------------------------------------------|
+| PRISM_APP_USERNAME           |                    | If set, the username for basic authentication                               |
+| PRISM_APP_USERNAME           |                    | If set, the password for basic authentication                               |
+| PROXIMUS_HOST                | localhost          | Proximus server seed host                                                   |
+| PROXIMUS_PORT                | 5000               | Proximus server seed host port                                              |
+| PROXIMUS_ADVERTISED_LISTENER |                    | An optional advertised listener to use if configured on the proximus server |
+| PROXIMUS_NAMESPACE           | test               | The aerospike namespace for storing the image records and index             |
+| PROXIMUS_INDEX_NAME          | prism-image-search | The name of the  index                                                      |
+| PROXIMUS_MAX_RESULTS         | 20                 | Maximum number of vector search results to return                           |
 
 #### Run for demo
 
