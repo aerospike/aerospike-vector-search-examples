@@ -1,6 +1,6 @@
 services:
   aerospike:
-    image: aerospike/aerospike-server-enterprise:latest
+    image: aerospike/aerospike-server-enterprise:7.0.0.2
     # ports:
       # - "3000:3000"
     networks:
@@ -40,7 +40,7 @@ services:
   #   volumes:
   #     - grafana-storage:/var/lib/grafana
   proximus:
-    image: aerospike/aerospike-proximus:0.2.0
+    image: aerospike.jfrog.io/docker/aerospike/aerospike-proximus-private:0.2.0
     networks:
       - proximus-demo
     volumes:
@@ -56,7 +56,7 @@ services:
       - PROXIMUS_PORT=5000
       - GRPC_DNS_RESOLVER=native
     volumes:
-      - ./static/images/data:/client-python/examples/prism-image-search/static/images/data
+      - ./container-volumes/prism/images:/prism/static/images/data
 
   
 networks:
