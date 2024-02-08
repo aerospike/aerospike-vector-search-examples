@@ -44,7 +44,7 @@ To make the experience personal, you can use your own photos on your computer, o
 a larger dataset you can browse image datasets on [Kaggle](https://www.kaggle.com/datasets).  
 
 [This subset](https://www.kaggle.com/datasets/ifigotin/imagenetmini-1000) of the Imagenet
-dataset is a good reasonable sized one. 
+dataset is a good reasonable sized one (~4000 images) if you remove the `train` folder. 
 
 > [!NOTE]
 > The images from your dataset do not leave your local environment, but the vector embeddings
