@@ -1,31 +1,22 @@
 > [!NOTE]
-> Aerospike Vector Search (Proximus) is currently in Alpha and avalable by invitation only. If you want to try out Proximus, please fill in and submit [this form](https://aerospike.com/lp/aerospike-vector-developer-program-sign-up/).
+> Aerospike Vector Search (Proximus) is currently in Alpha and avalable by invitation only. If you want to try out Proximus, please fill out [this form](https://aerospike.com/lp/aerospike-vector-developer-program-sign-up/).
 
 # About Proximus
 Proximus delivers an Approximate Nearest Neighbor (ANN) search using the Hierarchal Navigable Small World (HNSW) algorithm. Proximus provides a new set of capabilities and APIs for performing vector operations. This repository contains example apps for using Proximus to showcase these APIs, as well as the Python client.
 
-Vectors allow you to combine machine learning models, like ChatGPT, CLIP, Llama, etc.
-to build applications that leverage the capabilities of these models. Vector Embeddings
-encode meaning from text, images, video, etc and search across a large dataset.
-This can be used for a variety of applications such as semantic search, recommendation systems,
-retrieval augmented generation (RAG) apps and more. For more about leveraging Vector Embeddings
-see the [OpenAI Docs about vector embedding use cases](https://platform.openai.com/docs/guides/embeddings/use-cases). 
+Vectors allow you to combine machine learning models (e.g., ChatGPT, CLIP, Llama) to build applications that leverage the capabilities of these models. Vector embeddings encode meaning from text, images, video, etc., and enable search across a large dataset. You can use vector embeddings for a variety of applications such as semantic search, recommendation systems, or retrieval augmented generation (RAG) apps. To learn more about leveraging vector embeddings, see the OpenAI docs about [vector embedding use cases](https://platform.openai.com/docs/guides/embeddings/use-cases).
 
 # Getting Started
-This repo provides details on how to get started using our developer sandbox
-environment. To request a developer sandbox fill out the following [form](https://aerospike.com/lp/aerospike-vector-developer-program-sign-up/). These instructions go through setting up a
-demo application that performs semantic search across an image data set using the [CLIP](https://arxiv.org/abs/2103.00020) model. 
+This section describes how to get started using our developer sandbox environment. To request access to a developer sandbox, fill out [this form](https://aerospike.com/lp/aerospike-vector-developer-program-sign-up/). The following instructions help you set up up a demo application that performs semantic search across an image dataset using the [CLIP](https://arxiv.org/abs/2103.00020) model.
 
-## Pre-requisites
-To get started you do not need any knowledge of Aerospike, but you do need the following.
+## Prerequisites
+You don't have to know Aerospike to get started, but you do need the following:
 
-1. Python 3.8+ environment and familiarity with the python programming language. See [python environment details](./prism-image-search/README.md#setup-python-virtual-environment)
-1. A URL to your private sandbox environment (this will be provided) **or**
-1. Access to [aerospike.jfrog.io](https://aerospike.jfrog.io/ui/login/). If you do have access
-to Aerospike jfrog follow the [docker-compose](./prism-image-search/README.md#install-using-docker-compose) instructions.
+1. A Python 3.8+ environment and familiarity with the Python programming language (see [python environment details](./prism-image-search/README.md#setup-python-virtual-environment)).
+1. The URL to your private sandbox environment (this will be provided) **or** access to [aerospike.jfrog.io](https://aerospike.jfrog.io/ui/login/). If you have access to Aerospike jfrog, follow the [docker-compose](./prism-image-search/README.md#install-using-docker-compose) instructions.
 
 
-## 1. Clone Repo and setup dependencies
+## 1. Clone the Repository and Install Dependencies
 
 ```
 git clone https://github.com/aerospike/proximus-examples.git && \\
