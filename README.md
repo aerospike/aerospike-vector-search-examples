@@ -21,7 +21,7 @@ demo application that performs semantic search across an image data set using th
 ## Pre-requisites
 To get started you do not need any knowledge of Aerospike, but you do need the following.
 
-1. Python 3.8+ and familiarity with the python programming language.
+1. Python 3.8+ environment and familiarity with the python programming language. See [python environment details](./prism-image-search/README.md#setup-python-virtual-environment)
 1. A URL to your private sandbox environment (this will be provided) **or**
 1. Access to [aerospike.jfrog.io](https://aerospike.jfrog.io/ui/login/)
 
@@ -72,10 +72,18 @@ cd prism && \
 waitress-serve --host 127.0.0.1 --port 8080 --threads 32 prism:ap
 ```
 You will see a progress bar as new images are read and indexed using the clip model.
+Depending on the size of your dataset, it will take anywhere from a few minutes, to
+a few hours to index your images. 
 
 ## 5. Perform an image search
-Depending on the size of your dataset, it will take anywhere from a few minutes, to
-a few hours to index your images. Once it started open up 
+The demo application provides semantic search for a set of images
+by indexing them using the [CLIP](https://huggingface.co/sentence-transformers/clip-ViT-B-32-multilingual-v1)
+model created by OpenAI. This model generates vectors with semantic meaning 
+from each image and stores it as a vector embedding in Aerospike. When a user
+performs a query a vector embedding for the provided text is generated and
+Proximus performs Approximate Nearest Neighbor(ANN) search to find relevant results.
+
+Navigate to http://localhost:8080/search to perform a search. 
 
 # Limitations
 The sandbox environment is limited to a single index. If you need to create a different
