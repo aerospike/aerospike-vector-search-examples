@@ -33,7 +33,7 @@ to Aerospike jfrog follow the [docker-compose](./prism-image-search/README.md#in
 
 ```
 git clone https://github.com/aerospike/proximus-examples.git && \\
-cd proximus-examples/prism-image-search/ && \\
+cd proximus-examples/prism-image-search/prism && \\
 python3 -m pip install -r requirements.txt
 ```
 
