@@ -3,18 +3,20 @@
 > fill out the following [form](https://aerospike.com/lp/aerospike-vector-developer-program-sign-up/) if you are interested to try it out. 
 
 # About Proximus
-Proximus is Aerospike's vector search solution. 
+Proximus is Aerospike's vector search solution. It provides an Approximate Nearest Neighbor (ANN)
+search, using the Hierarchal Navigable Small World (HNSW) algorithm. Proximus provides a new
+set of capabilities and APIs for performing vector operations. This repo provides example apps for 
+using Proximus to showcase these APIs, and the Python Client.
 
-This repo provides example apps for building apps using Proximus to perform vector
-search. Vectors allows you to combine machine learning models, like ChatGPT, CLIP,
-Llama, etc. to build applications that leverage these models AI capabilities. This means
-you can encode meaning from text, images, video, etc and search across a large dataset.
+Vectors allow you to combine machine learning models, like ChatGPT, CLIP, Llama, etc.
+to build applications that leverage the capabilities of these models. Vector Embeddings
+encode meaning from text, images, video, etc and search across a large dataset.
 This can be used for a variety of applications such as semantic search, recommendation systems,
 retrieval augmented generation (RAG) apps and more. For more about leveraging Vector Embeddings
 see the [OpenAI Docs about vector embedding use cases](https://platform.openai.com/docs/guides/embeddings/use-cases). 
 
 # Getting Started
-This repo provides details on how to get started using our Developer Sandbox
+This repo provides details on how to get started using our developer sandbox
 environment. To request a developer sandbox fill out the following [form](https://aerospike.com/lp/aerospike-vector-developer-program-sign-up/). These instructions go through setting up a
 demo application that performs semantic search across an image data set using the [CLIP](https://arxiv.org/abs/2103.00020) model. 
 
@@ -23,7 +25,9 @@ To get started you do not need any knowledge of Aerospike, but you do need the f
 
 1. Python 3.8+ environment and familiarity with the python programming language. See [python environment details](./prism-image-search/README.md#setup-python-virtual-environment)
 1. A URL to your private sandbox environment (this will be provided) **or**
-1. Access to [aerospike.jfrog.io](https://aerospike.jfrog.io/ui/login/)
+1. Access to [aerospike.jfrog.io](https://aerospike.jfrog.io/ui/login/). If you do have access
+to Aerospike jfrog follow the [docker-compose](./prism-image-search/README.md#install-using-docker-compose) instructions.
+
 
 ## 1. Clone Repo and setup dependencies
 
@@ -32,9 +36,6 @@ git clone https://github.com/aerospike/proximus-examples.git && \\
 cd proximus-examples/prism-image-search/ && \\
 python3 -m pip install -r requirements.txt
 ```
-
-If you have access to [aerospike.jfrog.io](https://aerospike.jfrog.io/ui/login/) follow
-[these steps instead](./prism-image-search/README.md#docker-compose).
 
 ## 2. Find an image dataset to index
 
@@ -48,7 +49,7 @@ dataset is a good reasonable sized one (~4000 images) if you remove the `train` 
 
 > [!NOTE]
 > The images from your dataset do not leave your local environment, but the vector embeddings
-> are sent to our sandbox environment. All data is destroyed when your sandbox trial expires.
+> are sent to our sandbox environment. All data is destroyed after 3 days.
 
 Once you have a dataset of images (must be jpeg's), copy them to `prism/static/images/data`
 
@@ -87,7 +88,8 @@ Navigate to http://localhost:8080/search to perform a search.
 
 # Limitations
 The sandbox environment is limited to a single index. If you need to create a different
-index please get in touch about getting a new sandbox environment. 
+index please get in touch about getting a new sandbox environment. Sandbox environments
+expire after 3 days by default.
 
 # Contributing
 If you have an idea for a sample app please open a PR and we'll review. We're excited to provide more examples
