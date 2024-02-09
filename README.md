@@ -69,8 +69,7 @@ export INDEXER_PARALLELISM=4
 ## 4. Start the application locally.
 To start the application run.
 ```
-cd prism && \
-waitress-serve --host 127.0.0.1 --port 8080 --threads 32 prism:ap
+waitress-serve --host 127.0.0.1 --port 8080 --threads 32 prism:app
 ```
 You will see a progress bar as new images are read and indexed using the clip model.
 Depending on the size of your dataset, it will take anywhere from a few minutes, to
