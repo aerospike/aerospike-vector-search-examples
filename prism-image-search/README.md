@@ -15,19 +15,19 @@ To run using docker compose:
 ### 1 Docker login to Aerospike's jfrog artifactory
    Your username is your email and your password is your generate jfrog identity token.
 
-    ```
-    docker login aerospike.jfrog.io 
-    ```
+```
+docker login aerospike.jfrog.io 
+```
 
 ### 2. Build the prism image 
-    ```
-    cd prism-image-search && \\
-    docker build -t prism . -f Dockerfile-prism
-    ```
+```
+cd prism-image-search && \\
+docker build -t prism . -f Dockerfile-prism
+```
 ### 3. Start the environment
-    ```
-    docker compose up
-    ```
+```
+docker compose up
+```
 ### 3. Add an image dataset
 To make the experience personal, you can use your own photos on your computer, or to index
 a larger dataset you can browse image datasets on [Kaggle](https://www.kaggle.com/datasets).  
