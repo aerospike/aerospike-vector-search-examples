@@ -57,20 +57,14 @@ waitress-serve --host 127.0.0.1 --port 8080 --threads 32 prism:app
 Images are read and indexed using the CLIP model, indicated by a progress bar. Depending on the size of your dataset, it may take a few minutes to a few hours to index your images.
 
 ## 5. Perform an Image Search
-The demo application provides semantic search for a set of images
-by indexing them using the [CLIP](https://huggingface.co/sentence-transformers/clip-ViT-B-32-multilingual-v1)
-model created by OpenAI. This model generates vectors with semantic meaning 
-from each image and stores it as a vector embedding in Aerospike. When a user
-performs a query a vector embedding for the provided text is generated and
-Proximus performs Approximate Nearest Neighbor(ANN) search to find relevant results.
 
-Navigate to http://localhost:8080/search to perform a search. 
+After starting the application, go to http://localhost:8080/search to perform a search.
+
+The demo application enables semantic search for a set of images by indexing them using the [CLIP](https://huggingface.co/sentence-transformers/clip-ViT-B-32-multilingual-v1) model created by OpenAI. This model generates vectors with semantic meaning from each image and stores them as a vector embeddings in Aerospike. When a user submits a query, Proximus gnerates a vector embedding for the provided text and performs an Approximate Nearest Neighbor (ANN) search to find relevant results.
 
 # Limitations
-The sandbox environment is limited to a single index. If you need to create a different
-index please get in touch about getting a new sandbox environment. Sandbox environments
-expire after 3 days by default.
+The sandbox environment is limited to a single index. If you need to create a different index, contact us about getting a new sandbox environment. By default, each sandbox environment expires after three days.
 
 # Contributing
-If you have an idea for a sample app please open a PR and we'll review. We're excited to provide more examples
-of what Vector Search can do. 
+If you have an idea for a sample applications, open a PR and we will review it. We're excited to provide more examples
+of what Vector Search can do.
