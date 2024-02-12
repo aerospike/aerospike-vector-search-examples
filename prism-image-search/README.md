@@ -24,10 +24,7 @@ docker login aerospike.jfrog.io
 cd prism-image-search && \\
 docker build -t prism . -f Dockerfile-prism
 ```
-### 3. Start the environment
-```
-docker compose up
-```
+
 ### 3. Add an image dataset
 To make the experience personal, you can use your own photos on your computer, or to index
 a larger dataset you can browse image datasets on [Kaggle](https://www.kaggle.com/datasets).  
@@ -38,7 +35,12 @@ dataset is a good reasonable sized one (~4000 images) if you remove the `train` 
 Add the images you would like indexed to `container-volumes/prism/images` folder locally. 
 New images added to this folder are indexed periodically. 
 
-### 4. Perform an image search
+### 4. Start the environment
+```
+docker compose up
+```
+
+### 5. Perform an image search
 Navigate to http://127.0.0.1:8080 and perform a search for words to find similar
 images in your dataset. 
 
