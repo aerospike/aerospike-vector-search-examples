@@ -15,12 +15,12 @@ To run using docker compose:
 ### 1 Docker login to Aerospike's jfrog artifactory
    Your username is your email and your password is your generate jfrog identity token.
 
-    ```shell
+    ```
     docker login aerospike.jfrog.io 
     ```
 
 ### 2. Build the prism image and spin up the environment
-    ```shell
+    ```
     docker build -t prism . -f Dockerfile-prism
     docker compose up
     ```
