@@ -34,7 +34,7 @@ to Aerospike jfrog follow the [docker-compose](./prism-image-search/README.md#in
 ```
 git clone https://github.com/aerospike/proximus-examples.git && \\
 cd proximus-examples/prism-image-search/prism && \\
-python3 -m pip install -r requirements.txt
+python3 -m pip install -r requirements.txt --extra-index-url https://aerospike.jfrog.io/artifactory/api/pypi/aerospike-pypi-dev/simple 
 ```
 
 ## 2. Find an image dataset to index
