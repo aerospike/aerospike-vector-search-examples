@@ -12,8 +12,8 @@ This section describes how to get started using our developer sandbox environmen
 ## Prerequisites
 You don't have to know Aerospike to get started, but you do need the following:
 
-1. A Python 3.8+ environment and familiarity with the Python programming language (see [python environment details](./prism-image-search/README.md#setup-python-virtual-environment)).
-1. The URL to your private sandbox environment (this will be provided) **or** access to [aerospike.jfrog.io](https://aerospike.jfrog.io/ui/login/). If you have access to Aerospike jfrog, follow the [docker-compose](./prism-image-search/README.md#install-using-docker-compose) instructions.
+1. A Python 3.8+ environment and familiarity with the Python programming language (see [Setup Python Virtual Environment](./prism-image-search/README.md#setup-python-virtual-environment)).
+1. The URL to your private sandbox environment (this will be provided) **or** access to [aerospike.jfrog.io](https://aerospike.jfrog.io/ui/login/). If you have access to Aerospike jfrog, follow the instructions for [docker-compose](./prism-image-search/README.md#install-using-docker-compose).
 
 
 ## 1. Clone the Repository and Install Dependencies
@@ -24,45 +24,39 @@ cd proximus-examples/prism-image-search/prism && \\
 python3 -m pip install -r requirements.txt
 ```
 
-## 2. Find an image dataset to index
+## 2. Find an Image Dataset to Index
 
-The demo application works by indexing images stored on your computer, and 
-generating vector embeddings that are sent to a Proximus server hosted in the cloud.
-To make the experience personal, you can use your own photos on your computer, or to index
-a larger dataset you can browse image datasets on [Kaggle](https://www.kaggle.com/datasets).  
+The demo application indexes images stored on your computer and generates vector embeddings that are sent to a Proximus server hosted in the cloud. To personalize the demo, you can use your own photos if you like. To index a larger dataset, you can browse image datasets available on [Kaggle](https://www.kaggle.com/datasets).  
 
 [This subset](https://www.kaggle.com/datasets/ifigotin/imagenetmini-1000) of the Imagenet
-dataset is a good reasonable sized one (~4000 images) if you remove the `train` folder. 
+dataset is reasonably sized (~4000 images) if you remove the `train` folder.
 
 > [!NOTE]
 > The images from your dataset do not leave your local environment, but the vector embeddings
-> are sent to our sandbox environment. All data is destroyed after 3 days.
+> are sent to our sandbox environment. All data is destroyed after three days.
 
-Once you have a dataset of images (must be jpeg's), copy them to `prism/static/images/data`
+After you have identified a dataset of images (must be JPEGs), copy them to `prism/static/images/data`.
 
-## 3. Set environment variables
-Before starting the app you need to set the PROXIMUS_HOST to your sandbox host. 
+## 3. Set Environment Variables
+Before starting the application, you need to set `PROXIMUS_HOST` to your sandbox host.
 
 ```
 export PROXIMUS_HOST=<SANDBOX-HOST>
 ```
-Depending on your dataset, you may also want to also configure concurrent threads 
-for generating the image embeddings (this will put strain on your CPU).
+Depending on the size of your dataset, you may want to configure concurrent threads for generating the image embeddings. Higher parallelism will consume more CPU resources.
 
 ```
 export INDEXER_PARALLELISM=4
 ```
 
-## 4. Start the application locally.
-To start the application run.
+## 4. Start the Application
+To start the application locally, run the following:
 ```
 waitress-serve --host 127.0.0.1 --port 8080 --threads 32 prism:app
 ```
-You will see a progress bar as new images are read and indexed using the clip model.
-Depending on the size of your dataset, it will take anywhere from a few minutes, to
-a few hours to index your images. 
+Images are read and indexed using the CLIP model, indicated by a progress bar. Depending on the size of your dataset, it may take a few minutes to a few hours to index your images.
 
-## 5. Perform an image search
+## 5. Perform an Image Search
 The demo application provides semantic search for a set of images
 by indexing them using the [CLIP](https://huggingface.co/sentence-transformers/clip-ViT-B-32-multilingual-v1)
 model created by OpenAI. This model generates vectors with semantic meaning 

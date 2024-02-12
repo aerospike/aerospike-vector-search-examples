@@ -1,4 +1,4 @@
-# Prism image search
+# Prism Image Search
 This is a demo application provides semantic search for a set of images
 by indexing them using the [CLIP](https://huggingface.co/sentence-transformers/clip-ViT-B-32-multilingual-v1)
 model created by OpenAI. This model generates vectors with semantic meaning 
@@ -6,11 +6,11 @@ from each image and stores it as a vector embedding in Aerospike. When a user
 performs a query a vector embedding for the provided text is generated and
 Proximus performs Approximate Nearest Neighbor(ANN) search to find relevant results .
 
-## Install using docker compose
+## Install with Docker Compose
 
-The easiest way to get the demo app up and running is by using docker compose.
+The easiest way to get the demo app up and running is by using Docker compose.
 
-To run using docker compose:
+To run using Docker compose:
 
 ### 1 Docker login to Aerospike's jfrog artifactory
    Your username is your email and your password is your generate jfrog identity token.
@@ -37,14 +37,13 @@ Navigate to http://127.0.0.1:8080 and perform a search for words to find similar
 images in your dataset. 
 
 ## Developing
-This demo is build using [Python Flask](https://flask.palletsprojects.com/en/2.3.x/)
-and [Vue.js](https://vuejs.org/). In order to developer follow the steps to 
-setup your Python environment.
+This demo is built using [Python Flask](https://flask.palletsprojects.com/en/2.3.x/)
+and [Vue.js](https://vuejs.org/). To start developing, follow the steps below to configure your Python environment.
 
-### Setup pip
-Setup pip to use Aerospike PyPI repository following instructions [here](https://github.com/citrusleaf/aerospike-proximus-client-python/tree/main#using-the-client-from-your-application-using-pip).
+### Configure pip
+Follow [these instructions](https://github.com/citrusleaf/aerospike-proximus-client-python/tree/main#using-the-client-from-your-application-using-pip) to configure pip to use the Aerospike PyPI repository.
 
-### Setup Python Virtual Environment
+### Create Python Virtual Environment
 
 ```shell
 # Virtual environment to isolate dependencies.
@@ -54,16 +53,15 @@ python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-### Install dependencies
+### Install Dependencies
 
 ```shell
 python3 -m pip install -r requirements.txt
 ```
 
-### Configuration
+### Configure the Application
 
-The application can be configured by setting the following environment variable.
-If not set defaults are used.
+Set the following environment variables to configure the application. If you do not set a value for a variable, defaults are used.
 
 | Environment Variable        | Default            | Description                                                     |
 |-----------------------------|--------------------|-----------------------------------------------------------------|
@@ -76,14 +74,13 @@ If not set defaults are used.
 | PROXIMUS_INDEX_NAME         | prism-image-search | The name of the  index                                          |
 | PROXIMUS_MAX_RESULTS        | 20                 | Maximum number of vector search results to return               |
 
-### Setup networking (optional)
+### Configure Networking (optional)
 
-#### Run a proxy server like Nginx
+#### Run a Proxy Server (like nginx)
 
-Setup nginx to handle TLS as
-shown [here](https://dev.to/thetrebelcc/how-to-run-a-flask-app-over-https-using-waitress-and-nginx-2020-235c).
+Configure nginx to handle TLS as shown [here](https://dev.to/thetrebelcc/how-to-run-a-flask-app-over-https-using-waitress-and-nginx-2020-235c).
 
-#### Start the application
+#### Start the Application
 
 ```shell
  waitress-serve --host 127.0.0.1 --port 8080 --threads 32 prism:app
