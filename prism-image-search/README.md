@@ -19,9 +19,13 @@ To run using docker compose:
     docker login aerospike.jfrog.io 
     ```
 
-### 2. Build the prism image and spin up the environment
+### 2. Build the prism image 
     ```
+    cd prism-image-search && \\
     docker build -t prism . -f Dockerfile-prism
+    ```
+### 3. Start the environment
+    ```
     docker compose up
     ```
 ### 3. Add an image dataset
