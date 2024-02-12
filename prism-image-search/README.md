@@ -8,7 +8,7 @@ The easiest way to get the demo app up and running is by using Docker compose.
 To run using Docker compose:
 
 ### 1 Docker Login to Aerospike's JFrog Artifactory
-   Your username is your email and your password is your generate jfrog identity token.
+   Your username is your email and your password is your generated JFrog identity token.
     ```shell
     docker login aerospike.jfrog.io 
     ```
