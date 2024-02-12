@@ -1,10 +1,5 @@
 # Prism Image Search
-This is a demo application provides semantic search for a set of images
-by indexing them using the [CLIP](https://huggingface.co/sentence-transformers/clip-ViT-B-32-multilingual-v1)
-model created by OpenAI. This model generates vectors with semantic meaning 
-from each image and stores it as a vector embedding in Aerospike. When a user
-performs a query a vector embedding for the provided text is generated and
-Proximus performs Approximate Nearest Neighbor(ANN) search to find relevant results .
+This demo application enables semantic search for a set of images by indexing them using the [CLIP](https://huggingface.co/sentence-transformers/clip-ViT-B-32-multilingual-v1) model created by OpenAI. This model generates vectors with semantic meaning from each image and stores them as a vector embeddings in Aerospike. When a user submits a query, Proximus gnerates a vector embedding for the provided text and performs an Approximate Nearest Neighbor (ANN) search to find relevant results.
 
 ## Install with Docker Compose
 
@@ -12,33 +7,28 @@ The easiest way to get the demo app up and running is by using Docker compose.
 
 To run using Docker compose:
 
-### 1 Docker login to Aerospike's jfrog artifactory
+### 1 Docker Login to Aerospike's JFrog Artifactory
    Your username is your email and your password is your generate jfrog identity token.
     ```shell
     docker login aerospike.jfrog.io 
     ```
-### 2. Build the prism image and spin up the environment
+### 2. Build the Prism Image and Spin up the Environment
     ```shell
     docker build -t prism . -f Dockerfile-prism
     docker compose up
     ```
-### 3. Add an image dataset
-To make the experience personal, you can use your own photos on your computer, or to index
-a larger dataset you can browse image datasets on [Kaggle](https://www.kaggle.com/datasets).  
+### 3. Add an Image Dataset
+To personalize the demo, you can use your own photos if you like. To index a larger dataset, you can browse image datasets available on [Kaggle](https://www.kaggle.com/datasets).  
 
-[This subset](https://www.kaggle.com/datasets/ifigotin/imagenetmini-1000) of the Imagenet
-dataset is a good reasonable sized one (~4000 images) if you remove the `train` folder. 
+[This subset](https://www.kaggle.com/datasets/ifigotin/imagenetmini-1000) of the Imagenet dataset is reasonably sized (~4000 images) if you remove the `train` folder.
 
-Add the images you would like indexed to `container-volumes/prism/images` folder locally. 
-New images added to this folder are indexed periodically. 
+After you have identified a dataset of images (must be JPEGs), copy them locally to `container-volumes/prism/images`. New images added to this folder are indexed periodically. 
 
-### 4. Perform an image search
-Navigate to http://127.0.0.1:8080 and perform a search for words to find similar
-images in your dataset. 
+### 4. Perform an Image Search
+Go to http://127.0.0.1:8080 and perform a search for words to find similar images in your dataset. 
 
 ## Developing
-This demo is built using [Python Flask](https://flask.palletsprojects.com/en/2.3.x/)
-and [Vue.js](https://vuejs.org/). To start developing, follow the steps below to configure your Python environment.
+This demo is built using [Python Flask](https://flask.palletsprojects.com/en/2.3.x/) and [Vue.js](https://vuejs.org/). To start developing, follow the steps below to configure your Python environment.
 
 ### Configure pip
 Follow [these instructions](https://github.com/citrusleaf/aerospike-proximus-client-python/tree/main#using-the-client-from-your-application-using-pip) to configure pip to use the Aerospike PyPI repository.
