@@ -11,13 +11,13 @@ const Home = {
 
         <p>
         This is a demo application provides semantic search for a set of images
-        by indexing them using the <a class="link-dark" href="https://huggingface.co/sentence-transformers/clip-ViT-B-32-multilingual-v1>CLIP</a>
+        by indexing them using the <a class="link-dark" href="https://huggingface.co/sentence-transformers/clip-ViT-B-32-multilingual-v1">CLIP</a>
         model created by OpenAI. This model generates vectors with semantic meaning 
         from each image and stores it as a vector embedding in Aerospike. When a user
         performs a query a vector embedding for the provided text is generated and
         </p>
         <p>
-        Proximus, then performs Approximate Nearest Neighbor(<a class="link-dark"
+        Proximus, then performs Approximate Nearest Neighbor (<a class="link-dark"
         href="https://en.wikipedia.org/wiki/Nearest_neighbor_search#Approximate_nearest_neighbor">ANN</a>) 
         search to find relevant results. It uses the Hierarchical Navigable Small World (<a class="link-dark"
         href="https://arxiv.org/pdf/1603.09320.pdf">HNSW</a>) algorithm to perform the search.
