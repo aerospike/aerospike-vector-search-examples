@@ -96,3 +96,15 @@ shown [here](https://dev.to/thetrebelcc/how-to-run-a-flask-app-over-https-using-
 ```shell
  waitress-serve --host 127.0.0.1 --port 8080 --threads 32 prism:app
 ```
+
+
+#### Run for development
+
+This mode is not recommended for demo on hosting for use. The server is known to
+hang after being
+idle for some time. This mode will reflect changes to the code without server
+restart and hence is ideal for development.
+
+```shell
+FLASK_ENV=development FLASK_DEBUG=1 python3 -m flask --app prism  run --port 8080
+```
