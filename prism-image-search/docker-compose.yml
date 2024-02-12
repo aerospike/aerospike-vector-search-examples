@@ -1,8 +1,8 @@
 services:
   aerospike:
     image: aerospike/aerospike-server-enterprise:7.0.0.2
-    # ports:
-      # - "3000:3000"
+    ports:
+      - "3000:3000"
     networks:
       - proximus-demo
     volumes:
@@ -41,28 +41,30 @@ services:
   #     - grafana-storage:/var/lib/grafana
   proximus:
     image: aerospike.jfrog.io/docker/aerospike/aerospike-proximus-private:0.2.0
+    ports:
+      - "5000:5000"
     networks:
       - proximus-demo
     volumes:
       - ./container-volumes/proximus:/etc/aerospike-proximus
-  app:
-    image: prism
-    ports:
-      - "8080:8080"
-    networks:
-      - proximus-demo
-    environment:
-      - PROXIMUS_HOST=proximus
-      - PROXIMUS_PORT=5000
-      - GRPC_DNS_RESOLVER=native
-    volumes:
-      - ./container-volumes/prism/images:/prism/static/images/data
+  # app:
+  #   image: prism
+  #   ports:
+  #     - "8080:8080"
+  #   networks:
+  #     - proximus-demo
+  #   environment:
+  #     - PROXIMUS_HOST=proximus
+  #     - PROXIMUS_PORT=5000
+  #     - GRPC_DNS_RESOLVER=native
+  #   volumes:
+  #     - ./container-volumes/prism/images:/prism/static/images/data
 
   
 networks:
   proximus-demo: {}
 
-volumes:
- grafana-storage: {}
- prometheus_data: {}
- app_data: {}
+# volumes:
+#  grafana-storage: {}
+#  prometheus_data: {}
+#  app_data: {}
