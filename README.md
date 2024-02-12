@@ -25,8 +25,9 @@ To get started you do not need any knowledge of Aerospike, but you do need the f
 
 1. Python 3.8+ environment and familiarity with the python programming language. See [python environment details](./prism-image-search/README.md#setup-python-virtual-environment)
 1. A URL to your private sandbox environment (this will be provided) **or**
-1. Access to [aerospike.jfrog.io](https://aerospike.jfrog.io/ui/login/). If you do have access
-to Aerospike jfrog follow the [docker-compose](./prism-image-search/README.md#install-using-docker-compose) instructions.
+
+> [!TIP]
+> If you are an Aerospike employee you can follow the [docker-compose](./prism-image-search/README.md#install-using-docker-compose) instructions instead.
 
 
 ## 1. Clone Repo and setup dependencies
