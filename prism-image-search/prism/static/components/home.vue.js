@@ -19,7 +19,7 @@ const Home = {
         <p>
         and performs an Approximate Nearest Neighbor (<a class="link-dark"
         href="https://en.wikipedia.org/wiki/Nearest_neighbor_search#Approximate_nearest_neighbor">ANN</a>) 
-        search to find relevant results. It uses the Hierarchical Navigable Small World (<a class="link-dark"
+        search using the Hierarchical Navigable Small World (<a class="link-dark"
         href="https://arxiv.org/pdf/1603.09320.pdf">HNSW</a>) algorithm to perform the search.
         </p>
 
