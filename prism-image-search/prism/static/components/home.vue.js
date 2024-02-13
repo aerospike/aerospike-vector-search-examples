@@ -15,8 +15,6 @@ const Home = {
         model created by OpenAI. This model generates vectors with semantic meaning 
         from each image and stores them as vector embeddings in Aerospike. When a user
         submits a query, Proximus generates a vector embedding for the provided text
-        </p>
-        <p>
         and performs an Approximate Nearest Neighbor (<a class="link-dark"
         href="https://en.wikipedia.org/wiki/Nearest_neighbor_search#Approximate_nearest_neighbor">ANN</a>) 
         search using the Hierarchical Navigable Small World (<a class="link-dark"
