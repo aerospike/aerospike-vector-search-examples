@@ -14,7 +14,7 @@ const Home = {
         by indexing them using the <a class="link-dark" href="https://huggingface.co/sentence-transformers/clip-ViT-B-32-multilingual-v1">CLIP</a>
         model created by OpenAI. This model generates vectors with semantic meaning 
         from each image and stores them as vector embeddings in Aerospike. When a user
-        performs a query a vector embedding for the provided text is generated and
+        submits a query, Proximus generates a vector embedding for the provided text
         </p>
         <p>
         Proximus, then performs Approximate Nearest Neighbor (<a class="link-dark"
