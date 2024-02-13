@@ -8,7 +8,7 @@ Vectors allow you to combine machine learning models (e.g., ChatGPT, CLIP, Llama
 > Proximus is currently in Alpha and available by invitation only. If you want to try out Proximus, please fill out [this form](https://aerospike.com/lp/aerospike-vector-developer-program-sign-up/).
 
 # Getting Started
-This section describes how to get started using our developer sandbox environment. To request access to a developer sandbox, fill out [this form](https://aerospike.com/lp/aerospike-vector-developer-program-sign-up/). The following instructions help you set up up a demo application that performs semantic search across an image dataset using the [CLIP](https://arxiv.org/abs/2103.00020) model.
+This section describes how to get started using our developer sandbox environment. To request access to a developer sandbox, fill out [this form](https://aerospike.com/lp/aerospike-vector-developer-program-sign-up/). The following instructions help you set up a demo application that performs semantic search across an image dataset using the [CLIP](https://arxiv.org/abs/2103.00020) model.
 
 ## Prerequisites
 You don't have to know Aerospike to get started, but you do need the following:
@@ -63,10 +63,10 @@ Images are read and indexed using the CLIP model, indicated by a progress bar. D
 
 After starting the application, go to http://localhost:8080/search to perform a search.
 
-The demo application enables semantic search for a set of images by indexing them using the [CLIP](https://huggingface.co/sentence-transformers/clip-ViT-B-32-multilingual-v1) model created by OpenAI. This model generates vectors with semantic meaning from each image and stores them as a vector embeddings in Aerospike. When a user submits a query, Proximus gnerates a vector embedding for the provided text and performs an Approximate Nearest Neighbor (ANN) search to find relevant results.
+The demo application enables semantic search for a set of images by indexing them using the [CLIP](https://huggingface.co/sentence-transformers/clip-ViT-B-32-multilingual-v1) model created by OpenAI. This model generates vectors with semantic meaning from each image and stores them as vector embeddings in Aerospike. When a user submits a query, Proximus generates a vector embedding for the provided text and performs an Approximate Nearest Neighbor (ANN) search to find relevant results.
 
 # Limitations
 The sandbox environment is limited to a single index. If you need to create a different index, contact us about getting a new sandbox environment. By default, each sandbox environment expires after three days.
 
 # Contributing
-If you have an idea for a sample applications, open a PR and we will review it. We're excited to provide more examples of what Vector Search can do.
+If you have an idea for a sample application, open a PR and we will review it. We're excited to provide more examples of what Vector Search can do.
