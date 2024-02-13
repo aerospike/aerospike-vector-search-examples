@@ -13,7 +13,7 @@ const Home = {
         This demo application provides semantic search for a set of images
         by indexing them using the <a class="link-dark" href="https://huggingface.co/sentence-transformers/clip-ViT-B-32-multilingual-v1">CLIP</a>
         model created by OpenAI. This model generates vectors with semantic meaning 
-        from each image and stores it as a vector embedding in Aerospike. When a user
+        from each image and stores them as vector embeddings in Aerospike. When a user
         performs a query a vector embedding for the provided text is generated and
         </p>
         <p>
