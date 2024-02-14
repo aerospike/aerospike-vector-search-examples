@@ -1,5 +1,5 @@
 # Prism image search
-This is a demo application provides semantic search for a set of images
+This demo application provides semantic search for a set of images
 by indexing them using the [CLIP](https://huggingface.co/sentence-transformers/clip-ViT-B-32-multilingual-v1)
 model created by OpenAI. This model generates vectors with semantic meaning 
 from each image and stores it as a vector embedding in Aerospike. When a user
