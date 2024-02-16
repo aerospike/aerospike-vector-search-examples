@@ -1,7 +1,7 @@
 # Aerospike Vector Search (Proximus)
 
 > [!NOTE]
-> Proximus is currently in Alpha and available by invitation only. Changes to our client and APIs are expected. If you want to try out Proximus, please fill out [this form](https://aerospike.com/lp/aerospike-vector-developer-program-sign-up/).
+> Proximus is currently in Alpha and available by invitation only. Breaking changes to our client and APIs are expected. If you want to try out Proximus, please fill out [this form](https://aerospike.com/lp/aerospike-vector-developer-program-sign-up/).
 
 Aerospike Vector Search (Proximus) delivers an Approximate Nearest Neighbor (ANN) search using the Hierarchal Navigable Small World (HNSW) algorithm. Proximus provides a new set of capabilities and APIs for performing vector operations. This repository contains example apps for using Proximus to showcase these APIs, as well as the Python client.
 
