@@ -1,0 +1,17 @@
+# TODO: Include exact versions
+# Aerospike dependencies
+aerospike-proximus==0.2.0
+
+# Flask framework
+flask~=2.3.2
+flask-wtf
+Flask-BasicAuth
+werkzeug
+waitress
+
+# Image processing
+sentence-transformers==2.2.2
+torch==2.0.1
+tqdm~=4.66.1
+Pillow~=10.0.0
+
