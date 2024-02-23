@@ -9,9 +9,9 @@ Flask-BasicAuth
 werkzeug
 waitress
 
-# Image processing
+# Quote processing
+datasets==2.17.0
 sentence-transformers==2.2.2
 torch==2.0.1
 tqdm~=4.66.1
-Pillow~=10.0.0
 

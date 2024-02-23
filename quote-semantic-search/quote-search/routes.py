@@ -1,12 +1,11 @@
 import time
 
-from PIL import Image
 from flask import jsonify, request, send_file
 
 from config import Config
 from dataset_stats import dataset_counts
 from data_encoder import encoder
-from prism import app
+from quote_search import app
 from proximus_client import proximus_client
 
 
@@ -35,8 +34,6 @@ def search():
         results = vector_search(embedding.tolist())
         time_taken = time.time() - start
         return format_results(results, time_taken)
-        for result in results:
-            print(result.bins)
     else:
         return "No image uploaded", 400
 

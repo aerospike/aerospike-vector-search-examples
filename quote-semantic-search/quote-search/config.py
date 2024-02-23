@@ -2,8 +2,8 @@ import os
 
 
 class Config(object):
-    BASIC_AUTH_USERNAME = os.environ.get('PRISM_APP_USERNAME') or ''
-    BASIC_AUTH_PASSWORD = os.environ.get('PRISM_APP_PASSWORD') or ''
+    BASIC_AUTH_USERNAME = os.environ.get('QUOTE_APP_USERNAME') or ''
+    BASIC_AUTH_PASSWORD = os.environ.get('QUOTE_APP_PASSWORD') or ''
     PROXIMUS_HOST = os.environ.get('PROXIMUS_HOST') or 'localhost'
     PROXIMUS_PORT = int(os.environ.get('PROXIMUS_PORT') or 5000)
     PROXIMUS_ADVERTISED_LISTENER = os.environ.get(

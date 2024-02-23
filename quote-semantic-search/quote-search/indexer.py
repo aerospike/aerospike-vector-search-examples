@@ -4,6 +4,7 @@ import threading
 from multiprocessing import get_context
 from threading import Thread
 import logging
+import warnings
 
 from tqdm import tqdm
 
@@ -19,6 +20,7 @@ NUM_QUOTES = len(dataset)
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+warnings.filterwarnings('ignore') 
 
 def create_index():
     for index in proximus_admin_client.indexList():
@@ -42,11 +44,10 @@ def index_data():
         create_index()
 
         logger.info("Found new files to index")
-        with get_context("spawn").Pool(
-                processes=Config.INDEXER_PARALLELISM) as pool:
-            for _ in tqdm(pool.imap(index_quote, enumerate(dataset)), "Indexing quotes",
-                          total=len(dataset)):
-                pass
+        for data in tqdm(enumerate(dataset), "Indexing quotes",
+                      total=len(dataset)):
+            
+            index_quote(data)
 
     except Exception as e:
         logger.warning("Error indexing:" + str(e))
@@ -66,7 +67,6 @@ def index_quote(id_quote):
 
     # Insert record
     try:
-        logger.info(f"Inserting vector embedding into proximus {id}")
         proximus_client.put(Config.PROXIMUS_NAMESPACE, "",
                             doc['quote_id'], doc)
     except Exception as e:
@@ -76,7 +76,7 @@ def index_quote(id_quote):
 
 
 def start():
-    # Start indexing in a separate thread
+    # Index data once
     index_data()
 
 

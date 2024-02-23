@@ -1,4 +1,4 @@
-# Prism image search
+# Quote Semantic search
 This demo application provides semantic search for a set of images
 by indexing them using the [CLIP](https://huggingface.co/sentence-transformers/clip-ViT-B-32-multilingual-v1)
 model created by OpenAI. This model generates vectors with semantic meaning 
@@ -19,28 +19,18 @@ To run using docker compose:
 docker login aerospike.jfrog.io 
 ```
 
-### 2. Build the prism image 
+### 2. Build the image 
 ```
 cd quote-semantic-search && \\
 docker build -t quote-search . -f Dockerfile-quote-search
 ```
 
-### 3. Add an image dataset
-To make the experience personal, you can use your own photos on your computer, or to index
-a larger dataset you can browse image datasets on [Kaggle](https://www.kaggle.com/datasets).  
-
-[This subset](https://www.kaggle.com/datasets/ifigotin/imagenetmini-1000) of the Imagenet
-dataset is a good reasonable sized one (~4000 images) if you remove the `train` folder. 
-
-Add the images you would like indexed to `container-volumes/prism/images` folder locally. 
-New images added to this folder are indexed periodically. 
-
-### 4. Start the environment
+### 3. Start the environment
 ```
 docker compose up
 ```
 
-### 5. Perform an image search
+### 4. Perform an image search
 Navigate to http://127.0.0.1:8080 and perform a search for words to find similar
 images in your dataset. 
 
@@ -75,8 +65,8 @@ If not set defaults are used.
 
 | Environment Variable        | Default            | Description                                                     |
 |-----------------------------|--------------------|-----------------------------------------------------------------|
-| PRISM_APP_USERNAME          |                    | If set, the username for basic authentication                   |
-| PRISM_APP_USERNAME          |                    | If set, the password for basic authentication                   |
+| QUOTE_APP_USERNAME          |                    | If set, the username for basic authentication                   |
+| QUOTE_APP_USERNAME          |                    | If set, the password for basic authentication                   |
 | PROXIMUS_HOST               | localhost          | Proximus server seed host                                       |
 | PROXIMUS_PORT               | 5000               | Proximus server seed host port                                  |
 | PROXIMUS_ADVERTISED_LISTENER|                    | An optional advertised listener to use if configured on the proximus server                              |
