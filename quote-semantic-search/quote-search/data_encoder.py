@@ -5,7 +5,9 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.CRITICAL)
 
 # The image or text encoding model.
-model = SentenceTransformer('HasinMDG/SetFit_Labse_Sentiment_Towards_Topic')
+model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+MODEL_DIM = 384
+
 
 def encoder(data):
     logger.debug(f"Encoding data {data}")
