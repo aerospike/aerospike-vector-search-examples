@@ -1,6 +1,6 @@
 # Quote Semantic search
 This demo application provides semantic search for a set of images
-by indexing them using the [CLIP](https://huggingface.co/sentence-transformers/clip-ViT-B-32-multilingual-v1)
+by indexing them using the [MiniLM](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2)
 model created by OpenAI. This model generates vectors with semantic meaning 
 from each image and stores it as a vector embedding in Aerospike. When a user
 performs a query a vector embedding for the provided text is generated and
@@ -13,7 +13,7 @@ The easiest way to get the demo app up and running is by using docker compose.
 To run using docker compose:
 
 ### 1. Docker login to Aerospike's jfrog artifactory
-   Your username is your email and your password is your generate jfrog identity token.
+Your username is your email and your password is your generate jfrog identity token.
 
 ```
 docker login aerospike.jfrog.io 
@@ -31,8 +31,7 @@ docker compose up
 ```
 
 ### 4. Perform an image search
-Navigate to http://127.0.0.1:8080 and perform a search for words to find similar
-images in your dataset. 
+Navigate to http://127.0.0.1:8080 and perform a search for quotes based on a description. 
 
 ## Developing
 This demo is build using [Python Flask](https://flask.palletsprojects.com/en/2.3.x/)
@@ -65,8 +64,9 @@ If not set defaults are used.
 
 | Environment Variable        | Default            | Description                                                     |
 |-----------------------------|--------------------|-----------------------------------------------------------------|
-| QUOTE_APP_USERNAME          |                    | If set, the username for basic authentication                   |
-| QUOTE_APP_USERNAME          |                    | If set, the password for basic authentication                   |
+| APP_USERNAME          |                    | If set, the username for basic authentication                   |
+| APP_PASSWORD          |                    | If set, the password for basic authentication                   |
+| APP_NUM_QUOTES                  | 5000               | The number of quotes to index. If time and space allows the max is 499715                              |
 | PROXIMUS_HOST               | localhost          | Proximus server seed host                                       |
 | PROXIMUS_PORT               | 5000               | Proximus server seed host port                                  |
 | PROXIMUS_ADVERTISED_LISTENER|                    | An optional advertised listener to use if configured on the proximus server                              |

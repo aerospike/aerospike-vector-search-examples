@@ -8,7 +8,7 @@ service:
   # advertised-listeners:
   #   default:
   #     address: 127.0.0.1
-  #     port: 5002
+  #     port: 5000
   
 # Management API listening ports, TLS and network interface.
 manage:
