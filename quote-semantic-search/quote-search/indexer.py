@@ -1,9 +1,11 @@
 import csv
 import itertools
 from multiprocessing import get_context
+import os
 from threading import Thread
 import logging
 from tqdm import tqdm
+import tarfile
 
 from config import Config
 from data_encoder import MODEL_DIM, encoder
@@ -14,6 +16,11 @@ logger.setLevel(logging.INFO)
 
 
 def read_csv(filename):
+    if not os.path.exists(filename) and os.path.exists(filename + ".tgz"):
+        # Untar the file
+        with tarfile.open(filename + ".tgz", "r:gz") as tar:
+            tar.extractall(path=os.path.dirname(filename))
+        
     with open(filename, 'r') as f:
         reader = csv.reader(f)
         next(reader)  # Skip the header

@@ -49,7 +49,7 @@ export PROXIMUS_HOST=<SANDBOX-HOST>
 Depending on the size of your dataset, you may want to configure concurrent threads for generating the image embeddings. Higher parallelism will consume more CPU resources.
 
 ```
-export INDEXER_PARALLELISM=4
+export APP_INDEXER_PARALLELISM=4
 ```
 
 ## 4. Start the Application
