@@ -30,7 +30,7 @@ docker build -t quote-search . -f Dockerfile-quote-search
 docker compose up
 ```
 
-### 4. Perform an image search
+### 4. Perform a quote search
 Navigate to http://127.0.0.1:8080 and perform a search for quotes based on a description. 
 
 ## Developing
@@ -66,7 +66,8 @@ If not set defaults are used.
 |-----------------------------|--------------------|-----------------------------------------------------------------|
 | APP_USERNAME          |                    | If set, the username for basic authentication                   |
 | APP_PASSWORD          |                    | If set, the password for basic authentication                   |
-| APP_NUM_QUOTES                  | 5000               | The number of quotes to index. If time and space allows the max is 499715                              |
+| APP_NUM_QUOTES                  | 5000               | The number of quotes to index. If time and space allows the max is 499715. **Hint:** To keep the app from re-indexing quotes on subsequent runs set to 0               |
+| APP_INDEXER_PARALLELISM                  | 1               | To speed up indexing of quotes set this equal to or less than the number of CPU cores               |
 | PROXIMUS_HOST               | localhost          | Proximus server seed host                                       |
 | PROXIMUS_PORT               | 5000               | Proximus server seed host port                                  |
 | PROXIMUS_ADVERTISED_LISTENER|                    | An optional advertised listener to use if configured on the proximus server                              |

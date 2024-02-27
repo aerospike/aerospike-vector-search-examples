@@ -12,7 +12,7 @@ def either(c):
 
 def collect_stats():
     # lock.acquire()
-    # TODO
+    pass # TODO
     # lock.release()
 
     # Repeat indexing.
