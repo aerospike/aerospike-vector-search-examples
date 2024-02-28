@@ -85,7 +85,7 @@ shown [here](https://dev.to/thetrebelcc/how-to-run-a-flask-app-over-https-using-
 #### Start the application
 
 ```shell
-waitress-serve --host 127.0.0.1 --port 8080 --threads 32 quote-search:app
+waitress-serve --host 127.0.0.1 --port 8080 --threads 32 quote_search:app
 ```
 
 
@@ -97,5 +97,5 @@ idle for some time. This mode will reflect changes to the code without server
 restart and hence is ideal for development.
 
 ```shell
-FLASK_ENV=development FLASK_DEBUG=1 python3 -m flask --app quote-search  run --port 8080
+FLASK_ENV=development FLASK_DEBUG=1 python3 -m flask --app quote_search  run --port 8080
 ```
