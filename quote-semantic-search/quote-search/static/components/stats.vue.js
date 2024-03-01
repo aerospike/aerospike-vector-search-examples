@@ -6,7 +6,7 @@ const Stats = {
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Indexed Images</th>
+                    <th>Indexed Quotes</th>
                 </tr>
             </thead>
             <tr v-for="(count, dataset) in stats.datasets">
@@ -14,7 +14,7 @@ const Stats = {
                 <td >{{count}}</td>
             </tr>
         </table>
-        <p>Total Images Indexed: <strong>{{totalImages}}</strong></p>
+        <p>Total Quotes Indexed: <strong>{{totalQuotes}}</strong></p>
 </div>
   `,
     methods: {},
@@ -26,7 +26,7 @@ const Stats = {
             for (const dataset in this.stats.datasets) {
                 total += this.stats.datasets[dataset]
             }
-            this.totalImages = total
+            this.totalQuotes = total
         } catch (err) {
             console.log(err)
         }
@@ -34,7 +34,7 @@ const Stats = {
     data() {
         return {
             stats: {},
-            totalImages: 0
+            totalQuotes: 0
         }
     },
 };

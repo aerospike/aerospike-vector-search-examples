@@ -14,7 +14,7 @@ class Config(object):
     PROXIMUS_NAMESPACE = os.environ.get('PROXIMUS_NAMESPACE') or "test"
     PROXIMUS_VERIFY_TLS = os.environ.get('VERIFY_TLS') or True
     PROXIMUS_MAX_RESULTS = int(os.environ.get('PROXIMUS_MAX_RESULTS') or 5)
-    INDEXER_PARALLELISM = int(os.environ.get('INDEXER_PARALLELISM') or 1)
+    INDEXER_PARALLELISM = int(os.environ.get('APP_INDEXER_PARALLELISM') or 1)
     MAX_CONTENT_LENGTH = int(
         os.environ.get('MAX_CONTENT_LENGTH')) if os.environ.get(
         'MAX_CONTENT_LENGTH') is not None else 10485760
