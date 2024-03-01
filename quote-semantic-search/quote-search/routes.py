@@ -34,7 +34,7 @@ def search():
         time_taken = time.time() - start
         return format_results(results, time_taken)
     else:
-        return "No image uploaded", 400
+        return "No text uploaded", 400
 
 
 @app.route('/rest/v1/stats', methods=['GET'])
@@ -48,7 +48,7 @@ def search_internal():
     record = proximus_client.get(Config.PROXIMUS_NAMESPACE, '', int(quote_id),
                                  'quote_embedding')
     embedding = record.bins['quote_embedding']
-    # Search on more and filter the query image.
+    # Search on more and filter the query id.
     start = time.time()
     results = vector_search(embedding, Config.PROXIMUS_MAX_RESULTS + 1)
     results = list(filter(lambda result: result.bins["quote_id"] != quote_id,
@@ -58,7 +58,7 @@ def search_internal():
 
 
 def vector_search(embedding, count=Config.PROXIMUS_MAX_RESULTS):
-    # Execute kNN search over the image dataset
+    # Execute kNN search over the dataset
     return proximus_client.vectorSearch(
         Config.PROXIMUS_NAMESPACE,
         Config.PROXIMUS_INDEX_NAME,

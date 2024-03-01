@@ -1,10 +1,10 @@
 # Quote Semantic search
-This demo application provides semantic search for a set of images
+This demo application provides semantic search for a set of quotes
 by indexing them using the [MiniLM](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2)
 model created by OpenAI. This model generates vectors with semantic meaning 
-from each image and stores it as a vector embedding in Aerospike. When a user
+from each quote and stores it as a vector embedding in Aerospike. When a user
 performs a query a vector embedding for the provided text is generated and
-Proximus performs Approximate Nearest Neighbor(ANN) search to find relevant results .
+Proximus performs Approximate Nearest Neighbor(ANN) search to find relevant results.
 
 ## Install using docker compose
 
