@@ -1,9 +1,9 @@
 import glob
+import logging
 import os
 import threading
 from multiprocessing import get_context
 from threading import Thread
-import logging
 
 from PIL import Image
 from tqdm import tqdm
@@ -29,7 +29,6 @@ def create_index():
             return
     proximus_admin_client.indexCreate(Config.PROXIMUS_NAMESPACE,
                                       Config.PROXIMUS_INDEX_NAME,
-                                      "",
                                       "image_embedding", 512)
 
 
@@ -49,22 +48,25 @@ def index_data():
                 filenames)):
             # Check if record exists
             try:
-                proximus_client.get(Config.PROXIMUS_NAMESPACE, "",
-                                    filename)
-                # Record exists
-                continue
+                if proximus_client.isIndexed(Config.PROXIMUS_NAMESPACE, "",
+                                             filename,
+                                             Config.PROXIMUS_INDEX_NAME):
+                    # Record is indexed
+                    continue
             except:
                 pass
             to_index.append(filename)
         if len(to_index) > 0:
             logger.info("Found new files to index")
             if Config.INDEXER_PARALLELISM <= 1:
-                for filename in tqdm(to_index, "Indexing new files", total=len(to_index)):
+                for filename in tqdm(to_index, "Indexing new files",
+                                     total=len(to_index)):
                     index_image(filename)
             else:
                 with get_context("spawn").Pool(
                         processes=Config.INDEXER_PARALLELISM) as pool:
-                    for _ in tqdm(pool.imap(index_image, to_index), "Indexing new files",
+                    for _ in tqdm(pool.imap(index_image, to_index),
+                                  "Indexing new files",
                                   total=len(to_index)):
                         pass
 
