@@ -11,8 +11,8 @@ const Home = {
 
         <p>
         This demo application provides semantic search for a set of quotes
-        by indexing them using the <a class="link-dark" href="https://huggingface.co/sentence-transformers/clip-ViT-B-32-multilingual-v1">CLIP</a>
-        model created by OpenAI. This model generates vectors with semantic meaning 
+        by indexing them using the <a class="link-dark" href="https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2">MiniLM</a>
+        model. This model generates vectors with semantic meaning 
         from each quote and stores them as vector embeddings in Aerospike. When a user
         submits a query, Proximus generates a vector embedding for the provided text
         and performs an Approximate Nearest Neighbor (<a class="link-dark"
