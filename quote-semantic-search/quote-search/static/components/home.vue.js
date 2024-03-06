@@ -10,7 +10,7 @@ const Home = {
         </p>
 
         <p>
-        This demo application provides semantic search for a set of quotes
+        This demo application provides semantic search for an included <a class="link-dark" href="https://archive.org/details/quotes_20230625">dataset of quotes</a>
         by indexing them using the <a class="link-dark" href="https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2">MiniLM</a>
         model. This model generates vectors with semantic meaning 
         from each quote and stores them as vector embeddings in Aerospike. When a user
