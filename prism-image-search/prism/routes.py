@@ -36,7 +36,7 @@ def search():
         time_taken = time.time() - start
         return format_results(results, time_taken)
     else:
-        return "No test uploaded", 400
+        return "No text uploaded", 400
 
 
 @app.route('/rest/v1/stats', methods=['GET'])
