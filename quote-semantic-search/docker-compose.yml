@@ -1,0 +1,39 @@
+services:
+  aerospike:
+    image: aerospike/aerospike-server-enterprise:7.0.0.2
+    # ports:
+    #   - "3000:3000"
+    networks:
+      - proximus-demo
+    volumes:
+      - ./container-volumes/aerospike/etc/aerospike:/opt/aerospike/etc/aerospike
+    command:
+      - "--config-file"
+      - "/opt/aerospike/etc/aerospike/aerospike.conf"
+  proximus:
+    image: aerospike.jfrog.io/docker/aerospike/aerospike-proximus-private:0.2.0
+    # ports:
+    #   - "5000:5000"
+    networks:
+      - proximus-demo
+    volumes:
+      - ./container-volumes/proximus:/etc/aerospike-proximus
+  app:
+    image: quote-search
+    ports:
+      - "8080:8080"
+    networks:
+      - proximus-demo
+    volumes:
+      - ./container-volumes/quote-search/data:/container-volumes/quote-search/data
+      # ./usr/local/lib/python3.10/dist-packages/sentence_transformers
+    environment:
+      - PROXIMUS_HOST=proximus
+      - PROXIMUS_PORT=5000
+
+  
+networks:
+  proximus-demo: {}
+
+volumes:
+ app_data: {}
