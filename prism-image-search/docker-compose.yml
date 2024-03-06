@@ -6,41 +6,14 @@ services:
     networks:
       - proximus-demo
     volumes:
-      - ./container-volumes/aerospike:/opt/aerospike/etc/aerospike
-    mem_limit: 8g
+      - ./container-volumes/aerospike/etc/aerospike:/opt/aerospike/etc/aerospike
     command:
       - "--config-file"
       - "/opt/aerospike/etc/aerospike/aerospike.conf"
-  # prometheus-exporter:
-  #   image: aerospike/aerospike-prometheus-exporter:latest
-  #   environment:
-  #     - AS_HOST=aerospike
-  #   ports:
-  #     - 9145:9145
-  #   networks:
-  #     - proximus-demo
-  # prometheus:
-  #   image: prom/prometheus:latest
-  #   volumes:
-  #     # - type: bind
-  #     #   source: ./prometheus/prometheus.yml
-  #     #   target: /etc/prometheus/prometheus.yml
-  #     - ./prometheus/:/etc/prometheus/
-  #     - prometheus_data:/prometheus
-  #   ports:
-  #     - 9090:9090
-  #   networks:
-  #     - proximus-demo
-  # grafana:
-  #   image: grafana/grafana:latest
-  #   ports:
-  #     - "3003:3000"
-  #   networks:
-  #     - proximus-demo
-  #   volumes:
-  #     - grafana-storage:/var/lib/grafana
   proximus:
     image: aerospike.jfrog.io/docker/aerospike/aerospike-proximus-private:0.2.0
+    # ports:
+      # - "5000:5000"
     networks:
       - proximus-demo
     volumes:
@@ -54,15 +27,8 @@ services:
     environment:
       - PROXIMUS_HOST=proximus
       - PROXIMUS_PORT=5000
-      - GRPC_DNS_RESOLVER=native
     volumes:
       - ./container-volumes/prism/images:/prism/static/images/data
 
-  
 networks:
   proximus-demo: {}
-
-volumes:
- grafana-storage: {}
- prometheus_data: {}
- app_data: {}

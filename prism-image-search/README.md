@@ -75,8 +75,9 @@ If not set defaults are used.
 
 | Environment Variable        | Default            | Description                                                     |
 |-----------------------------|--------------------|-----------------------------------------------------------------|
-| PRISM_APP_USERNAME          |                    | If set, the username for basic authentication                   |
-| PRISM_APP_USERNAME          |                    | If set, the password for basic authentication                   |
+| APP_USERNAME                |                    | If set, the username for basic authentication                   |
+| APP_PASSWORD                |                    | If set, the password for basic authentication                   |
+| APP_INDEXER_PARALLELISM     | 1                  | To speed up indexing of quotes set this equal to or less than the number of CPU cores               |
 | PROXIMUS_HOST               | localhost          | Proximus server seed host                                       |
 | PROXIMUS_PORT               | 5000               | Proximus server seed host port                                  |
 | PROXIMUS_ADVERTISED_LISTENER|                    | An optional advertised listener to use if configured on the proximus server                              |
