@@ -1,1 +1,1 @@
-aerospike-proximus
+aerospike-proximus == 0.3.0

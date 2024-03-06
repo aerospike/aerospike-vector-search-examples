@@ -1,11 +1,10 @@
 import time
 
-from PIL import Image
 from flask import jsonify, request, send_file
 
 from config import Config
-from dataset_stats import dataset_counts
 from data_encoder import encoder
+from dataset_stats import dataset_counts
 from prism import app
 from proximus_client import proximus_client
 
@@ -65,7 +64,7 @@ def vector_search(embedding, count=Config.PROXIMUS_MAX_RESULTS):
     return proximus_client.vectorSearch(
         Config.PROXIMUS_NAMESPACE,
         Config.PROXIMUS_INDEX_NAME,
-        embedding, count, "image_id", "image_name",
+        embedding, count, None, "image_id", "image_name",
         "relative_path")
 
 
