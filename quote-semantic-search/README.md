@@ -1,5 +1,5 @@
 # Quote Semantic search
-This demo application provides semantic search for a set of quotes
+This demo application provides semantic search for an included [dataset of quotes](https://archive.org/details/quotes_20230625)
 by indexing them using the [MiniLM](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2)
 model created by OpenAI. This model generates vectors with semantic meaning 
 from each quote and stores it as a vector embedding in Aerospike. When a user
