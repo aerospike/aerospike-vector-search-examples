@@ -40,7 +40,7 @@ about 500K quotes. Depending on the size of your dataset, you may want to config
 export APP_INDEXER_PARALLELISM=4
 ```
 
-> [!WARN]
+> [!WARNING]
 > Generating all 500k embeddings on a laptop will take some time. It is recommended to use a cloud instance if you are testing the full dataset. 
 
 ## 3. Start the Application
