@@ -25,7 +25,12 @@ cd quote-semantic-search && \\
 docker build -t quote-search . -f Dockerfile-quote-search
 ```
 
-### 3. Start the environment
+### 4. Add features.conf
+Proximus needs an Aerospike features.conf file with the vector-search feature enabled.
+Add your features.conf file to container-volumes/proximus/etc/aerospike-proximus.
+
+
+### 5. Start the environment
 ```
 docker compose up
 ```
@@ -66,7 +71,7 @@ If not set defaults are used.
 |-----------------------------|--------------------|-----------------------------------------------------------------|
 | APP_USERNAME          |                    | If set, the username for basic authentication                   |
 | APP_PASSWORD          |                    | If set, the password for basic authentication                   |
-| APP_NUM_QUOTES                  | 5000               | The number of quotes to index. If time and space allows the max is 499715. **Hint:** To keep the app from re-indexing quotes on subsequent runs set to 0               |
+| APP_NUM_QUOTES                  | 5000               | The number of quotes to index. If time and space allows the max is 100000. **Hint:** To keep the app from re-indexing quotes on subsequent runs set to 0               |
 | APP_INDEXER_PARALLELISM                  | 1               | To speed up indexing of quotes set this equal to or less than the number of CPU cores               |
 | PROXIMUS_HOST               | localhost          | Proximus server seed host                                       |
 | PROXIMUS_PORT               | 5000               | Proximus server seed host port                                  |

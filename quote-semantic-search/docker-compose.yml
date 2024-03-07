@@ -17,7 +17,7 @@ services:
     networks:
       - proximus-demo
     volumes:
-      - ./container-volumes/proximus:/etc/aerospike-proximus
+      - ./container-volumes/proximus/etc/aerospike-proximus:/etc/aerospike-proximus
   app:
     image: quote-search
     ports:
