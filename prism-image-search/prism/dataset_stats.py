@@ -2,6 +2,7 @@ import os
 import threading
 import warnings
 from threading import Thread
+import logging
 
 from config import Config
 from indexer import image_data_files, relative_path
@@ -11,9 +12,11 @@ lock = threading.Lock()
 
 dataset_counts = {}
 
+logger = logging.getLogger(__name__)
+
 
 def either(c):
-    return '[%s%s]' % (c.lower(), c.upper()) if c.isalpha() else c
+    return "[%s%s]" % (c.lower(), c.upper()) if c.isalpha() else c
 
 
 def collect_stats():
@@ -23,20 +26,24 @@ def collect_stats():
         temp_counts = {}
         for filename in filenames:
             # Check if record exists
-            try:
-                proximus_client.get(Config.PROXIMUS_NAMESPACE, "",
-                                    filename)
+            if proximus_client.isIndexed(
+                Config.PROXIMUS_NAMESPACE,
+                Config.PROXIMUS_SET,
+                filename,
+                Config.PROXIMUS_INDEX_NAME,
+            ):
                 # Record exists
                 path = relative_path(filename)
                 dataset_name = path.split(os.sep)[1]
+
                 if dataset_name not in temp_counts:
                     temp_counts[dataset_name] = 0
+
                 temp_counts[dataset_name] = temp_counts[dataset_name] + 1
-            except:
-                pass
+
         dataset_counts.update(temp_counts)
     except Exception as e:
-        warnings.warn("Error collecting statistics:" + str(e))
+        logger.warn("Error collecting statistics:" + str(e))
     lock.release()
 
     # Repeat indexing.

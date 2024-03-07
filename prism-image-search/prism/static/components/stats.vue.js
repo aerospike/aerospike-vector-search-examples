@@ -1,20 +1,20 @@
 const Stats = {
     template: `
 <div id="stats">
-  <h1>Datasets</h1>
-  <table class="table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Indexed Images</th>
-                </tr>
-            </thead>
+    <h1>Datasets</h1>
+    <p>Total Images Indexed: <strong>{{totalImages}}</strong></p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Indexed Images</th>
+            </tr>
+        </thead>
             <tr v-for="(count, dataset) in stats.datasets">
                 <td >{{dataset}}</td>
                 <td >{{count}}</td>
             </tr>
-        </table>
-        <p>Total Images Indexed: <strong>{{totalImages}}</strong></p>
+    </table>
 </div>
   `,
     methods: {},
