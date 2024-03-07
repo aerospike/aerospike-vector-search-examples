@@ -1,20 +1,25 @@
 # Change the configuration for your use case.
-# TODO: Link to Proximus docs
+cluster:
+  # Custom node-id. It will be auto-generated if not specified.
+  # node-id: a1
+
+  # Unique identifier for this cluster.
+  cluster-name: prism-image-search
 
 # The Proximus service listening ports, TLS and network interface.
 service:
   ports:
-    5000: { }
+    5000: {}
 
 # Management API listening ports, TLS and network interface.
 manage:
   ports:
-    5040: { }
+    5040: {}
 
 # Intra cluster interconnect listening ports, TLS and network interface.
 interconnect:
   ports:
-    5001: { }
+    5001: {}
 
 #heartbeat:
 #  seeds:
@@ -55,7 +60,6 @@ aerospike:
 #    private-key: samples/auth/private_key.pem
 #    public-key: samples/auth/public_key.pem
 
-
 # The logging properties.
 logging:
   #format: json
@@ -63,6 +67,3 @@ logging:
   enable-console-logging: true
   levels:
     metrics-ticker: off
-
-
-

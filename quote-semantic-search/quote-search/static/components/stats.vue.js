@@ -2,18 +2,6 @@ const Stats = {
     template: `
 <div id="stats">
   <h1>Datasets</h1>
-  <table class="table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Indexed Quotes</th>
-                </tr>
-            </thead>
-            <tr v-for="(count, dataset) in stats.datasets">
-                <td >{{dataset}}</td>
-                <td >{{count}}</td>
-            </tr>
-        </table>
         <p>Total Quotes Indexed: <strong>{{totalQuotes}}</strong></p>
 </div>
   `,

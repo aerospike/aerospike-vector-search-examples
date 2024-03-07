@@ -1,8 +1,8 @@
 services:
   aerospike:
     image: aerospike/aerospike-server-enterprise:7.0.0.2
-    # ports:
-      # - "3000:3000"
+    ports:
+      - "3000:3000"
     networks:
       - proximus-demo
     volumes:
@@ -11,7 +11,7 @@ services:
       - "--config-file"
       - "/opt/aerospike/etc/aerospike/aerospike.conf"
   proximus:
-    image: aerospike.jfrog.io/docker/aerospike/aerospike-proximus-private:0.2.0
+    image: aerospike.jfrog.io/docker/aerospike/aerospike-proximus-private:0.3.0
     # ports:
       # - "5000:5000"
     networks:

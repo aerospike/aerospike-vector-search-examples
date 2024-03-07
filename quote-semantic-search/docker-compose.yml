@@ -11,7 +11,7 @@ services:
       - "--config-file"
       - "/opt/aerospike/etc/aerospike/aerospike.conf"
   proximus:
-    image: aerospike.jfrog.io/docker/aerospike/aerospike-proximus-private:0.2.0
+    image: aerospike.jfrog.io/docker/aerospike/aerospike-proximus-private:0.3.0
     # ports:
     #   - "5000:5000"
     networks:
@@ -30,6 +30,8 @@ services:
     environment:
       - PROXIMUS_HOST=proximus
       - PROXIMUS_PORT=5000
+      - APP_NUM_QUOTES=5000
+      - GRPC_DNS_RESOLVER=native
 
   
 networks:
