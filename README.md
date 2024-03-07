@@ -34,7 +34,7 @@ Before starting the application, you need to set `PROXIMUS_HOST` to your sandbox
 export PROXIMUS_HOST=<SANDBOX-HOST>
 ```
 By default the app will index 5000 quotes, but the dataset included in this repo has 
-50K quotes. Depending on the size of your dataset, you may want to configure concurrent parallelism for generating the text embeddings. Higher parallelism will consume more CPU resources. See the [full list of configurable settings](./quote-semantic-search/README.md#configuration)
+100K quotes. Depending on the size of your dataset, you may want to configure concurrent parallelism for generating the text embeddings. Higher parallelism will consume more CPU resources. See the [full list of configurable settings](./quote-semantic-search/README.md#configuration)
 
 ## 3. Start the Application
 To start the application locally, run the following:
