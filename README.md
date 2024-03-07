@@ -34,7 +34,7 @@ Before starting the application, you need to set `PROXIMUS_HOST` to your sandbox
 export PROXIMUS_HOST=<SANDBOX-HOST>
 ```
 By default the app will index 5000 quotes, but the dataset included in this repo has 
-about 50K quotes. Depending on the size of your dataset, you may want to configure concurrent parallelism for generating the text embeddings. Higher parallelism will consume more CPU resources. See the [full list of configurable settings](./quote-semantic-search/README.md#configuration)
+50K quotes. Depending on the size of your dataset, you may want to configure concurrent parallelism for generating the text embeddings. Higher parallelism will consume more CPU resources. See the [full list of configurable settings](./quote-semantic-search/README.md#configuration)
 
 ## 3. Start the Application
 To start the application locally, run the following:
@@ -42,8 +42,7 @@ To start the application locally, run the following:
 waitress-serve --host 127.0.0.1 --port 8080 --threads 32 quote_search:app
 ```
 Embeddings will be generated from each quote using the [MiniLM](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) and those quotes will be added to the
-index to become searchable. Once your indexing is complete you'll be able to 
-begin searching. 
+index to become searchable. 
 
 
 ## 4. Perform a Quote Search
