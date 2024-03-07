@@ -41,7 +41,7 @@ To start the application locally, run the following:
 ```
 waitress-serve --host 127.0.0.1 --port 8080 --threads 32 quote_search:app
 ```
-Quotes will begin being inferences using the [MiniLM](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) and those quotes will be added to the
+Embeddings will be generated from each quote using the [MiniLM](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) and those quotes will be added to the
 index to become searchable. Once your indexing is complete you'll be able to 
 begin searching. 
 
