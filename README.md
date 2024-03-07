@@ -36,9 +36,6 @@ export PROXIMUS_HOST=<SANDBOX-HOST>
 By default the app will index 5000 quotes, but the dataset included in this repo has 
 about 50K quotes. Depending on the size of your dataset, you may want to configure concurrent parallelism for generating the image embeddings. Higher parallelism will consume more CPU resources. See the [full list of configurable settings](./quote-semantic-search/README.md#configuration)
 
-> [!WARNING]
-> Generating all 500k embeddings on a laptop will take some time. It is recommended to use a cloud instance if you are testing the full dataset. 
-
 ## 3. Start the Application
 To start the application locally, run the following:
 ```
