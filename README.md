@@ -23,7 +23,7 @@ You don't have to know Aerospike to get started, but you do need the following:
 
 ```
 git clone https://github.com/aerospike/proximus-examples.git && \\
-cd quote-semantic-search/quote-search && \\
+cd proximus-examples/quote-semantic-search/quote-search && \\
 python3 -m pip install -r requirements.txt --extra-index-url https://aerospike.jfrog.io/artifactory/api/pypi/aerospike-pypi-dev/simple 
 ```
 
@@ -50,7 +50,7 @@ Quotes will begin being inferences using the [MiniLM](https://huggingface.co/sen
 index to become searchable. 
 
 
-## 4. Perform an Quote Search
+## 4. Perform a Quote Search
 
 After starting the application, go to http://localhost:8080/search to perform a search.
 
