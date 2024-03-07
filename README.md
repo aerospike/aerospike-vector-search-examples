@@ -37,14 +37,14 @@ By default the app will index 5000 quotes, but the dataset included in this repo
 over 500K quotes. Depending on the size of your dataset, you may want to configure concurrent threads for generating the image embeddings. Higher parallelism will consume more CPU resources.
 
 ```
-export APP_NUM_QUOTES=500000
+export APP_NUM_QUOTES=500000 && \\
 export APP_INDEXER_PARALLELISM=4
 ```
 
 ## 3. Start the Application
 To start the application locally, run the following:
 ```
-waitress-serve --host 127.0.0.1 --port 8080 --threads 32 prism:app
+waitress-serve --host 127.0.0.1 --port 8080 --threads 32 quote_search:app
 ```
 Quotes will begin being inferences using the [MiniLM](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) and those quotes will be added to the
 index to become searchable. 
