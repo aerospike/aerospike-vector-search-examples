@@ -34,12 +34,14 @@ Before starting the application, you need to set `PROXIMUS_HOST` to your sandbox
 export PROXIMUS_HOST=<SANDBOX-HOST>
 ```
 By default the app will index 5000 quotes, but the dataset included in this repo has 
-over 500K quotes. Depending on the size of your dataset, you may want to configure concurrent threads for generating the image embeddings. Higher parallelism will consume more CPU resources.
+about 500K quotes. Depending on the size of your dataset, you may want to configure concurrent parallelism for generating the image embeddings. Higher parallelism will consume more CPU resources.
 
 ```
-export APP_NUM_QUOTES=500000 && \\
 export APP_INDEXER_PARALLELISM=4
 ```
+
+> [!WARN]
+> Generating all 500k embeddings on a laptop will take some time. It is recommended to use a cloud instance if you are testing the full dataset. 
 
 ## 3. Start the Application
 To start the application locally, run the following:
