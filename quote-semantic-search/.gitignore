@@ -2,4 +2,4 @@ venv/
 .venv/
 pip.conf
 container-volumes/quote-search/data/quotes.csv
-container-volumes/proximus/features.conf
+container-volumes/proximus/etc/aerospike-proximus/features.conf

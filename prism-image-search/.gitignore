@@ -5,4 +5,4 @@ container-volumes/prism/images/*.jpg
 container-volumes/prism/images/*.jpeg
 container-volumes/prism/images/*.png
 container-volumes/prism/images/*.svg
-container-volumes/proximus/features.conf
+container-volumes/proximus/etc/aerospike-proximus/features.conf
