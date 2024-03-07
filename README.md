@@ -8,7 +8,7 @@ Aerospike Vector Search (Proximus) delivers an Approximate Nearest Neighbor (ANN
 Vectors allow you to combine machine learning models (e.g., ChatGPT, CLIP, Llama) to build applications that leverage the capabilities of these models. Vector embeddings encode meaning from text, images, video, etc., and enable search across a large dataset. You can use vector embeddings for a variety of applications such as semantic search, recommendation systems, or retrieval augmented generation (RAG) apps. To learn more about leveraging vector embeddings, see the OpenAI docs about [vector embedding use cases](https://platform.openai.com/docs/guides/embeddings/use-cases).
 
 # Getting Started
-This section describes how to get started using our developer sandbox environment. To request access to a developer sandbox, fill out [this form](https://aerospike.com/lp/aerospike-vector-developer-program-sign-up/). The following instructions help you set up a demo application that performs semantic search across an a dataset of quotes.
+This section describes how to get started using our developer sandbox environment. To request access to a developer sandbox, fill out [this form](https://aerospike.com/lp/aerospike-vector-developer-program-sign-up/). The following instructions help you set up a demo application that performs semantic search across a dataset of quotes.
 
 ## Prerequisites
 You don't have to know Aerospike to get started, but you do need the following:
