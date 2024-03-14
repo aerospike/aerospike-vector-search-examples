@@ -50,7 +50,7 @@ def search_internal():
         return "quote_id is required", 400
 
     record = proximus_client.get(
-        Config.PROXIMUS_NAMESPACE, "", int(quote_id), "quote_embedding"
+        Config.PROXIMUS_NAMESPACE, Config.PROXIMUS_SET, int(quote_id), "quote_embedding"
     )
     embedding = record.bins["quote_embedding"]
     # Search on more and filter the query id.
