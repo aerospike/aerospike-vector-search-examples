@@ -4,7 +4,7 @@ cluster:
   # node-id: a1
 
   # Unique identifier for this cluster.
-  cluster-name: prism-image-search
+  cluster-name: aerospike-proximus
 
 # The Proximus service listening ports, TLS and network interface.
 service:
