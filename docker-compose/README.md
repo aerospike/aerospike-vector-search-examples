@@ -33,5 +33,8 @@ docker run -d \
 ```
 
 ## Uninstall Clusters
+```shell
+./uninstall.sh
+```
 
 
