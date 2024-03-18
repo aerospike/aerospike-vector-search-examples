@@ -1,0 +1,67 @@
+version: "3.9"
+services:
+  aerospike-cluster:
+    image: aerospike/aerospike-server-enterprise:7.0.0.5
+    container_name: "aerospike-cluster"
+    command: --config-file /etc/aerospike/aerospike.conf
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+      - "3002:3002"
+      - "3003:3003"
+    volumes:
+      - ./aerospike-cluster/etc/aerospike:/etc/aerospike
+      - ./aerospike-cluster/var/log/aerospike:/var/log/aerospike
+      - ./aerospike-cluster/run/aerospike:/var/run/aerospike
+      - ./aerospike-cluster/opt/data:/opt/aerospike/data
+      - ./aerospike-cluster/usr/udf/lua:/opt/aerospike/usr/udf/lua
+    healthcheck:
+#      test: [ "CMD", "asinfo", "-U", "admin", "-P", "admin", "-p", "3000", "-v", "build" ]
+      test: [ "CMD", "asinfo", "-p", "3000", "-v", "build" ]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    networks:
+      - svc
+  aerospike-proximus:
+    image: aerospike.jfrog.io/docker/aerospike/aerospike-proximus-private:0.3.1
+    container_name: "aerospike-proximus"
+    depends_on:
+      aerospike-cluster:
+        condition: service_healthy
+    ports:
+     - "5000:5000"
+     - "5040:5040"
+    networks:
+      - svc
+    volumes:
+      - ./aerospike-proximus/etc/aerospike-proximus:/etc/aerospike-proximus
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://aerospike-proximus:5040/manage/rest/v1"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+#  aerospike-client:
+#    image: aerospike/aerospike-tools:10.2.1
+#    container_name: "aerospike-client"
+#    depends_on:
+#      aerospike-cluster:
+#        condition: service_healthy
+#    command: [
+#      "asadm",
+#      "-U", "admin",
+#      "-P", "admin",
+#      "-e", 'enable; manage acl create user tester password psw roles truncate sindex-admin user-admin data-admin read-write read write read-write-udf sys-admin udf-admin',
+#      "--no-config-file",
+#      "-h", "aerospike-cluster",
+#      "-p", "3000"
+#    ]
+#    networks:
+#      - svc
+
+networks:
+  svc:
+    name: svc
+
+

@@ -8,6 +8,7 @@ RUN apt-get update \
 RUN mkdir /prism
 COPY ./prism /prism
 WORKDIR /prism
-RUN python3 -m pip install -r requirements.txt --extra-index-url https://aerospike.jfrog.io/artifactory/api/pypi/aerospike-pypi-dev/simple 
+RUN python3 -m pip install -r requirements.txt --extra-index-url https://aerospike.jfrog.io/artifactory/api/pypi/aerospike-pypi-dev/simple
 
-CMD waitress-serve --host 0.0.0.0 --port 8080 --threads 32 prism:app
+ENTRYPOINT ["waitress-serve"]
+CMD ["--host=0.0.0.0", "--port=8080", "--threads=32", "prism:app"]
