@@ -11,10 +11,6 @@ services:
       - "3003:3003"
     volumes:
       - ./aerospike-cluster/etc/aerospike:/etc/aerospike
-      - ./aerospike-cluster/var/log/aerospike:/var/log/aerospike
-      - ./aerospike-cluster/run/aerospike:/var/run/aerospike
-      - ./aerospike-cluster/opt/data:/opt/aerospike/data
-      - ./aerospike-cluster/usr/udf/lua:/opt/aerospike/usr/udf/lua
     healthcheck:
 #      test: [ "CMD", "asinfo", "-U", "admin", "-P", "admin", "-p", "3000", "-v", "build" ]
       test: [ "CMD", "asinfo", "-p", "3000", "-v", "build" ]

@@ -5,36 +5,29 @@ Locate valid `features.conf` in the following directories:
 * `./aerospike-cluster/etc/aerospike`
 * `./aerospike-proximus/etc/aerospike-proximus`
 
-## Installation Aerospike and Proximus Clusters
+## Installation Aerospike and Proximus Clusters (docker-compose)
 ```shell
-./install.sh
+docker compose -f aerospike-proximus-compose.yaml up -d
 ```
-## To Start Prism Image Search Run:
+## Installation Aerospike and Proximus Clusters (as separate docker images)
+## Run Aerospike Cluster
 ```shell
-cd "$(git rev-parse --show-toplevel)/prism-image-search" && docker build -f "Dockerfile-prism" -t "prism" . && cd -
-
 docker run -d \
---name "prism-image-search" \
--v "$(git rev-parse --show-toplevel)/prism-image-search/container-volumes/prism/images:/prism/static/images/data" \
---network "svc" -p "8080:8080" -e "PROXIMUS_HOST=aerospike-proximus" -e "PROXIMUS_PORT=5000" prism
+--name aerospike-cluster \
+--network svc \
+-p 3000-3003:3000-3003 \
+-v ./aerospike-cluster/etc/aerospike:/etc/aerospike aerospike/aerospike-server-enterprise:7.0.0.5 \
+--config-file /etc/aerospike/aerospike.conf
 ```
-## To Start Quote Semantic Search Run:
+## Run Proximus Cluster
 ```shell
-cd "$(git rev-parse --show-toplevel)/quote-semantic-search" && docker build -f "Dockerfile-quote-search" -t "quote-search" . && cd -
-
 docker run -d \
---name "quote-search" \
--v "$(git rev-parse --show-toplevel)/quote-semantic-search/container-volumes/quote-search/data:/container-volumes/quote-search/data" \
---network "svc" -p "8080:8080" \
--e "PROXIMUS_HOST=aerospike-proximus" \
--e "PROXIMUS_PORT=5000" \
--e "APP_NUM_QUOTES=5000" \
--e "GRPC_DNS_RESOLVER=native" quote-search
-```
-
-## Uninstall Clusters
-```shell
-./uninstall.sh
+--name aerospike-proximus \
+--network svc \
+-p 5000:5000 \
+-p 5040:5040 \
+-v ./aerospike-proximus/etc/aerospike-proximus:/etc/aerospike-proximus \
+aerospike.jfrog.io/docker/aerospike/aerospike-proximus-private:0.3.1
 ```
 
 
