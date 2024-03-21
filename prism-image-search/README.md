@@ -23,7 +23,7 @@ export PROXIMUS_HOST=<SANDBOX_IP>
 To index your local photos, create a symlink to a location with photos directory.
 
 ```shell
-ln -s ~/Picture prism/static/images/data
+ln -s ~/Pictures prism/static/images/data
 ```
 ## Start the application
 
