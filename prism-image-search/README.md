@@ -12,6 +12,13 @@ You don't have to know Aerospike to get started, but you do need the following:
 1. A Python 3.10 - 3.11 environment and familiarity with the Python programming language (see [Setup Python Virtual Environment](./prism-image-search/README.md#setup-python-virtual-environment)).
 1. An Aerospike Vector Search host (Sandbox, or local)
 
+## Configure Proximus Host
+
+If you are connecting to a sandbox trial you'll need to set the following. 
+```shell
+export PROXIMUS_HOST=<SANDBOX_IP>
+```
+
 ## Link your photos
 To index your local photos, create a symlink to a location with photos directory.
 
@@ -26,7 +33,7 @@ ln -s ~/Picture prism/static/images/data
 
 ## Install using docker compose
 If you have a license key, you can easily setup Aerospike, Proximus, and the prism-image-search
-app using docker-compose. When using docker-compose you'll need to place your images in `continer-volumes`
+app using docker-compose. When using docker-compose you'll need to place your images in `container-volumes`
 
 ```shell
 ln -s ~/Pictures container-volumes/prism/images/static/data
@@ -46,6 +53,9 @@ Add your features.conf file to container-volumes/proximus/etc/aerospike-proximus
 ```
 docker compose up
 ```
+
+## Performing a quote search
+Navigate to http://127.0.0.1:8080 and perform a search for images based on a description. 
 
 ## Developing
 This demo is build using [Python Flask](https://flask.palletsprojects.com/en/2.3.x/)

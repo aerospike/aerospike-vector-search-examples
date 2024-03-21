@@ -13,6 +13,13 @@ You don't have to know Aerospike to get started, but you do need the following:
 1. A Python 3.10 - 3.11 environment and familiarity with the Python programming language (see [Setup Python Virtual Environment](./prism-image-search/README.md#setup-python-virtual-environment)).
 1. An Aerospike Vector Search host (Sandbox, or local)
 
+## Configure Proximus Host
+
+If you are connecting to a sandbox trial you'll need to set the following. 
+```shell
+export PROXIMUS_HOST=<SANDBOX_IP>
+```
+
 ## Start the application
 
 ```shell
@@ -39,7 +46,7 @@ Add your features.conf file to container-volumes/proximus/etc/aerospike-proximus
 docker compose up
 ```
 
-### 4. Perform a quote search
+## Performing a quote search
 Navigate to http://127.0.0.1:8080 and perform a search for quotes based on a description. 
 
 ## Developing
