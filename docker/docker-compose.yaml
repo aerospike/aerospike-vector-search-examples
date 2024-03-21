@@ -10,7 +10,7 @@ services:
       - "3002:3002"
       - "3003:3003"
     volumes:
-      - ./aerospike-cluster/etc/aerospike:/etc/aerospike
+      - ${PWD}/config:/etc/aerospike
     healthcheck:
 #      test: [ "CMD", "asinfo", "-U", "admin", "-P", "admin", "-p", "3000", "-v", "build" ]
       test: [ "CMD", "asinfo", "-p", "3000", "-v", "build" ]
@@ -31,7 +31,7 @@ services:
     networks:
       - svc
     volumes:
-      - ./aerospike-proximus/etc/aerospike-proximus:/etc/aerospike-proximus
+      - ${PWD}/config:/etc/aerospike-proximus
     healthcheck:
       test: ["CMD", "curl", "-f", "http://aerospike-proximus:5040/manage/rest/v1"]
       interval: 30s
