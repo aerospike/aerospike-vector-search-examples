@@ -1,7 +1,7 @@
 # Aerospike Proximus Docker Compose
 
 ## Prerequisite
-Locate valid `features.conf` in the current directory:
+Locate valid `features.conf` in the `./config` directory:
 
 ## Installation Aerospike and Proximus Clusters (docker-compose)
 ```shell
