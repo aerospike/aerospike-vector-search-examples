@@ -31,6 +31,10 @@ ln -s ~/Picture prism/static/images/data
  waitress-serve --host 127.0.0.1 --port 8080 --threads 32 prism:app
 ```
 
+## Performing a quote search
+Navigate to http://127.0.0.1:8080 and perform a search for images based on a description. 
+
+
 ## Install using docker compose
 If you have a license key, you can easily setup Aerospike, Proximus, and the prism-image-search
 app using docker-compose. When using docker-compose you'll need to place your images in `container-volumes`
@@ -53,10 +57,6 @@ Add your features.conf file to container-volumes/proximus/etc/aerospike-proximus
 ```
 docker compose up
 ```
-
-## Performing a quote search
-Navigate to http://127.0.0.1:8080 and perform a search for images based on a description. 
-
 ## Developing
 This demo is build using [Python Flask](https://flask.palletsprojects.com/en/2.3.x/)
 and [Vue.js](https://vuejs.org/). In order to developer follow the steps to 
