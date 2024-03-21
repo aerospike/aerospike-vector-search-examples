@@ -23,11 +23,12 @@ export PROXIMUS_HOST=<SANDBOX_IP>
 ## Start the application
 
 ```shell
+cd quote-search && \\
  waitress-serve --host 127.0.0.1 --port 8080 --threads 32 quote_search:app
 ```
 
 ## Performing a quote search
-Navigate to http://127.0.0.1:8080 and perform a search for quotes based on a description. 
+Navigate to http://127.0.0.1:8080/search and perform a search for quotes based on a description. 
 
 
 ## Install using docker compose
@@ -36,7 +37,6 @@ app using docker-compose.
 
 ### 1. Build the image 
 ```
-cd quote-semantic-search && \\
 docker build -t quote-search . -f Dockerfile-quote-search
 ```
 
