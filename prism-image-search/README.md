@@ -6,55 +6,51 @@ from each image and stores it as a vector embedding in Aerospike. When a user
 performs a query a vector embedding for the provided text is generated and
 Proximus performs Approximate Nearest Neighbor(ANN) search to find relevant results .
 
+## Pre-requisites
+You don't have to know Aerospike to get started, but you do need the following:
+
+1. A Python 3.10 - 3.11 environment and familiarity with the Python programming language (see [Setup Python Virtual Environment](./prism-image-search/README.md#setup-python-virtual-environment)).
+1. An Aerospike Vector Search host (Sandbox, or local)
+
+## Link your photos
+To index your local photos, create a symlink to a location with photos directory.
+
+```shell
+ln -s ~/Picture prism/static/images/data
+```
+## Start the application
+
+```shell
+ waitress-serve --host 127.0.0.1 --port 8080 --threads 32 prism:app
+```
+
 ## Install using docker compose
+If you have a license key, you can easily setup Aerospike, Proximus, and the prism-image-search
+app using docker-compose. When using docker-compose you'll need to place your images in `continer-volumes`
 
-The easiest way to get the demo app up and running is by using docker compose.
-
-To run using docker compose:
-
-### 1. Docker login to Aerospike's jfrog artifactory
-   Your username is your email and your password is your generate jfrog identity token.
-
-```
-docker login aerospike.jfrog.io 
+```shell
+ln -s ~/Pictures container-volumes/prism/images/static/data
 ```
 
-### 2. Build the prism image 
+### 1. Build the prism image 
 ```
 cd prism-image-search && \\
 docker build -t prism . -f Dockerfile-prism
 ```
 
-### 3. Add features.conf
+### 2. Add features.conf
 Proximus needs an Aerospike features.conf file with the vector-search feature enabled.
 Add your features.conf file to container-volumes/proximus/etc/aerospike-proximus.
 
-### 4. Add an image dataset
-To make the experience personal, you can use your own photos on your computer, or to index
-a larger dataset you can browse image datasets on [Kaggle](https://www.kaggle.com/datasets).  
-
-[This subset](https://www.kaggle.com/datasets/ifigotin/imagenetmini-1000) of the Imagenet
-dataset is a good reasonable sized one (~4000 images) if you remove the `train` folder. 
-
-Add the images you would like indexed to `container-volumes/prism/images` folder locally. 
-New images added to this folder are indexed periodically. 
-
-### 5. Start the environment
+### 3. Start the environment
 ```
 docker compose up
 ```
-
-### 6. Perform an image search
-Navigate to http://127.0.0.1:8080 and perform a search for words to find similar
-images in your dataset. 
 
 ## Developing
 This demo is build using [Python Flask](https://flask.palletsprojects.com/en/2.3.x/)
 and [Vue.js](https://vuejs.org/). In order to developer follow the steps to 
 setup your Python environment.
-
-### Setup pip
-Setup pip to use Aerospike PyPI repository following instructions [here](https://github.com/citrusleaf/aerospike-proximus-client-python/tree/main#using-the-client-from-your-application-using-pip).
 
 ### Setup Python Virtual Environment
 
@@ -95,12 +91,6 @@ If not set defaults are used.
 
 Setup nginx to handle TLS as
 shown [here](https://dev.to/thetrebelcc/how-to-run-a-flask-app-over-https-using-waitress-and-nginx-2020-235c).
-
-#### Start the application
-
-```shell
- waitress-serve --host 127.0.0.1 --port 8080 --threads 32 prism:app
-```
 
 
 #### Run for development
