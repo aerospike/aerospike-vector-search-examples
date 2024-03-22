@@ -37,7 +37,7 @@ Navigate to http://127.0.0.1:8080 and perform a search for images based on a des
 
 ## Install using docker compose
 If you have a license key, you can easily setup Aerospike, AVS, and the prism-image-search
-app using docker-compose. When using docker-compose you'll need to place your images in `container-volumes`
+app using docker-compose. When using docker-compose, you'll need to place your images in `container-volumes`
 
 ```shell
 ln -s ~/Pictures container-volumes/prism/images/static/data
