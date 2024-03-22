@@ -58,7 +58,7 @@ Add your features.conf file to container-volumes/proximus/etc/aerospike-proximus
 docker compose up
 ```
 ## Developing
-This demo is build using [Python Flask](https://flask.palletsprojects.com/en/2.3.x/)
+This demo is built using [Python Flask](https://flask.palletsprojects.com/en/2.3.x/)
 and [Vue.js](https://vuejs.org/). In order to developer follow the steps to 
 setup your Python environment.
 
