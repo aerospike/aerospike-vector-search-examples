@@ -7,7 +7,7 @@ performs a query a vector embedding for the provided text is generated and
 Proximus performs Approximate Nearest Neighbor(ANN) search to find relevant results.
 
 
-## Pre-requisites
+## Prerequisites
 You don't have to know Aerospike to get started, but you do need the following:
 
 1. A Python 3.10 - 3.11 environment and familiarity with the Python programming language (see [Setup Python Virtual Environment](./prism-image-search/README.md#setup-python-virtual-environment)).
