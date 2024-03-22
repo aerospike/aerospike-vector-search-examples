@@ -32,7 +32,7 @@ Navigate to http://127.0.0.1:8080/search and perform a search for quotes based o
 
 
 ## Install using docker compose
-If you have a license key, you can easily setup Aerospike, Proximus, and the quote-semantic-search
+If you have a license key, you can easily set up Aerospike, AVS, and the quote-semantic-search
 app using docker-compose. 
 
 ### 1. Build the image 
