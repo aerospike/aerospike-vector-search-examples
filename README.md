@@ -5,7 +5,7 @@
 
 
 ## Sample Applications
-This repo contains examples apps for utilizing Aerospike Vector Search. Currently 
+This repo contains sample apps for utilizing Aerospike Vector Search. All of the current 
 these are all written in Python. A brief description of example is below.
 
 * [Basic Search](./basic-search/README.md) - This is a simple application used to showcase the Python client.
