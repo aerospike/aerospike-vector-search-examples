@@ -4,7 +4,7 @@
 > Aerospike Vector Search (AVS) is currently in Alpha and available by invitation only. Breaking changes to our client and APIs are expected. Please refer to our [documentation](https://aerospike-vector-search.netlify.app/vector/) for more details and to request access.
 
 
-## Examples
+## Sample Applications
 This repo contains examples apps for utilizing Aerospike Vector Search. Currently 
 these are all written in Python. A brief description of example is below.
 
