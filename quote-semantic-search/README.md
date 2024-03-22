@@ -15,7 +15,7 @@ You don't have to know Aerospike to get started, but you do need the following:
 
 ## Configure Proximus Host
 
-If you are connecting to a sandbox trial you'll need to set the following. 
+If you are connecting to a trial sandbox, you'll need to set the following:
 ```shell
 export PROXIMUS_HOST=<SANDBOX_IP>
 ```
