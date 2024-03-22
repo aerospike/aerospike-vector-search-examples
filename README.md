@@ -10,7 +10,7 @@ apps are written in Python. The available apps are:
 
 * [Basic Search](./basic-search/README.md) - A simple application used to showcase the Python client.
 * [Quote Search](./quote-semantic-search/) - A application for semantic text search that includes a small dataset of quotes. 
-* [Prism Image Search](./prism-image-search/) - This is an image search demo that can be used to search jpgs. (No dataset included in this example. )
+* [Prism Image Search](./prism-image-search/) - An image search demo that can be used to search JPEG images (no sample dataset included).
 
 ## Prerequisites
 You don't have to know Aerospike to get started, but you do need the following:
