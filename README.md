@@ -19,7 +19,7 @@ You don't have to know Aerospike to get started, but you do need the following:
 1. The URL to your private sandbox environment (this will be provided).
 
 ## Development
-To development you can run AVS using [docker](./docker/README.md) and each of the sample application
+To develop, you can run AVS using [docker](./docker/README.md), and each of the sample applications
 contains a docker-compose file that deploys all the necessary components. 
 
 # Contributing
