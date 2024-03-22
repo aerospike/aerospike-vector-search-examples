@@ -1,6 +1,6 @@
 # Basic vector search example
 
-A simple python application that demonstrates vector ANN index creation, 
+A simple Python application that demonstrates vector ANN index creation, 
 vector record insertion and basic ANN query against Proximus server, using the python client.
 
 ## Prerequisites
