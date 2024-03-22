@@ -6,7 +6,7 @@
 
 ## Sample Applications
 This repo contains sample apps for utilizing Aerospike Vector Search. All of the current 
-these are all written in Python. A brief description of example is below.
+apps are written in Python. The available apps are:
 
 * [Basic Search](./basic-search/README.md) - This is a simple application used to showcase the Python client.
 * [Quote Search](./quote-semantic-search/) - This is a semantic text search that includes a small dataset of quotes. 
