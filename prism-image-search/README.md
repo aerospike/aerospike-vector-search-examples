@@ -62,7 +62,7 @@ This demo is built using [Python Flask](https://flask.palletsprojects.com/en/2.3
 and [Vue.js](https://vuejs.org/). In order to developer follow the steps to 
 set up your Python environment.
 
-### Setup Python Virtual Environment
+### Set up Python Virtual Environment
 
 ```shell
 # Virtual environment to isolate dependencies.
