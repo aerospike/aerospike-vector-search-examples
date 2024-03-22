@@ -9,7 +9,7 @@ This repo contains sample apps for utilizing Aerospike Vector Search. All of the
 apps are written in Python. The available apps are:
 
 * [Basic Search](./basic-search/README.md) - A simple application used to showcase the Python client.
-* [Quote Search](./quote-semantic-search/) - This is a semantic text search that includes a small dataset of quotes. 
+* [Quote Search](./quote-semantic-search/) - A application for semantic text search that includes a small dataset of quotes. 
 * [Prism Image Search](./prism-image-search/) - This is an image search demo that can be used to search jpgs. (No dataset included in this example. )
 
 ## Prerequisites
