@@ -59,7 +59,7 @@ docker compose up
 ```
 ## Developing
 This demo is built using [Python Flask](https://flask.palletsprojects.com/en/2.3.x/)
-and [Vue.js](https://vuejs.org/). In order to developer follow the steps to 
+and [Vue.js](https://vuejs.org/). To start developing, follow the steps to 
 set up your Python environment.
 
 ### Set up Python Virtual Environment
