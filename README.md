@@ -1,7 +1,7 @@
 # Aerospike Vector Search (Proximus)
 
 > [!NOTE]
-> Aerospike Vector Search(AVS) is currently in Alpha and available by invitation only. Breaking changes to our client and APIs are expected. Please refer to our [documentation](https://aerospike-vector-search.netlify.app/) for more details and to request access.
+> Aerospike Vector Search (AVS) is currently in Alpha and available by invitation only. Breaking changes to our client and APIs are expected. Please refer to our [documentation](https://aerospike-vector-search.netlify.app/vector/) for more details and to request access.
 
 
 ## Examples
