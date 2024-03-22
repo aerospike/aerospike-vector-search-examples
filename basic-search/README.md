@@ -6,7 +6,7 @@ vector record insertion, and basic ANN query against the AVS server using the Py
 ## Prerequisites
 
 1. A Python 3.10 - 3.11 environment and familiarity with the Python programming language (see [Setup Python Virtual Environment](./prism-image-search/README.md#setup-python-virtual-environment)).
-1. An Aerospike Vector Search host (Sandbox, or local)
+1. An Aerospike Vector Search host (sandbox or local).
 
 ## Setup build Python Virtual Environment
 
