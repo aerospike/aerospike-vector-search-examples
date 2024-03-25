@@ -13,7 +13,7 @@ You don't have to know Aerospike to get started, but you do need the following:
 1. A Python 3.10 - 3.11 environment and familiarity with the Python programming language (see [Setup Python Virtual Environment](./prism-image-search/README.md#setup-python-virtual-environment)).
 1. An Aerospike Vector Search host (sandbox or local).
 
-## Configure Proximus Host
+## Configure AVS (Proximus) host
 
 If you are connecting to a trial sandbox, you'll need to set the following:
 ```shell
