@@ -1,16 +1,12 @@
 # Basic vector search example
 
-A simple python application that demonstrates vector ANN index creation, vector record insertion and basic ANN query
-against Proximus server, using the python client.
+A simple Python application that demonstrates vector ANN index creation, 
+vector record insertion, and basic ANN query against the AVS server using the Python client.
 
 ## Prerequisites
 
-See the prerequisites [here](https://github.com/citrusleaf/aerospike-proximus-client-python/tree/main#prerequisites)
-
-## Setup pip PyPI repository
-
-Setup pip to use Aerospike PyPI repository following
-instructions [here](https://github.com/citrusleaf/aerospike-proximus-client-python/tree/main#using-the-client-from-your-application-using-pip).
+1. A Python 3.10 - 3.11 environment and familiarity with the Python programming language (see [Setup Python Virtual Environment](./prism-image-search/README.md#setup-python-virtual-environment)).
+1. An Aerospike Vector Search host (sandbox or local).
 
 ## Setup build Python Virtual Environment
 
@@ -25,7 +21,9 @@ source .venv/bin/activate
 ## Install dependencies
 
 ```shell
-python3 -m pip install -r requirements.txt
+python3 -m pip install -r requirements.txt --extra-index-url https://aerospike.jfrog.io/artifactory/api/pypi/aerospike-pypi-dev/simple 
+```
+
 ```
 
 ## Run the search demo
