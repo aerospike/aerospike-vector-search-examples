@@ -15,6 +15,7 @@ You don't have to know Aerospike to get started, but you do need the following:
 
 ## Pip Install Dependencies
 ```shell
+cd quote-search && \\
 python3 -m pip install -r requirements.txt --extra-index-url https://aerospike.jfrog.io/artifactory/api/pypi/aerospike-pypi-dev/simple 
 ```
 
@@ -28,8 +29,7 @@ export PROXIMUS_HOST=<SANDBOX_IP>
 ## Start the application
 
 ```shell
-cd quote-search && \\
- waitress-serve --host 127.0.0.1 --port 8080 --threads 32 quote_search:app
+waitress-serve --host 127.0.0.1 --port 8080 --threads 32 quote_search:app
 ```
 
 ## Performing a quote search

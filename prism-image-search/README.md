@@ -14,6 +14,7 @@ You don't have to know Aerospike to get started, but you do need the following:
 
 ## Pip Install Dependencies
 ```shell
+cd prism && \\
 python3 -m pip install -r requirements.txt --extra-index-url https://aerospike.jfrog.io/artifactory/api/pypi/aerospike-pypi-dev/simple 
 ```
 
