@@ -29,7 +29,7 @@ docker run -d \
 -p 5000:5000 \
 -p 5040:5040 \
 -v ./config:/etc/aerospike-proximus \
-aerospike.jfrog.io/docker/aerospike/aerospike-proximus-private:0.3.1
+aerospike/aerospike-proximus:0.3.1
 ```
 
 
