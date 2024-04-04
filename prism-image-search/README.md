@@ -31,7 +31,7 @@ ln -s ~/Pictures prism/static/images/data
  waitress-serve --host 127.0.0.1 --port 8080 --threads 32 prism:app
 ```
 
-## Performing a quote search
+## Performing an image search
 Navigate to http://127.0.0.1:8080 and perform a search for images based on a description. 
 
 

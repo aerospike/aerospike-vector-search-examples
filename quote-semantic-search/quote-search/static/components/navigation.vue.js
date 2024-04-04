@@ -5,7 +5,6 @@ const Navigation = {
                 <a href="." class="logo d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
                     <img class="bi me-2"
                          src="/images/aerospike-logo.png">
-                    <span class="fs-4">Proximus</span>
                 </a>
 
                 <ul class="nav nav-pills">
