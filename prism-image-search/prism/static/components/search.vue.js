@@ -76,6 +76,8 @@ const Search = {
             });
         },
         findSimilar(image_id, relative_path) {
+	    console.log(image_id)
+	    console.log(relative_path)
             this.url = 'images/data' + relative_path
             startTime = Date.now()
             axios.get('/rest/v1/search_by_id', {params: {image_id: image_id}})

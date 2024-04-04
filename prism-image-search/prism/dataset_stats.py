@@ -26,6 +26,9 @@ def collect_stats():
         temp_counts = {}
         for filename in filenames:
             # Check if record exists
+            filename = filename.replace("/train", "")
+            filename = filename.replace("/google-landmark/google-landmark", "/google-landmark")
+
             if proximus_client.isIndexed(
                 Config.PROXIMUS_NAMESPACE,
                 Config.PROXIMUS_SET,

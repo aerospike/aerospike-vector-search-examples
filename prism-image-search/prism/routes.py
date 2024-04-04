@@ -47,16 +47,14 @@ def dataset_stats():
 def search_internal():
     image_id = request.args.get("image_id")
     record = proximus_client.get(
-        Config.PROXIMUS_NAMESPACE, Config.PROXIMUS_SET, image_id,
-        "image_embedding"
+        Config.PROXIMUS_NAMESPACE, Config.PROXIMUS_SET, image_id, "image_embedding"
     )
     embedding = record.bins["image_embedding"]
 
     # Search on more and filter the query image.
     start = time.time()
     results = vector_search(embedding, Config.PROXIMUS_MAX_RESULTS + 1)
-    results = list(
-        filter(lambda result: result.bins["image_id"] != image_id, results))
+    results = list(filter(lambda result: result.bins["image_id"] != image_id, results))
     time_taken = time.time() - start
     return format_results(results[: Config.PROXIMUS_MAX_RESULTS], time_taken)
 
@@ -75,7 +73,14 @@ def vector_search(embedding, count=Config.PROXIMUS_MAX_RESULTS):
 
 
 def format_results(results, time_taken):
+    for result in results:
+        result.bins["relative_path"] = result.bins["relative_path"].replace(
+            "/train", ""
+        )
+        result.bins["relative_path"] = result.bins["relative_path"].replace(
+            "/google-landmark/google-landmark", "/google-landmark"
+        )
+
     return jsonify(
-        {"timeTaken": time_taken,
-         "results": [result.bins for result in results]}
+        {"timeTaken": time_taken, "results": [result.bins for result in results]}
     )
