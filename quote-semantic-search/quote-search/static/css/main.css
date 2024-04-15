@@ -7,12 +7,8 @@ p {
 }
 
 a.logo img {
-    max-width: 32px;
-    max-height: 32px;
-}
-
-a.logo span {
-    padding-right: 10px;
+    /* max-width: 32px; */
+    max-height: 36px;
 }
 
 img#preview {
@@ -27,41 +23,56 @@ img.search-result {
 
 div.gallery {
     /* Modify styles for the table container */
-    height: auto; /* Adjust height to fit content */
-    width: auto; /* Adjust width to fit content */
-    overflow: auto; /* Add overflow for scrolling if needed */
-    border: 1px solid #ccc; /* Add border as needed */
-    padding: 10px; /* Add padding for spacing */
+    height: auto;
+    /* Adjust height to fit content */
+    width: auto;
+    /* Adjust width to fit content */
+    overflow: auto;
+    /* Add overflow for scrolling if needed */
+    border: 1px solid #ccc;
+    /* Add border as needed */
+    padding: 10px;
+    /* Add padding for spacing */
 }
 
 div.gallery table {
-    width: 100%; /* Make the table take full width */
+    width: 100%;
+    /* Make the table take full width */
 }
 
 div.gallery table td {
-    padding: 10px; /* Add padding for spacing */
+    padding: 10px;
+    /* Add padding for spacing */
 }
 
 div.quote {
     /* Style for each quote container */
-    border: 1px solid #ddd; /* Add border as needed */
-    padding: 10px; /* Add padding for spacing */
-    width: 100%; /* Adjust the width of each quote to fit three per row */
-    margin: 10px; /* Add margin between quotes for spacing */
+    border: 1px solid #ddd;
+    /* Add border as needed */
+    padding: 10px;
+    /* Add padding for spacing */
+    width: 100%;
+    /* Adjust the width of each quote to fit three per row */
+    margin: 10px;
+    /* Add margin between quotes for spacing */
 }
 
 div.quote p {
-    margin: 0; /* Remove default margin for paragraphs */
-    font-style: italic; /* Apply italic style to the quotes */
+    margin: 0;
+    /* Remove default margin for paragraphs */
+    font-style: italic;
+    /* Apply italic style to the quotes */
 }
 
 .author {
-    margin-top: 5px; /* Add margin between the quote and the author */
+    margin-top: 5px;
+    /* Add margin between the quote and the author */
 }
 
 @media only screen {
     .quote {
-        width: 100%; /* Adjust width for even smaller screens to span full width */
+        width: 100%;
+        /* Adjust width for even smaller screens to span full width */
     }
 }
 
