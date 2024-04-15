@@ -16,3 +16,4 @@ class Config(object):
     PROXIMUS_VERIFY_TLS = os.environ.get("VERIFY_TLS") or True
     PROXIMUS_MAX_RESULTS = int(os.environ.get("PROXIMUS_MAX_RESULTS") or 20)
     MAX_CONTENT_LENGTH = int(os.environ.get("MAX_CONTENT_LENGTH") or 10485760)
+    PROXIMUS_IS_LOADBALANCER = os.environ.get("PROXIMUS_IS_LOADBALANCER") or False

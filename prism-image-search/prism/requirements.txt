@@ -1,6 +1,6 @@
 # TODO: Include exact versions
 # Aerospike dependencies
-aerospike-proximus==0.3.1
+aerospike-proximus==0.3.2.dev1
 
 # Flask framework
 flask~=2.3.2

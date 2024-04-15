@@ -19,6 +19,7 @@ class Config(object):
     PROXIMUS_MAX_RESULTS = int(os.environ.get("PROXIMUS_MAX_RESULTS") or 5)
     INDEXER_PARALLELISM = int(os.environ.get("APP_INDEXER_PARALLELISM") or 1)
     MAX_CONTENT_LENGTH = int(os.environ.get("MAX_CONTENT_LENGTH") or 10485760)
+    PROXIMUS_IS_LOADBALANCER = os.environ.get("PROXIMUS_IS_LOADBALANCER") or False
 
     if NUM_QUOTES > 497715:
         NUM_QUOTES = 497715
