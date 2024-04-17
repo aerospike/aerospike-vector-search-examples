@@ -1,1 +1,1 @@
-aerospike-proximus==0.3.2.dev1
+aerospike-vector==0.4.0

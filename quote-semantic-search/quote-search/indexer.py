@@ -1,8 +1,10 @@
+import asyncio
+import collections
+from concurrent.futures import ProcessPoolExecutor
 import csv
 import itertools
 from multiprocessing import get_context
 import os
-from threading import Thread
 import logging
 from tqdm import tqdm
 import tarfile
@@ -10,7 +12,7 @@ import tarfile
 from config import Config
 from data_encoder import MODEL_DIM, encoder
 from proximus_client import proximus_admin_client, proximus_client
-from aerospike_vector import types_pb2
+from aerospike_vector import types
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -33,21 +35,21 @@ DATASET_FILE = "../container-volumes/quote-search/data/quotes.csv"
 dataset = itertools.islice(read_csv(DATASET_FILE), Config.NUM_QUOTES)
 
 
-def create_index():
-    for index in proximus_admin_client.indexList():
+async def create_index():
+    for index in await proximus_admin_client.index_list():
         if (
-            index.id.namespace == Config.PROXIMUS_NAMESPACE
-            and index.id.name == Config.PROXIMUS_INDEX_NAME
+            index["id"]["namespace"] == Config.PROXIMUS_NAMESPACE
+            and index["id"]["name"] == Config.PROXIMUS_INDEX_NAME
         ):
             return
 
-    proximus_admin_client.indexCreate(
+    await proximus_admin_client.index_create(
         namespace=Config.PROXIMUS_NAMESPACE,
         name=Config.PROXIMUS_INDEX_NAME,
-        setFilter=Config.PROXIMUS_SET,
-        vector_bin_name="quote_embedding",
+        sets=Config.PROXIMUS_SET,
+        vector_field="quote_embedding",
         dimensions=MODEL_DIM,
-        vector_distance_metric=types_pb2.VectorDistanceMetric.COSINE,
+        vector_distance_metric=types.VectorDistanceMetric.COSINE,
     )
 
 
@@ -55,26 +57,57 @@ def either(c):
     return "[%s%s]" % (c.lower(), c.upper()) if c.isalpha() else c
 
 
-def index_data():
+async def process_index_quote(executor, id_quote):
+    embedding = await asyncio.get_running_loop().run_in_executor(
+        executor,
+        embed_text,
+        id_quote,
+    )
+
+    await index_quote(id_quote, embedding)
+
+
+async def index_data():
     try:
         logger.info("Creating index")
-        create_index()
+        await create_index()
 
         if Config.INDEXER_PARALLELISM <= 1:
             for quote in tqdm(
                 enumerate(dataset), "Indexing quotes", total=Config.NUM_QUOTES
             ):
-                index_quote(quote)
+                embedding = embed_text(quote)
+                await index_quote(quote, embedding)
+
         else:
+            # with ProcessPoolExecutor(
+            #     max_workers=Config.INDEXER_PARALLELISM
+            # ) as executor:
+            #     futures = [
+            #         process_index_quote(executor, id_quote)
+            #         for id_quote in enumerate(dataset)
+            #     ]
+
+            #     for f in tqdm(
+            #         asyncio.as_completed(futures),
+            #         "Indexing quotes",
+            #         total=Config.NUM_QUOTES,
+            #     ):
+            #         await f
+            #     print("done")
+            #     executor.shutdown()
+
+            # print("done")
+
             with get_context("spawn").Pool(
                 processes=Config.INDEXER_PARALLELISM
             ) as pool:
-                for _ in tqdm(
-                    pool.imap(index_quote, enumerate(dataset)),
+                for r in tqdm(
+                    pool.imap(embed_text, enumerate(dataset)),
                     "Indexing quotes",
                     total=Config.NUM_QUOTES,
                 ):
-                    pass
+                    await index_quote(r[1], r[0])
 
     except Exception as e:
         logger.warning("Error indexing:" + str(e))
@@ -83,22 +116,30 @@ def index_data():
         traceback.print_exc()
 
 
-def index_quote(id_quote):
+def embed_text(id_quote):
     id, quote = id_quote
     quote, author, catagory = quote
+    text = quote + " ".join(catagory.split(","))
+    return encoder(text), id_quote
+
+
+async def index_quote(id_quote, embedding):
+    id, quote = id_quote
+    quote, author, category = quote
     doc = {"quote_id": id}
     doc["quote"] = quote
     doc["author"] = author
-    doc["tags"] = catagory.split(",")
+    doc["tags"] = category.split(",")
     logger.debug(f"Creating text vector embedding {id}")
-    text = quote + " ".join(doc["tags"])
-    embedding = encoder(text)
     doc["quote_embedding"] = embedding.tolist()
 
     # Insert record
     try:
-        proximus_client.put(
-            Config.PROXIMUS_NAMESPACE, Config.PROXIMUS_SET, doc["quote_id"], doc
+        await proximus_client.put(
+            namespace=Config.PROXIMUS_NAMESPACE,
+            set_name=Config.PROXIMUS_SET,
+            key=doc["quote_id"],
+            record_data=doc,
         )
     except Exception as e:
         logger.warning(
@@ -108,11 +149,7 @@ def index_quote(id_quote):
         pass
 
 
-def start():
+async def start():
     # Index data once
-    thread = Thread(target=index_data)
-    thread.start()
-
-
-if __name__ == "__main__":
-    start()
+    await index_data()
+    logger.info("Indexing complete")

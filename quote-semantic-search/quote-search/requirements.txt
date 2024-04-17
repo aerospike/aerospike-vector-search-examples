@@ -1,10 +1,10 @@
 # TODO: Include exact versions
 # Aerospike dependencies
-aerospike-proximus==0.3.2.dev1
+aerospike-proximus==0.4.0
 
 
 # Flask framework
-flask~=2.3.2
+flask[async]~=2.3.2
 flask-wtf
 Flask-BasicAuth
 werkzeug

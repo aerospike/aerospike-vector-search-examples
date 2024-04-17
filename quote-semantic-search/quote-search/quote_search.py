@@ -1,10 +1,14 @@
+import asyncio
+import threading
 from flask import Flask
 from flask_basicauth import BasicAuth
 from config import Config
 import logging
+from event_loop import run_async, loop
 
 logging.basicConfig(level=logging.CRITICAL)
 logger = logging.getLogger(__name__)
+
 
 # The flask application.
 app = Flask(__name__, static_url_path="")
@@ -19,9 +23,16 @@ import indexer
 import dataset_stats
 import routes
 
+
+def background():
+    run_async(indexer.start(), blocking=False)
+    run_async(dataset_stats.start(), blocking=False)
+    loop.run_forever()
+
+
 dir(routes)
-indexer.start()
-dataset_stats.start()
+background_thread = threading.Thread(target=background)
+background_thread.start()
 
 if __name__ == "__main__":
-    app.run(host="localhost", port=8080)
+    app.run(host="localhost", port=8080, debug=True)
