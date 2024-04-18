@@ -1,24 +1,38 @@
 #!/usr/bin/env bash
 
-# Default directory containing the JSON files
-DEFAULT_DIR="/path/to/dashboards"
+# Default path for JSON files or directory
+DEFAULT_PATH="/path/to/dashboards"
 
-# Use the first script argument as the directory, or use the default if no argument provided
-DASHBOARD_DIR="${1:-$DEFAULT_DIR}"
+# Use the first script argument as the path, or use the default if no argument provided
+INPUT_PATH="${1:-$DEFAULT_PATH}"
 
-# Check if the specified directory exists
-if [ ! -d "$DASHBOARD_DIR" ]; then
-    echo "The specified directory does not exist: $DASHBOARD_DIR"
+# Function to process and create a configmap from a JSON file
+process_file() {
+    local file="$1"
+    local base_name=$(basename "$file" .json)
+    local sanitized_name=$(echo "$base_name" | tr '[:upper:]_' '[:lower:]-')
+
+    if [ "${#sanitized_name}" -gt 253 ]; then
+        sanitized_name="${sanitized_name:0:253}"
+    fi
+
+    kubectl create configmap "${sanitized_name}-dashboard" \
+        --from-file="${sanitized_name}.json=$file" \
+        -n monitoring \
+        --dry-run=client -o yaml | kubectl apply -f - && \
+    kubectl label configmap "${sanitized_name}-dashboard" grafana_dashboard=1 -n monitoring --overwrite
+}
+
+# Check the type of the input path and process accordingly
+if [ -d "$INPUT_PATH" ]; then
+    # It's a directory, process all .json files recursively
+    find "$INPUT_PATH" -type f -name '*.json' | while read -r file; do
+        process_file "$file"
+    done
+elif [ -f "$INPUT_PATH" ] && [[ "$INPUT_PATH" == *.json ]]; then
+    # It's a single file, process it
+    process_file "$INPUT_PATH"
+else
+    echo "The specified path is not valid or does not contain JSON files: $INPUT_PATH"
     exit 1
 fi
-
-# Loop over each JSON file in the directory
-for file in "$DASHBOARD_DIR"/*.json; do
-    # Extract the base filename without the extension
-    base_name=$(basename "$file" .json)
-    # Create a ConfigMap with a unique name and key based on the original file name
-    kubectl create configmap "${base_name}-dashboard" \
-        --from-file="${base_name}.json=$file" \
-        -n monitoring \
-        --dry-run=client -o yaml | kubectl apply -f -
-done
