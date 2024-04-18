@@ -1,5 +1,23 @@
 #!/usr/bin/env bash
 
+# This script automates the creation of Kubernetes ConfigMaps from Grafana dashboard JSON files.
+# It is designed to handle both individual JSON files and directories containing JSON files.
+# The script recursively searches the given directory for all JSON files, creates a ConfigMap for each,
+# labels them for Grafana's sidecar to recognize, and handles names appropriately by sanitizing them
+# to meet Kubernetes naming requirements.
+#
+# Usage:
+#   ./create_grafana_dashboards.sh [path to JSON file or directory]
+#   If no path is provided, a default path can be set in the script.
+#
+# The script checks if the input is a directory or a single JSON file:
+# - If a directory, it processes all JSON files recursively.
+# - If a single JSON file, it processes just that file.
+# Each JSON file is used to create a ConfigMap named after the file, sanitized and suffixed with '-dashboard'.
+# These ConfigMaps are labeled with 'grafana_dashboard=1' to ensure they are recognized by Grafana's sidecar.
+#
+# Ensure you have the necessary permissions to execute kubectl commands in your environment.
+
 # Default path for JSON files or directory
 DEFAULT_PATH="/path/to/dashboards"
 
