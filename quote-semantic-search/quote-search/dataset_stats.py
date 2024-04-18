@@ -24,10 +24,10 @@ async def collect_stats():
 
             for quote_id in range(Config.NUM_QUOTES):
                 # Check if record exists
-                if await proximus_client.is_indexed(
+                if proximus_client.isIndexed(
                     namespace=Config.PROXIMUS_NAMESPACE,
-                    set_name=Config.PROXIMUS_SET,
-                    index_name=Config.PROXIMUS_INDEX_NAME,
+                    set=Config.PROXIMUS_SET,
+                    indexName=Config.PROXIMUS_INDEX_NAME,
                     key=quote_id,
                 ):
                     # Record exists

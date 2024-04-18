@@ -1,38 +1,38 @@
-import asyncio
-import threading
-from flask import Flask
-from flask_basicauth import BasicAuth
+import time
 from config import Config
 import logging
-from event_loop import run_async, loop
 
 logging.basicConfig(level=logging.CRITICAL)
 logger = logging.getLogger(__name__)
 
 
-# The flask application.
-app = Flask(__name__, static_url_path="")
-app.config.from_object(Config)
-
-if Config.BASIC_AUTH_USERNAME and Config.BASIC_AUTH_PASSWORD:
-    logger.info("Running with basic auth")
-    app.config["BASIC_AUTH_FORCE"] = True
-    basic_auth = BasicAuth(app)
-
 import indexer
-import dataset_stats
 import routes
+from proximus_client import proximus_client
+from data_encoder import encoder
 
-
-def background():
-    run_async(indexer.start(), blocking=False)
-    run_async(dataset_stats.start(), blocking=False)
-    loop.run_forever()
-
+# time.sleep(10)
 
 dir(routes)
-background_thread = threading.Thread(target=background)
-background_thread.start()
+indexer.index_data()
 
-if __name__ == "__main__":
-    app.run(host="localhost", port=8080, debug=True)
+bins = ("quote_id", "quote", "author")
+embedding = encoder("dogs").tolist()
+i = 0
+
+while True:
+    results = proximus_client.vectorSearch(
+        Config.PROXIMUS_NAMESPACE,
+        Config.PROXIMUS_INDEX_NAME,
+        embedding,
+        5,
+        None,
+        *bins,
+    )
+
+    print(f"Query {i} results")
+
+    for i, r in enumerate(results):
+        print("Result", i, r.bins)
+
+    time.sleep(5)
