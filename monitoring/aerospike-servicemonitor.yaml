@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: aerospike-monitor
+  namespace: monitoring
+  labels:
+    release: monitoring-stack  # Ensure this matches the Helm release name
+spec:
+  selector:
+    matchLabels:
+      app: aerospike-cluster 
+  namespaceSelector:
+    matchNames:
+      - aerospike
+  endpoints:
+    - port: exporter  # Assuming this is the port name where metrics are exposed
+      interval: 15s

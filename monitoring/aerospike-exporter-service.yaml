@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: aerospike-exporter
+  namespace: aerospike
+  labels:
+    app: aerospike-cluster  # This label must match the ServiceMonitor selector
+spec:
+  ports:
+  - name: exporter
+    port: 9145
+    protocol: TCP
+  selector:
+    app: aerospike-cluster  # This should match the labels of your Aerospike pods
+  type: ClusterIP
