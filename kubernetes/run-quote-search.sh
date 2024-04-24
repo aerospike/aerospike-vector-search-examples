@@ -65,3 +65,7 @@ gcloud compute scp $WORKSPACE/aerospike-proximus/gke/run-app.sh proximus-app:~/r
 rm "$WORKSPACE/aerospike-proximus/gke/run-app.sh"
 
 gcloud compute ssh proximus-app --zone="$ZONE" --project="$PROJECT" -- "./run-app.sh"
+
+echo "to expose your web app to the world, run the following commands adapted to your enviroment"
+echo 'gcloud compute firewall-rules create allow-8080 --network default --allow tcp:8080 --target-tags http-server --direction INGRESS'
+echo 'gcloud compute instances add-tags proximus-app --tags http-server --zone us-central1-c'

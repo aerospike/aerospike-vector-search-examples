@@ -14,12 +14,12 @@ print_env() {
 
 # Set environment variables for the GKE cluster setup
 export PROJECT_ID="aerostation-dev"
-export CLUSTER_NAME="victor-cluster"
+export CLUSTER_NAME="whatthe-cluster"
 export NODE_POOL_NAME_AEROSPIKE="aerospike-pool"
 export NODE_POOL_NAME_PROXIMUS="proximus-pool"
 export ZONE="us-central1-c"
 export FEATURES_CONF="./features.conf"
-export AEROSPIKE_CR="./ssd_storage_cluster_cr.yaml"
+export AEROSPIKE_CR="./manifests/ssd_storage_cluster_cr.yaml"
 
 # Print environment variables to ensure they are set correctly
 print_env
@@ -58,8 +58,7 @@ kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_AEROSPIKE" -
     xargs -I {} kubectl label {} aerospike.com/node-pool=default-rack --overwrite
 
 
-kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_AEROSPIKE" -o name | \
-    xargs -I {} kubectl taint nodes {} dedicated=aerospike:NoSchedule --overwrite
+
 
 echo "----- Adding Proximus node pool -----"
 if ! gcloud container node-pools create "$NODE_POOL_NAME_PROXIMUS" \
@@ -117,14 +116,30 @@ kubectl apply -f https://raw.githubusercontent.com/aerospike/aerospike-kubernete
 echo "Deploy Aerospike Cluster"
 kubectl apply -f "$AEROSPIKE_CR"
 
-
+echo "Deploy Proximus from helm chart"
 # deploy proximus. this part is hacky especially until we have a public helm chart.
 mkdir temp-helm
 cd temp-helm
 git clone -b VEC-90-helm-for-proximus https://github.com/aerospike/helm-charts.git
 cd ..
-helm install proximus-gke "temp-helm/helm-charts/aerospike-proximus" --values "proximus-gke.yaml" --namespace aerospike --wait
+helm install proximus-gke "temp-helm/helm-charts/aerospike-proximus" --values "manifests/proximus-gke-values.yaml" --namespace aerospike --wait
 
+echo "Add monitoring"
+
+# Add the Prometheus Community Helm repository
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+
+# Install the kube-prometheus-stack
+helm install monitoring-stack prometheus-community/kube-prometheus-stack --namespace monitoring --create-namespace
+
+kubectl apply -f manifests/monitoring
+
+echo "Use the following command to view grafana dashboard"
+echo "kubectl port-forward -n monitoring svc/monitoring-stack-grafana 3000:80"
+
+echo "You can use 'import-dashboards.sh <your grafana dashboard directory>' to include your grafana dashboards"
+echo "To run the quote-search app, use 'run-quote-search.sh'"
 
 # echo "Deploy Proximus"
 # helm install proximus-gke "$WORKSPACE/aerospike-proximus" \
