@@ -8,7 +8,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: as-proximus-gke-aerospike-proximus
+      app: proximus-gke-aerospike-proximus
   namespaceSelector:
     matchNames:
       - aerospike

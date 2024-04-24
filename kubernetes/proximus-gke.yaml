@@ -2,8 +2,13 @@ replicaCount: 3
 proximusConfig:
   heartbeat:
     seeds:
-      - address: as-proximus-gke-aerospike-proximus-0.as-proximus-gke-aerospike-proximus.aerospike.svc.cluster.local
+      - address: proximus-gke-aerospike-proximus-0.proximus-gke-aerospike-proximus.aerospike.svc.cluster.local 
         port: 5001
+      - address: proximus-gke-aerospike-proximus-1.proximus-gke-aerospike-proximus.aerospike.svc.cluster.local 
+        port: 5001
+      - address: proximus-gke-aerospike-proximus-2.proximus-gke-aerospike-proximus.aerospike.svc.cluster.local 
+        port: 5001
+
   interconnect:
     ports:
       5001:
@@ -34,15 +39,15 @@ service:
       targetPort: 5000
 
 # schedule proximus nodes
-affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: "cloud.google.com/gke-nodepool"
-          operator: In
-          values:
-          - "proximus-gke-proximus-pool"
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: aerospike.com/node-pool
+            operator: In
+            values:
+            - "proximus"
   podAntiAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
       - topologyKey: "kubernetes.io/hostname"

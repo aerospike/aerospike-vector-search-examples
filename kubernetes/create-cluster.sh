@@ -15,8 +15,8 @@ print_env() {
 # Set environment variables for the GKE cluster setup
 export PROJECT_ID="aerostation-dev"
 export CLUSTER_NAME="victor-cluster"
-export NODE_POOL_NAME_AEROSPIKE="${CLUSTER_NAME}-aerospike-pool"
-export NODE_POOL_NAME_PROXIMUS="${CLUSTER_NAME}-proximus-pool"
+export NODE_POOL_NAME_AEROSPIKE="aerospike-pool"
+export NODE_POOL_NAME_PROXIMUS="proximus-pool"
 export ZONE="us-central1-c"
 export FEATURES_CONF="./features.conf"
 export AEROSPIKE_CR="./ssd_storage_cluster_cr.yaml"
@@ -78,7 +78,7 @@ fi
 
 echo "----- Labeling Proximus nodes -----"
 kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_PROXIMUS" -o name | \
-    xargs -I {} kubectl label {} proximus.com/node-pool=default --overwrite
+    xargs -I {} kubectl label {} aereospike.com/node-pool=proximus --overwrite
 
 echo "----- Setup complete. The cluster and node pools are configured. -----"
 
@@ -116,6 +116,15 @@ kubectl apply -f https://raw.githubusercontent.com/aerospike/aerospike-kubernete
 
 echo "Deploy Aerospike Cluster"
 kubectl apply -f "$AEROSPIKE_CR"
+
+
+# deploy proximus. this part is hacky especially until we have a public helm chart.
+mkdir temp-helm
+cd temp-helm
+git clone -b VEC-90-helm-for-proximus https://github.com/aerospike/helm-charts.git
+cd ..
+helm install proximus-gke "temp-helm/helm-charts/aerospike-proximus" --values "proximus-gke.yaml" --namespace aerospike --wait
+
 
 # echo "Deploy Proximus"
 # helm install proximus-gke "$WORKSPACE/aerospike-proximus" \
