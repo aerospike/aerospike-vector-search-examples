@@ -1,0 +1,54 @@
+replicaCount: 3
+proximusConfig:
+  heartbeat:
+    seeds:
+      - address: as-proximus-gke-aerospike-proximus-0.as-proximus-gke-aerospike-proximus.aerospike.svc.cluster.local
+        port: 5001
+  interconnect:
+    ports:
+      5001:
+        addresses:
+          0.0.0.0
+  aerospike:
+    metadata-namespace: "proximus-meta"
+    seeds:
+      - aerocluster-0-0.aerocluster.aerospike.svc.cluster.local:
+          port: 3000
+  logging:
+    #    file: /var/log/aerospike-proximus/aerospike-proximus.log
+    enable-console-logging: false
+    format: simple
+    max-history: 30
+    levels:
+      metrics-ticker: info
+      root: info
+    ticker-interval: 10
+
+service:
+  enabled: true
+  annotations:
+    networking.gke.io/load-balancer-type: "Internal"
+  ports:
+    - name: "svc-port"
+      port: 5000
+      targetPort: 5000
+
+# schedule proximus nodes
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: "cloud.google.com/gke-nodepool"
+          operator: In
+          values:
+          - "proximus-gke-proximus-pool"
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - topologyKey: "kubernetes.io/hostname"
+        labelSelector:
+          matchExpressions:
+            - key: "app.kubernetes.io/name"
+              operator: In
+              values:
+                - "aerospike-proximus"
