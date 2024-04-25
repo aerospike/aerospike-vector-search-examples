@@ -61,6 +61,9 @@ echo "Labeling and tainting Aerospike nodes..."
 kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_AEROSPIKE" -o name | \
     xargs -I {} kubectl label {} aerospike.com/node-pool=default-rack --overwrite
 
+# This script is used to create and install a Kubernetes application.
+# However, there seems to be an issue with the labels used in the script.
+# Further investigation is needed to identify the cause of the problem.
 # This does not work for some reason, suspecting bad label
 # kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_AEROSPIKE" -o name | \
 #     xargs -I {} kubectl taint nodes {} dedicated=aerospike:NoSchedule --overwrite
