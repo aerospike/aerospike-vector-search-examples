@@ -18,7 +18,7 @@ print_env() {
 
 # Set environment variables for the GKE cluster setup
 export PROJECT_ID="aerostation-dev"
-export CLUSTER_NAME="whatthe-cluster"
+export CLUSTER_NAME="myworld"
 export NODE_POOL_NAME_AEROSPIKE="aerospike-pool"
 export NODE_POOL_NAME_PROXIMUS="proximus-pool"
 export ZONE="us-central1-c"
@@ -57,13 +57,10 @@ else
     echo "Aerospike node pool added successfully."
 fi
 
-echo "Labeling and tainting Aerospike nodes..."
+echo "Labeling Aerospike nodes..."
 kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_AEROSPIKE" -o name | \
     xargs -I {} kubectl label {} aerospike.com/node-pool=default-rack --overwrite
 
-# This script is used to create and install a Kubernetes application.
-# However, there seems to be an issue with the labels used in the script.
-# Further investigation is needed to identify the cause of the problem.
 # This does not work for some reason, suspecting bad label
 # kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_AEROSPIKE" -o name | \
 #     xargs -I {} kubectl taint nodes {} dedicated=aerospike:NoSchedule --overwrite
@@ -137,8 +134,10 @@ helm install monitoring-stack prometheus-community/kube-prometheus-stack --names
 echo "Applying additional monitoring manifests..."
 kubectl apply -f manifests/monitoring
 
-echo "Setup complete. Use the following command to view Grafana dashboard:"
-echo "kubectl port-forward -n monitoring svc/monitoring-stack-grafana 3000:80"
-
+echo "Setup complete."
 echo "To include your Grafana dashboards, use 'import-dashboards.sh <your grafana dashboard directory>'"
+
+echo "To view grafana dashboards from your machine use kubectl port-forward -n monitoring svc/monitoring-stack-grafana 3000:80"
+echo "To expose grafana ports publically 'kubectl apply -f helpers/EXPOSE-GRAFANA.yaml'"
+echo "To find the exposed port with 'kubectl get svc -n monitoring' " 
 echo "To run the quote-search app, use 'run-quote-search.sh'"
