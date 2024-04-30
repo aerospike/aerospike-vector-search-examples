@@ -22,7 +22,7 @@ def read_csv(filename):
         with tarfile.open(filename + ".tgz", "r:gz") as tar:
             tar.extractall(path=os.path.dirname(filename))
 
-    with open(filename, "r") as f:
+    with open(filename, "r", encoding="utf-8") as f:
         reader = csv.reader(f)
         next(reader)  # Skip the header
         for row in reader:
