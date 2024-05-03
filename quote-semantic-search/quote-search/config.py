@@ -20,6 +20,8 @@ class Config(object):
     INDEXER_PARALLELISM = int(os.environ.get("APP_INDEXER_PARALLELISM") or 1)
     MAX_CONTENT_LENGTH = int(os.environ.get("MAX_CONTENT_LENGTH") or 10485760)
     PROXIMUS_IS_LOADBALANCER = os.environ.get("PROXIMUS_IS_LOADBALANCER") or False
+    DATASET_FILE_PATH = os.environ.get("DATASET_FILE_PATH") or "../container-volumes/quote-search/data/quotes.csv"
+
 
     if NUM_QUOTES > 497715:
         NUM_QUOTES = 497715
