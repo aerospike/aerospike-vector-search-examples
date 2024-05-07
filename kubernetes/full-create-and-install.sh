@@ -118,11 +118,11 @@ kubectl apply -f https://raw.githubusercontent.com/aerospike/aerospike-kubernete
 
 echo "Deploying Aerospike cluster..."
 kubectl apply -f "$AEROSPIKE_CR"
-
+# replace with helm repo add when helm chart is published. 
 echo "Deploying Proximus from Helm chart..."
 mkdir -p temp-helm
 cd temp-helm
-git clone -b VEC-90-helm-for-proximus https://github.com/aerospike/helm-charts.git
+git clone  https://github.com/aerospike/helm-charts.git
 cd ..
 helm install proximus-gke "temp-helm/helm-charts/aerospike-proximus" --values "manifests/proximus-gke-values.yaml" --namespace aerospike --wait
 
