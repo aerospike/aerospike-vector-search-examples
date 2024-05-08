@@ -105,7 +105,7 @@ If not set defaults are used.
 | PROXIMUS_NAMESPACE          | test               | The aerospike namespace for storing the image records and index |
 | PROXIMUS_INDEX_NAME         | prism-image-search | The name of the  index                                          |
 | PROXIMUS_MAX_RESULTS        | 20                 | Maximum number of vector search results to return               |
-| PROXIMUS_IS_LOADBALANCER    | False                 | Determines weather the client should use a load balancer     |
+| PROXIMUS_IS_LOADBALANCER    | False                 |                 If true, the first seed address will be treated as a load balancer node.```
 
 ### Setup networking (optional)
 
