@@ -6,11 +6,11 @@ proximus_client = vectordb_client.VectorDbClient(
     types.HostPort(Config.PROXIMUS_HOST,
                    Config.PROXIMUS_PORT,
                    Config.PROXIMUS_VERIFY_TLS),
-    Config.PROXIMUS_ADVERTISED_LISTENER)
+    Config.PROXIMUS_ADVERTISED_LISTENER, Config.PROXIMUS_IS_LOADBALANCER)
 
 
 proximus_admin_client = vectordb_admin.VectorDbAdminClient(
     types.HostPort(Config.PROXIMUS_HOST,
                    Config.PROXIMUS_PORT,
                    Config.PROXIMUS_VERIFY_TLS),
-    Config.PROXIMUS_ADVERTISED_LISTENER)
+    Config.PROXIMUS_ADVERTISED_LISTENER, Config.PROXIMUS_IS_LOADBALANCER)

@@ -29,7 +29,7 @@ def read_csv(filename):
             yield row
 
 
-DATASET_FILE = "../container-volumes/quote-search/data/quotes.csv"
+DATASET_FILE = Config.DATASET_FILE_PATH
 dataset = itertools.islice(read_csv(DATASET_FILE), Config.NUM_QUOTES)
 
 
