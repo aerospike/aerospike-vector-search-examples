@@ -11,19 +11,29 @@ Proximus performs Approximate Nearest Neighbor(ANN) search to find relevant resu
 You don't have to know Aerospike to get started, but you do need the following:
 
 1. A Python 3.10 - 3.11 environment and familiarity with the Python programming language (see [Setup Python Virtual Environment](./prism-image-search/README.md#setup-python-virtual-environment)).
-1. An Aerospike Vector Search host (sandbox or local).
+1. An Aerospike Vector Search host (preview or local).
 
 ## Configure AVS (Proximus) host
 
-If you are connecting to a trial sandbox, you'll need to set the following:
+If you are connecting to a preview environment, you'll need to set the following:
 ```shell
-export PROXIMUS_HOST=<SANDBOX_IP>
+export PROXIMUS_HOST=<PREVIEW_ENV_IP>
 ```
 
+## Install Dependencies
+Change directories into the `quote-search` folder.
+
+```shell
+cd quote-search
+```
+
+Install dependencies using requirements.text 
+```shell 
+python3 -m pip install -r requirements.txt --extra-index-url https://aerospike.jfrog.io/artifactory/api/pypi/aerospike-pypi-dev/simple 
+```
 ## Start the application
 
 ```shell
-cd quote-search && \\
  waitress-serve --host 127.0.0.1 --port 8080 --threads 32 quote_search:app
 ```
 
@@ -91,6 +101,7 @@ If not set defaults are used.
 | PROXIMUS_NAMESPACE          | test               | The aerospike namespace for storing the image records and index |
 | PROXIMUS_INDEX_NAME         | quote-search       | The name of the  index                                          |
 | PROXIMUS_MAX_RESULTS        | 20                 | Maximum number of vector search results to return               |
+| PROXIMUS_IS_LOADBALANCER    | False                 |                 If true, the first seed address will be treated as a load balancer node.```
 
 ### Setup networking (optional)
 
