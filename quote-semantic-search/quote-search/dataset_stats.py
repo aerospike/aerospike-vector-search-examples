@@ -2,7 +2,7 @@ import threading
 import logging
 from threading import Thread
 
-from proximus_client import proximus_client
+from avs_client import avs_client
 from config import Config
 
 logger = logging.getLogger(__name__)
@@ -25,11 +25,11 @@ def collect_stats():
 
         for quote_id in range(Config.NUM_QUOTES):
             # Check if record exists
-            if proximus_client.isIndexed(
-                Config.PROXIMUS_NAMESPACE,
-                Config.PROXIMUS_SET,
-                quote_id,
-                Config.PROXIMUS_INDEX_NAME,
+            if avs_client.is_indexed(
+                namespace=Config.PROXIMUS_NAMESPACE,
+                set_name=Config.PROXIMUS_SET,
+                key=quote_id,
+                index_name=Config.PROXIMUS_INDEX_NAME,
             ):
                 # Record exists
                 quote_id = str(quote_id)

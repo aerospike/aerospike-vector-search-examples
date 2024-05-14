@@ -5,7 +5,7 @@ from config import Config
 from dataset_stats import dataset_counts
 from data_encoder import encoder
 from quote_search import app
-from proximus_client import proximus_client
+from avs_client import avs_client
 
 
 @app.route("/")
@@ -49,32 +49,31 @@ def search_internal():
     if not quote_id:
         return "quote_id is required", 400
 
-    record = proximus_client.get(
-        Config.PROXIMUS_NAMESPACE, Config.PROXIMUS_SET, int(quote_id), "quote_embedding"
+    record = avs_client.get(
+        namespace=Config.PROXIMUS_NAMESPACE, set_name=Config.PROXIMUS_SET, key=int(quote_id), field_names=["quote_embedding"]
     )
-    embedding = record.bins["quote_embedding"]
+    embedding = record.fields["quote_embedding"]
     # Search on more and filter the query id.
     start = time.time()
     results = vector_search(embedding, Config.PROXIMUS_MAX_RESULTS + 1)
-    results = list(filter(lambda result: result.bins["quote_id"] != quote_id, results))
+    results = list(filter(lambda result: result.fields["quote_id"] != quote_id, results))
     time_taken = time.time() - start
     return format_results(results[: Config.PROXIMUS_MAX_RESULTS], time_taken)
 
 
 def vector_search(embedding, count=Config.PROXIMUS_MAX_RESULTS):
     # Execute kNN search over the dataset
-    bins = ("quote_id", "quote", "author")
-    return proximus_client.vectorSearch(
-        Config.PROXIMUS_NAMESPACE,
-        Config.PROXIMUS_INDEX_NAME,
-        embedding,
-        count,
-        None,
-        *bins,
+    fields = ("quote_id", "quote", "author")
+    return avs_client.vectorSearch(
+        namespace=Config.PROXIMUS_NAMESPACE,
+        index_name=Config.PROXIMUS_INDEX_NAME,
+        query=embedding,
+        limit=count,
+        field_names=fields,
     )
 
 
 def format_results(results, time_taken):
     return jsonify(
-        {"timeTaken": time_taken, "results": [result.bins for result in results]}
+        {"timeTaken": time_taken, "results": [result.fields for result in results]}
     )
