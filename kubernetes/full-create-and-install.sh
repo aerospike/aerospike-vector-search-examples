@@ -17,8 +17,8 @@ print_env() {
 }
 
 # Set environment variables for the GKE cluster setup
-export PROJECT_ID="aerostation-dev"
-export CLUSTER_NAME="myworld"
+export PROJECT_ID="performance-eco"
+export CLUSTER_NAME="my-world"
 export NODE_POOL_NAME_AEROSPIKE="aerospike-pool"
 export NODE_POOL_NAME_PROXIMUS="proximus-pool"
 export ZONE="us-central1-c"
@@ -65,27 +65,6 @@ kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_AEROSPIKE" -
 # kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_AEROSPIKE" -o name | \
 #     xargs -I {} kubectl taint nodes {} dedicated=aerospike:NoSchedule --overwrite
 
-echo "Adding Proximus node pool..."
-if ! gcloud container node-pools create "$NODE_POOL_NAME_PROXIMUS" \
-      --cluster "$CLUSTER_NAME" \
-      --project "$PROJECT_ID" \
-      --zone "$ZONE" \
-      --num-nodes 3 \
-      --disk-type "pd-standard" \
-      --disk-size "100" \
-      --machine-type "e2-highmem-4"; then
-    echo "Failed to create Proximus node pool"
-    exit 1
-else
-    echo "Proximus node pool added successfully."
-fi
-
-echo "Labeling Proximus nodes..."
-kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_PROXIMUS" -o name | \
-    xargs -I {} kubectl label {} aerospike.com/node-pool=proximus --overwrite
-
-echo "Setup complete. Cluster and node pools are configured."
-
 echo "Deploying Aerospike Kubernetes Operator (AKO)..."
 curl -sL https://github.com/operator-framework/operator-lifecycle-manager/releases/download/v0.25.0/install.sh | bash -s v0.25.0
 kubectl create -f https://operatorhub.io/install/aerospike-kubernetes-operator.yaml
@@ -118,14 +97,53 @@ kubectl apply -f https://raw.githubusercontent.com/aerospike/aerospike-kubernete
 
 echo "Deploying Aerospike cluster..."
 kubectl apply -f "$AEROSPIKE_CR"
-# replace with helm repo add when helm chart is published. 
-echo "Deploying Proximus from Helm chart..."
-mkdir -p temp-helm
-cd temp-helm
-git clone  https://github.com/aerospike/helm-charts.git
-cd ..
-helm install proximus-gke "temp-helm/helm-charts/aerospike-proximus" --values "manifests/proximus-gke-values.yaml" --namespace aerospike --wait
+############################################## 
+# Proximus name space
+##############################################
 
+echo "Adding Proximus node pool..."
+if ! gcloud container node-pools create "$NODE_POOL_NAME_PROXIMUS" \
+      --cluster "$CLUSTER_NAME" \
+      --project "$PROJECT_ID" \
+      --zone "$ZONE" \
+      --num-nodes 3 \
+      --disk-type "pd-standard" \
+      --disk-size "100" \
+      --machine-type "e2-highmem-4"; then
+    echo "Failed to create Proximus node pool"
+    exit 1
+else
+    echo "Proximus node pool added successfully."
+fi
+
+echo "Labeling Proximus nodes..."
+kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_PROXIMUS" -o name | \
+    xargs -I {} kubectl label {} aerospike.com/node-pool=proximus --overwrite
+
+
+
+echo "Setup complete. Cluster and node pools are configured."
+
+kubectl create namespace proximus
+
+echo "Setting secrets for proximus cluster..."
+kubectl --namespace proximus create secret generic aerospike-secret --from-file=features.conf="$FEATURES_CONF"
+kubectl --namespace proximus create secret generic auth-secret --from-literal=password='admin123'
+
+
+# replace with helm repo add when helm chart is published. 
+# echo "Deploying Proximus from Helm chart..."
+# mkdir -p temp-helm
+# cd temp-helm
+# git clone  https://github.com/aerospike/helm-charts.git
+# cd ..
+
+helm install proximus-gke --values "manifests/proximus-gke-values.yaml" --namespace proximus aerospike/aerospike-proximus --wait
+
+
+##############################################
+# Monitoring namespace
+##############################################
 echo "Adding monitoring setup..."
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update

@@ -2,11 +2,11 @@ replicaCount: 3
 proximusConfig:
   heartbeat:
     seeds:
-      - address: proximus-gke-aerospike-proximus-0.proximus-gke-aerospike-proximus.aerospike.svc.cluster.local 
+      - address: proximus-gke-aerospike-proximus-0.proximus-gke-aerospike-proximus.proximus.svc.cluster.local 
         port: 5001
-      - address: proximus-gke-aerospike-proximus-1.proximus-gke-aerospike-proximus.aerospike.svc.cluster.local 
+      - address: proximus-gke-aerospike-proximus-1.proximus-gke-aerospike-proximus.proximus.svc.cluster.local 
         port: 5001
-      - address: proximus-gke-aerospike-proximus-2.proximus-gke-aerospike-proximus.aerospike.svc.cluster.local 
+      - address: proximus-gke-aerospike-proximus-2.proximus-gke-aerospike-proximus.proximus.svc.cluster.local 
         port: 5001
 
   interconnect:
@@ -27,6 +27,7 @@ proximusConfig:
     levels:
       metrics-ticker: info
       root: info
+      com.aerospike.vector.embedded.client: debug
     ticker-interval: 10
 
 service:
