@@ -130,14 +130,6 @@ echo "Setting secrets for proximus cluster..."
 kubectl --namespace proximus create secret generic aerospike-secret --from-file=features.conf="$FEATURES_CONF"
 kubectl --namespace proximus create secret generic auth-secret --from-literal=password='admin123'
 
-
-# replace with helm repo add when helm chart is published. 
-# echo "Deploying Proximus from Helm chart..."
-# mkdir -p temp-helm
-# cd temp-helm
-# git clone  https://github.com/aerospike/helm-charts.git
-# cd ..
-
 helm install proximus-gke --values "manifests/proximus-gke-values.yaml" --namespace proximus aerospike/aerospike-proximus --wait
 
 
