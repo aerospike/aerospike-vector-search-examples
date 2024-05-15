@@ -1,6 +1,6 @@
 # TODO: Include exact versions
 # Aerospike dependencies
-aerospike-proximus==0.3.2.dev1
+aerospike-vector-search==0.6.1
 
 
 # Flask framework

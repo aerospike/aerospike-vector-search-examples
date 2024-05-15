@@ -4,7 +4,7 @@ by indexing them using the [MiniLM](https://huggingface.co/sentence-transformers
 model created by OpenAI. This model generates vectors with semantic meaning 
 from each quote and stores it as a vector embedding in Aerospike. When a user
 performs a query a vector embedding for the provided text is generated and
-Proximus performs Approximate Nearest Neighbor(ANN) search to find relevant results.
+Aerospike Vector Search (AVS) performs Approximate Nearest Neighbor(ANN) search to find relevant results.
 
 
 ## Prerequisites
@@ -13,11 +13,11 @@ You don't have to know Aerospike to get started, but you do need the following:
 1. A Python 3.10 - 3.11 environment and familiarity with the Python programming language (see [Setup Python Virtual Environment](./prism-image-search/README.md#setup-python-virtual-environment)).
 1. An Aerospike Vector Search host (preview or local).
 
-## Configure AVS (Proximus) host
+## Configure AVS host
 
 If you are connecting to a preview environment, you'll need to set the following:
 ```shell
-export PROXIMUS_HOST=<PREVIEW_ENV_IP>
+export AVS_HOST=<PREVIEW_ENV_IP>
 ```
 
 ## Install Dependencies
@@ -51,8 +51,8 @@ docker build -t quote-search . -f Dockerfile-quote-search
 ```
 
 ### 2. Add features.conf
-Proximus needs an Aerospike features.conf file with the vector-search feature enabled.
-Add your features.conf file to container-volumes/proximus/etc/aerospike-proximus.
+AVS needs an Aerospike features.conf file with the vector-search feature enabled.
+Add your features.conf file to container-volumes/avs/etc/aerospike-vector-search.
 
 
 ### 3. Start the environment
@@ -95,13 +95,13 @@ If not set defaults are used.
 | APP_PASSWORD          |                    | If set, the password for basic authentication                   |
 | APP_NUM_QUOTES                  | 5000               | The number of quotes to index. If time and space allows the max is 100000. **Hint:** To keep the app from re-indexing quotes on subsequent runs set to 0               |
 | APP_INDEXER_PARALLELISM                  | 1               | To speed up indexing of quotes set this equal to or less than the number of CPU cores               |
-| PROXIMUS_HOST               | localhost          | Proximus server seed host                                       |
-| PROXIMUS_PORT               | 5000               | Proximus server seed host port                                  |
-| PROXIMUS_ADVERTISED_LISTENER|                    | An optional advertised listener to use if configured on the proximus server                              |
-| PROXIMUS_NAMESPACE          | test               | The aerospike namespace for storing the image records and index |
-| PROXIMUS_INDEX_NAME         | quote-search       | The name of the  index                                          |
-| PROXIMUS_MAX_RESULTS        | 20                 | Maximum number of vector search results to return               |
-| PROXIMUS_IS_LOADBALANCER    | False                 |                 If true, the first seed address will be treated as a load balancer node.```
+| AVS_HOST               | localhost          | AVS server seed host                                       |
+| AVS_PORT               | 5000               | AVS server seed host port                                  |
+| AVS_ADVERTISED_LISTENER|                    | An optional advertised listener to use if configured on the AVS server                              |
+| AVS_NAMESPACE          | test               | The aerospike namespace for storing the image records and index |
+| AVS_INDEX_NAME         | quote-search       | The name of the  index                                          |
+| AVS_MAX_RESULTS        | 20                 | Maximum number of vector search results to return               |
+| AVS_IS_LOADBALANCER    | False                 |                 If true, the first seed address will be treated as a load balancer node.```
 
 ### Setup networking (optional)
 
