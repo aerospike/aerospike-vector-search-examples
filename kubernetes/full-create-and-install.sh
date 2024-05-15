@@ -17,7 +17,7 @@ print_env() {
 }
 
 # Set environment variables for the GKE cluster setup
-export PROJECT_ID="performance-eco"
+export PROJECT_ID="aerostation-dev"
 export CLUSTER_NAME="my-world"
 export NODE_POOL_NAME_AEROSPIKE="aerospike-pool"
 export NODE_POOL_NAME_PROXIMUS="proximus-pool"
@@ -158,4 +158,8 @@ echo "To include your Grafana dashboards, use 'import-dashboards.sh <your grafan
 echo "To view grafana dashboards from your machine use kubectl port-forward -n monitoring svc/monitoring-stack-grafana 3000:80"
 echo "To expose grafana ports publically 'kubectl apply -f helpers/EXPOSE-GRAFANA.yaml'"
 echo "To find the exposed port with 'kubectl get svc -n monitoring' " 
-echo "To run the quote-search app, use 'run-quote-search.sh'"
+
+
+To run the quote search sample app on your new cluster you can use 
+   helm install sematic-search-app  aerospike/quote-semantic-search --namespace proximus --values manifests/sematic-search-values.yaml --wait
+
