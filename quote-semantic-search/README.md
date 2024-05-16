@@ -29,7 +29,7 @@ cd quote-search
 
 Install dependencies using requirements.text 
 ```shell 
-python3 -m pip install -r requirements.txt --extra-index-url https://aerospike.jfrog.io/artifactory/api/pypi/aerospike-pypi-dev/simple 
+python3 -m pip install -r requirements.txt
 ```
 ## Start the application
 
@@ -86,7 +86,8 @@ source .venv/bin/activate
 ### Install dependencies
 
 ```shell
-python3 -m pip install -r requirements.txt --extra-index-url https://aerospike.jfrog.io/artifactory/api/pypi/aerospike-pypi-dev/simple 
+cd quote-search
+python3 -m pip install -r requirements.txt 
 ```
 
 ### Configuration
