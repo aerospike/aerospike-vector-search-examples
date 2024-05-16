@@ -42,7 +42,8 @@ python3 -m pip install -r requirements.txt --extra-index-url https://aerospike.j
 ```
 
 ## Performing a quote search
-Navigate to http://127.0.0.1:8080/search and perform a search for quotes based on a description.  <!-- markdown-link-check-disable-line -->
+<!-- markdown-link-check-disable-next-line -->
+Navigate to http://127.0.0.1:8080/search and perform a search for quotes based on a description.
 
 
 ## Install using docker compose

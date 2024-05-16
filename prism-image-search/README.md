@@ -47,7 +47,9 @@ ln -s ~/Pictures prism/static/images/data
 ```
 
 ## Performing an image search
-Navigate to http://127.0.0.1:8080 and perform a search for images based on a <!--markdown-link-check-disable-line --> description. 
+<!-- markdown-link-check-disable-next-line -->
+Navigate to http://127.0.0.1:8080 and perform a search for images based on a
+description.
 
 
 ## Install using docker compose
