@@ -10,7 +10,7 @@ Aerospike Vector Search (AVS) performs Approximate Nearest Neighbor(ANN) search 
 ## Prerequisites
 You don't have to know Aerospike to get started, but you do need the following:
 
-1. A Python 3.10 - 3.11 environment and familiarity with the Python programming language (see [Setup Python Virtual Environment](./prism-image-search/README.md#setup-python-virtual-environment)).
+1. A Python 3.10 - 3.11 environment and familiarity with the Python programming language (see [Setup Python Virtual Environment](../prism-image-search/README.md#setup-python-virtual-environment)).
 1. An Aerospike Vector Search host (preview or local).
 
 ## Configure AVS host
@@ -33,12 +33,16 @@ python3 -m pip install -r requirements.txt --extra-index-url https://aerospike.j
 ```
 ## Start the application
 
+> [!IMPORTANT]
+> If you did not use an virtualenv when installing dependencies `waitress-serve` will
+> likely not be in your path. 
+
 ```shell
  waitress-serve --host 127.0.0.1 --port 8080 --threads 32 quote_search:app
 ```
 
 ## Performing a quote search
-Navigate to http://127.0.0.1:8080/search and perform a search for quotes based on a description. 
+Navigate to http://127.0.0.1:8080/search and perform a search for quotes based on a description.  <!-- markdown-link-check-disable-line -->
 
 
 ## Install using docker compose
