@@ -6,7 +6,7 @@ import logging
 
 from config import Config
 from indexer import image_data_files, relative_path
-from proximus_client import proximus_client
+from avs_client import avs_client
 
 lock = threading.Lock()
 
@@ -26,11 +26,11 @@ def collect_stats():
         temp_counts = {}
         for filename in filenames:
             # Check if record exists
-            if proximus_client.isIndexed(
-                Config.PROXIMUS_NAMESPACE,
-                Config.PROXIMUS_SET,
-                filename,
-                Config.PROXIMUS_INDEX_NAME,
+            if avs_client.is_indexed(
+                namespace=Config.AVS_NAMESPACE,
+                set_name=Config.AVS_SET,
+                key=filename,
+                index_name=Config.AVS_INDEX_NAME,
             ):
                 # Record exists
                 path = relative_path(filename)

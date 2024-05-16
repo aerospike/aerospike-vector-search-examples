@@ -9,8 +9,8 @@ import tarfile
 
 from config import Config
 from data_encoder import MODEL_DIM, encoder
-from proximus_client import proximus_admin_client, proximus_client
-from aerospike_vector import types_pb2
+from avs_client import avs_admin_client, avs_client
+from aerospike_vector_search import types
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -34,20 +34,20 @@ dataset = itertools.islice(read_csv(DATASET_FILE), Config.NUM_QUOTES)
 
 
 def create_index():
-    for index in proximus_admin_client.indexList():
+    for index in avs_admin_client.index_list():
         if (
-            index.id.namespace == Config.PROXIMUS_NAMESPACE
-            and index.id.name == Config.PROXIMUS_INDEX_NAME
+            index["id"]["namespace"] == Config.AVS_NAMESPACE
+            and index["id"]["name"] == Config.AVS_INDEX_NAME
         ):
             return
 
-    proximus_admin_client.indexCreate(
-        namespace=Config.PROXIMUS_NAMESPACE,
-        name=Config.PROXIMUS_INDEX_NAME,
-        setFilter=Config.PROXIMUS_SET,
-        vector_bin_name="quote_embedding",
+    avs_admin_client.index_create(
+        namespace=Config.AVS_NAMESPACE,
+        name=Config.AVS_INDEX_NAME,
+        sets=Config.AVS_SET,
+        vector_field="quote_embedding",
         dimensions=MODEL_DIM,
-        vector_distance_metric=types_pb2.VectorDistanceMetric.COSINE,
+        vector_distance_metric=types.VectorDistanceMetric.COSINE,
     )
 
 
@@ -93,16 +93,19 @@ def index_quote(id_quote):
     logger.debug(f"Creating text vector embedding {id}")
     text = quote + " ".join(doc["tags"])
     embedding = encoder(text)
-    doc["quote_embedding"] = embedding.tolist()
+    doc["quote_embedding"] = embedding  # Numpy array is supported by aerospike
 
     # Insert record
     try:
-        proximus_client.put(
-            Config.PROXIMUS_NAMESPACE, Config.PROXIMUS_SET, doc["quote_id"], doc
+        avs_client.upsert(
+            namespace=Config.AVS_NAMESPACE,
+            set_name=Config.AVS_SET,
+            key=doc["quote_id"],
+            record_data=doc,
         )
     except Exception as e:
         logger.warning(
-            f"Error inserting vector embedding into proximus {id}: {str(e)} quote: {quote}"
+            f"Error inserting vector embedding into avs {id}: {str(e)} quote: {quote}"
         )
         # Retry again
         pass
