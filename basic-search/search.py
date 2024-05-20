@@ -1,35 +1,44 @@
-from aerospike_vector import types
-from aerospike_vector import vectordb_admin, vectordb_client
+from aerospike_vector_search import types
+from aerospike_vector_search import AdminClient, Client
 
 host = "localhost"
 port = 5000
 listener_name = None
 
-setName = "simple_search"
-indexName = "simple_index"
+namespace = "test"
+set_name = "simple_search"
+index_name = "simple_index"
 
-with vectordb_admin.VectorDbAdminClient(
-    types.HostPort(host, port), listener_name=listener_name
+with AdminClient(
+    seeds=types.HostPort(host=host, port=port), listener_name=listener_name
 ) as adminClient:
     try:
         print("creating index")
-        adminClient.indexCreate("test", indexName, "vector", 2, setFilter=setName)
+        adminClient.index_create(
+            namespace=namespace,
+            name=index_name,
+            vector_field="vector",
+            dimensions=2,
+            sets=set_name,
+        )
     except Exception as e:
         print("failed creating index " + str(e))
         pass
 
-with vectordb_client.VectorDbClient(
-    types.HostPort(host, port), listener_name=listener_name
+with Client(
+    seeds=types.HostPort(host=host, port=port), listener_name=listener_name
 ) as client:
     print("inserting vectors")
     for i in range(10):
         key = "r" + str(i)
-        if not client.isIndexed("test", setName, key, indexName):
-            client.put(
-                "test",
-                setName,
-                key,
-                {
+        if not client.is_indexed(
+            namespace="test", set_name=set_name, key=key, index_name=index_name
+        ):
+            client.upsert(
+                namespace=namespace,
+                set_name=set_name,
+                key=key,
+                record_data={
                     "url": f"http://host.com/data{i}",
                     "vector": [i * 1.0, i * 1.0],
                     "map": {"a": "A", "inlist": [1, 2, 3]},
@@ -38,11 +47,16 @@ with vectordb_client.VectorDbClient(
             )
 
     print("waiting for indexing to complete")
-    client.waitForIndexCompletion("test", indexName)
+    client.wait_for_index_completion(namespace="test", name=index_name)
 
     print("querying")
     for i in range(10):
         print("   query " + str(i))
-        results = client.vectorSearch("test", indexName, [i * 1.0, i * 1.0], 10)
+        results = client.vector_search(
+            namespace=namespace,
+            index_name=index_name,
+            query=[i * 1.0, i * 1.0],
+            limit=10,
+        )
         for result in results:
-            print(str(result.key.digest) + " -> " + str(result.bins))
+            print(str(result.key.key) + " -> " + str(result.fields))

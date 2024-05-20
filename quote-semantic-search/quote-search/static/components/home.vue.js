@@ -5,7 +5,7 @@ const Home = {
         <div class="p-3 align-items-center justify-content-center">
         <p>
           <div class="d-flex flex-column flex-lg-row align-items-md-stretch justify-content-md-center gap-3 mb-4">
-                <img class="proximus img-responsive center-block" src="/images/proximus.png"/>
+                <img class="avs img-responsive center-block" src="/images/avs.png"/>
           </div>
         </p>
 

@@ -6,7 +6,7 @@ from config import Config
 from data_encoder import encoder
 from dataset_stats import dataset_counts
 from prism import app
-from proximus_client import proximus_client
+from avs_client import avs_client
 
 
 @app.route("/")
@@ -31,7 +31,7 @@ def search():
     if text:
         embedding = encoder(text)
         start = time.time()
-        results = vector_search(embedding.tolist())
+        results = vector_search(embedding)
         time_taken = time.time() - start
         return format_results(results, time_taken)
     else:
@@ -46,36 +46,41 @@ def dataset_stats():
 @app.route("/rest/v1/search_by_id", methods=["GET"])
 def search_internal():
     image_id = request.args.get("image_id")
-    record = proximus_client.get(
-        Config.PROXIMUS_NAMESPACE, Config.PROXIMUS_SET, image_id,
-        "image_embedding"
+
+    if not image_id:
+        return "image_id is required", 400
+
+    record = avs_client.get(
+        namespace=Config.AVS_NAMESPACE,
+        set_name=Config.AVS_SET,
+        key=image_id,
+        field_names=["image_embedding"],
     )
-    embedding = record.bins["image_embedding"]
+    embedding = record.fields["image_embedding"]
 
     # Search on more and filter the query image.
     start = time.time()
-    results = vector_search(embedding, Config.PROXIMUS_MAX_RESULTS + 1)
+    results = vector_search(embedding, Config.AVS_MAX_RESULTS + 1)
     results = list(
-        filter(lambda result: result.bins["image_id"] != image_id, results))
+        filter(lambda result: result.fields["image_id"] != image_id, results)
+    )
     time_taken = time.time() - start
-    return format_results(results[: Config.PROXIMUS_MAX_RESULTS], time_taken)
+    return format_results(results[: Config.AVS_MAX_RESULTS], time_taken)
 
 
-def vector_search(embedding, count=Config.PROXIMUS_MAX_RESULTS):
+def vector_search(embedding, count=Config.AVS_MAX_RESULTS):
     # Execute kNN search over the image dataset
-    bins = ("image_id", "image_name", "relative_path")
-    return proximus_client.vectorSearch(
-        Config.PROXIMUS_NAMESPACE,
-        Config.PROXIMUS_INDEX_NAME,
-        embedding,
-        count,
-        None,
-        *bins,
+    field_names = ["image_id", "image_name", "relative_path"]
+    return avs_client.vector_search(
+        namespace=Config.AVS_NAMESPACE,
+        index_name=Config.AVS_INDEX_NAME,
+        query=embedding,
+        limit=count,
+        field_names=field_names,
     )
 
 
 def format_results(results, time_taken):
     return jsonify(
-        {"timeTaken": time_taken,
-         "results": [result.bins for result in results]}
+        {"timeTaken": time_taken, "results": [result.fields for result in results]}
     )
