@@ -1,4 +1,6 @@
+
 replicaCount: 3
+
 proximusConfig:
   heartbeat:
     seeds:

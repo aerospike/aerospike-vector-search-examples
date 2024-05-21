@@ -152,6 +152,6 @@ echo "To expose grafana ports publically 'kubectl apply -f helpers/EXPOSE-GRAFAN
 echo "To find the exposed port with 'kubectl get svc -n monitoring' " 
 
 
-To run the quote search sample app on your new cluster you can use 
-   helm install sematic-search-app  aerospike/quote-semantic-search --namespace proximus --values manifests/sematic-search-values.yaml --wait
+#To run the quote search sample app on your new cluster you can use 
+# helm install sematic-search-app  aerospike/quote-semantic-search --namespace proximus --values manifests/sematic-search-values.yaml --wait
 
