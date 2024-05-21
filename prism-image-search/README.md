@@ -34,7 +34,7 @@ python3 -m pip install -r requirements.txt
 To index your local photos, create a symlink to a location with photos directory.
 
 ```shell
-ln -s ~/Pictures prism/static/images/data
+ln -s ~/Pictures static/images/data
 ```
 ## Start the application
 
