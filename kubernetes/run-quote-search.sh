@@ -49,12 +49,12 @@ docker run -d \
 --name "quote-search" \
 -v "./data:/container-volumes/quote-search/data" \
 -p "8080:8080" \
--e "PROXIMUS_HOST=$(kubectl -n aerospike get svc/proximus-gke-aerospike-proximus-lb \
+-e "AVS_HOST=$(kubectl -n aerospike get svc/proximus-gke-aerospike-proximus-lb \
 -o=jsonpath='{.status.loadBalancer.ingress[0].ip}')" \
--e "PROXIMUS_PORT=5000" \
+-e "AVS_PORT=5000" \
 -e "APP_NUM_QUOTES=5000" \
 -e "GRPC_DNS_RESOLVER=native" \
--e "PROXIMUS_IS_LOADBALANCER=True" quote-search
+-e "AVS_IS_LOADBALANCER=True" quote-search
 EOF
 
 chmod +x "$WORKSPACE/aerospike-proximus/gke/run-app.sh"

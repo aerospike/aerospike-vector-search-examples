@@ -1,4 +1,4 @@
-# Aerospike Vector Search (Proximus)
+# Aerospike Vector Search
 
 > [!NOTE]
 > Aerospike Vector Search (AVS) is currently in Alpha and available by invitation only. Breaking changes to our client and APIs are expected. Please refer to our [documentation](https://aerospike-vector-search.netlify.app/vector/) for more details and to request access.
@@ -15,7 +15,7 @@ apps are written in Python. The available apps are:
 ## Prerequisites
 You don't have to know Aerospike to get started, but you do need the following:
 
-1. A Python 3.10 - 3.11 environment and familiarity with the Python programming language (see [Setup Python Virtual Environment](./prism-image-search/README.md#setup-python-virtual-environment)).
+1. A Python 3.10 - 3.11 environment and familiarity with the Python programming language (see [Setup Python Virtual Environment](#setup-python-virtual-environment)).
 1. The URL to your private sandbox environment (this will be provided).
 
 ## Development

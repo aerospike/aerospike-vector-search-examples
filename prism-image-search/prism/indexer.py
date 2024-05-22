@@ -10,8 +10,8 @@ from tqdm import tqdm
 
 from config import Config
 from data_encoder import MODEL_DIM, encoder
-from proximus_client import proximus_admin_client, proximus_client
-from aerospike_vector import types_pb2
+from avs_client import avs_admin_client, avs_client
+from aerospike_vector_search import types
 
 lock = threading.Lock()
 extensions = [".jp*g", ".png"]
@@ -23,21 +23,21 @@ logger.setLevel(logging.INFO)
 
 
 def create_index():
-    for index in proximus_admin_client.indexList():
+    for index in avs_admin_client.index_list():
         if (
-            index.id.namespace == Config.PROXIMUS_NAMESPACE
-            and index.id.name == Config.PROXIMUS_INDEX_NAME
+            index["id"]["namespace"] == Config.AVS_NAMESPACE
+            and index["id"]["name"] == Config.AVS_INDEX_NAME
         ):
             logger.info("Index already exists")
             return
 
-    proximus_admin_client.indexCreate(
-        namespace=Config.PROXIMUS_NAMESPACE,
-        name=Config.PROXIMUS_INDEX_NAME,
-        setFilter=Config.PROXIMUS_SET,
-        vector_bin_name="image_embedding",
+    avs_admin_client.index_create(
+        namespace=Config.AVS_NAMESPACE,
+        name=Config.AVS_INDEX_NAME,
+        sets=Config.AVS_SET,
+        vector_field="image_embedding",
         dimensions=MODEL_DIM,
-        vector_distance_metric=types_pb2.VectorDistanceMetric.COSINE,
+        vector_distance_metric=types.VectorDistanceMetric.COSINE,
     )
 
 
@@ -56,11 +56,11 @@ def index_data():
         for filename in tqdm(filenames, "Checking for new files", total=len(filenames)):
             # Check if record exists
             try:
-                if proximus_client.isIndexed(
-                    Config.PROXIMUS_NAMESPACE,
-                    Config.PROXIMUS_SET,
-                    filename,
-                    Config.PROXIMUS_INDEX_NAME,
+                if avs_client.is_indexed(
+                    namespace=Config.AVS_NAMESPACE,
+                    set_name=Config.AVS_SET,
+                    key=filename,
+                    index_name=Config.AVS_INDEX_NAME,
                 ):
                     # Record exists
                     continue
@@ -118,13 +118,16 @@ def index_image(filename):
     doc["image_name"] = os.path.basename(filename)
     logger.debug(f"Creating image vector embedding {filename}")
     embedding = encoder(image)
-    doc["image_embedding"] = embedding.tolist()
+    doc["image_embedding"] = embedding  # Numpy array is supported by aerospike
     doc["relative_path"] = relative_path(filename)
     # Insert record
     try:
-        logger.debug(f"Inserting vector embedding into proximus {filename}")
-        proximus_client.put(
-            Config.PROXIMUS_NAMESPACE, Config.PROXIMUS_SET, doc["image_id"], doc
+        logger.debug(f"Inserting vector embedding into avs {filename}")
+        avs_client.upsert(
+            namespace=Config.AVS_NAMESPACE,
+            set_name=Config.AVS_SET,
+            key=doc["image_id"],
+            record_data=doc,
         )
     except:
         # Retry again
