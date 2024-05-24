@@ -4,7 +4,7 @@
 Locate valid `features.conf` in the `./config` directory:
 
 > [!IMPORTANT]
-> If you are running MacOS you will need to replace all occurances of port 5000 with 
+> If you are running MacOS you will need to replace all occurrences of port 5000 with 
 > port 5002 in your docker compose file and aerospike-proximus.yml file.
 
 ## Installation Aerospike and AVS Clusters (docker-compose)
