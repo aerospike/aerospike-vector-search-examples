@@ -30,18 +30,27 @@ aerospikeVectorSearchConfig:
       metrics-ticker: info
       root: info
       com.aerospike.vector.embedded.client: debug
+      client: debug
     ticker-interval: 10
 
 service:
-  enabled: false
-  type: LoadBalancer
+  enabled: true
   annotations:
-    cloud.google.com/l4-rbs: "enabled"
-#    networking.gke.io/load-balancer-type: "Internal"
+    networking.gke.io/load-balancer-type: "Internal"
   ports:
     - name: "svc-port"
       port: 5000
       targetPort: 5000
+# service:
+#   enabled: false
+#   type: LoadBalancer
+#   annotations:
+#     cloud.google.com/l4-rbs: "enabled"
+# #    networking.gke.io/load-balancer-type: "Internal"
+#   ports:
+#     - name: "svc-port"
+#       port: 5000
+#       targetPort: 5000
 
 # schedule proximus nodes
   affinity:

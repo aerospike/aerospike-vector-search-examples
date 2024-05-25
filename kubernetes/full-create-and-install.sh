@@ -21,13 +21,13 @@ print_env() {
 }
 
 # Set environment variables for the GKE cluster setup
-export PROJECT_ID="aerostation-dev"
-export CLUSTER_NAME="modern-world"
+export PROJECT_ID="$(gcloud config get-value project)"
+export CLUSTER_NAME="${PROJECT_ID}-modern-world"
 export NODE_POOL_NAME_AEROSPIKE="aerospike-pool"
 export NODE_POOL_NAME_AVS="avs-pool"
 export ZONE="us-central1-c"
 #export HELM_CHART="aerospike/aerospike-avs"
-export HELM_CHART="/home/joem/src/helm-charts/aerospike-avs"
+export HELM_CHART="/home/joem/src/helm-charts/aerospike-vector-search"
 export FEATURES_CONF="./features.conf"
 export AEROSPIKE_CR="./manifests/ssd_storage_cluster_cr.yaml"
 
@@ -138,20 +138,20 @@ kubectl --namespace avs create secret generic aerospike-secret --from-file=featu
 kubectl --namespace avs create secret generic auth-secret --from-literal=password='admin123'
 
 
-echo "Deploying Istio"
-helm repo add istio https://istio-release.storage.googleapis.com/charts
-helm repo update
+# echo "Deploying Istio"
+# helm repo add istio https://istio-release.storage.googleapis.com/charts
+# helm repo update
 
-helm install istio-base istio/base --namespace istio-system --set defaultRevision=default --create-namespace --wait
-helm install istiod istio/istiod --namespace istio-system --create-namespace --wait
-helm install istio-ingress istio/gateway \
---values "manifests/istio-ingressgateway-values.yaml" \
---namespace istio-ingress \
---create-namespace \
---wait
+# helm install istio-base istio/base --namespace istio-system --set defaultRevision=default --create-namespace --wait
+# helm install istiod istio/istiod --namespace istio-system --create-namespace --wait
+# helm install istio-ingress istio/gateway \
+# --values "manifests/istio-ingressgateway-values.yaml" \
+# --namespace istio-ingress \
+# --create-namespace \
+# --wait
 
-kubectl apply -f "manifests/gateway.yaml"
-kubectl apply -f "manifests/virtual-service-vector-search.yaml"
+# kubectl apply -f "manifests/gateway.yaml"
+# kubectl apply -f "manifests/virtual-service-vector-search.yaml"
 
 
 

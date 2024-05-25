@@ -1,5 +1,5 @@
 quoteSearchConfig:
-  avsHost: "istio-ingress.istio-ingress.svc.cluster.local"
+  avsHost: "avs-gke-aerospike-vector-search-lb.svc.cluster.local"
   avsIsLoadbalancer: "True"
   avsNamespace: "avs-meta"
 
