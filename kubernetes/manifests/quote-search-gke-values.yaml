@@ -1,0 +1,5 @@
+quoteSearchConfig:
+  avsHost: "istio-ingress.istio-ingress.svc.cluster.local"
+  avsIsLoadbalancer: "True"
+  avsNamespace: "avs-meta"
+

@@ -1,5 +1,0 @@
-quoteSearchConfig:
-  proximusHost: proximus-gke-aerospike-proximus-lb.proximus.svc.cluster.local 
-  proximusIsLoadbalancer: True
-  proximusIndexName: "quotesindex"
-
