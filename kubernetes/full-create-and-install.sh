@@ -17,8 +17,8 @@ print_env() {
 }
 
 # Set environment variables for the GKE cluster setup
-export PROJECT_ID="aerostation-dev"
-export CLUSTER_NAME="my-world"
+export PROJECT_ID="performance-eco"
+export CLUSTER_NAME="my-world-eco"
 export NODE_POOL_NAME_AEROSPIKE="aerospike-pool"
 export NODE_POOL_NAME_PROXIMUS="proximus-pool"
 export ZONE="us-central1-c"
