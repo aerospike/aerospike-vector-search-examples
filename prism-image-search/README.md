@@ -9,7 +9,7 @@ Aerospike Vector Search (AVS) performs Approximate Nearest Neighbor(ANN) search 
 ## Prerequisites
 You don't have to know Aerospike to get started, but you do need the following:
 
-1. A Python 3.10 - 3.11 environment and familiarity with the Python programming language (see [Setup Python Virtual Environment](./prism-image-search/README.md#setup-python-virtual-environment)).
+1. A Python 3.10 - 3.11 environment and familiarity with the Python programming language (see [Setup Python Virtual Environment](./README.md#setup-python-virtual-environment)).
 1. An Aerospike Vector Search host (preview environment or local).
 
 ## Configure AVS host
@@ -28,22 +28,28 @@ cd prism
 
 Install dependencies using requirements.text 
 ```shell 
-python3 -m pip install -r requirements.txt --extra-index-url https://aerospike.jfrog.io/artifactory/api/pypi/aerospike-pypi-dev/simple 
+python3 -m pip install -r requirements.txt
 ```
 ## Link your photos
 To index your local photos, create a symlink to a location with photos directory.
 
 ```shell
-ln -s ~/Pictures prism/static/images/data
+ln -s ~/Pictures static/images/data
 ```
 ## Start the application
+
+> [!IMPORTANT]
+> If you did not use an virtualenv when installing dependencies `waitress-serve` will
+> likely not be in your path. 
 
 ```shell
  waitress-serve --host 127.0.0.1 --port 8080 --threads 32 prism:app
 ```
 
 ## Performing an image search
-Navigate to http://127.0.0.1:8080 and perform a search for images based on a description. 
+<!-- markdown-link-check-disable-next-line -->
+Navigate to http://127.0.0.1:8080 and perform a search for images based on a
+description.
 
 
 ## Install using docker compose
@@ -86,7 +92,8 @@ source .venv/bin/activate
 ### Install dependencies
 
 ```shell
-python3 -m pip install -r requirements.txt --extra-index-url https://aerospike.jfrog.io/artifactory/api/pypi/aerospike-pypi-dev/simple 
+cd prism
+python3 -m pip install -r requirements.txt
 ```
 
 ### Configuration
