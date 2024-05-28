@@ -1,23 +1,23 @@
 
 replicaCount: 3
 
-proximusConfig:
+aerospikeVectorSearchConfig:
   heartbeat:
     seeds:
-      - address: proximus-gke-aerospike-proximus-0.proximus-gke-aerospike-proximus.proximus.svc.cluster.local 
+      - address: avs-gke-aerospike-vector-search-0.avs-gke-aerospike-vector-search.avs.svc.cluster.local
         port: 5001
-      - address: proximus-gke-aerospike-proximus-1.proximus-gke-aerospike-proximus.proximus.svc.cluster.local 
+      - address: avs-gke-aerospike-vector-search-1.avs-gke-aerospike-vector-search.avs.svc.cluster.local
         port: 5001
-      - address: proximus-gke-aerospike-proximus-2.proximus-gke-aerospike-proximus.proximus.svc.cluster.local 
+      - address: avs-gke-aerospike-vector-search-2.avs-gke-aerospike-vector-search.avs.svc.cluster.local
         port: 5001
-
+ 
   interconnect:
     ports:
       5001:
         addresses:
           0.0.0.0
   aerospike:
-    metadata-namespace: "proximus-meta"
+    metadata-namespace: "avs-meta"
     seeds:
       - aerocluster-0-0.aerocluster.aerospike.svc.cluster.local:
           port: 3000
@@ -30,16 +30,27 @@ proximusConfig:
       metrics-ticker: info
       root: info
       com.aerospike.vector.embedded.client: debug
+      client: debug
     ticker-interval: 10
 
 service:
   enabled: true
   annotations:
-    networking.gke.io/load-balancer-type: "Internal"
+    networking.gke.io/load-balancer-type: "External"
   ports:
     - name: "svc-port"
       port: 5000
       targetPort: 5000
+# service:
+#   enabled: false
+#   type: LoadBalancer
+#   annotations:
+#     cloud.google.com/l4-rbs: "enabled"
+# #    networking.gke.io/load-balancer-type: "Internal"
+#   ports:
+#     - name: "svc-port"
+#       port: 5000
+#       targetPort: 5000
 
 # schedule proximus nodes
   affinity:
@@ -50,7 +61,7 @@ service:
           - key: aerospike.com/node-pool
             operator: In
             values:
-            - "proximus"
+            - "aerospike-vector-search"
   podAntiAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
       - topologyKey: "kubernetes.io/hostname"
@@ -59,4 +70,4 @@ service:
             - key: "app.kubernetes.io/name"
               operator: In
               values:
-                - "aerospike-proximus"
+                - "aerospike-vector-search"

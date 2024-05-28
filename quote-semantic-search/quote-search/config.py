@@ -3,13 +3,11 @@ import os
 
 def get_bool_env(name, default):
     env = os.environ.get(name)
-
     if env is None:
         return default
+    env = env.lower()    
 
-    env = env.lower()
-
-    if os.environ.get(name) in ["true", "1"]:
+    if env in ["true", "1"]:
         return True
     else:
         return False

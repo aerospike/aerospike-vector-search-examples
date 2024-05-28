@@ -1,0 +1,5 @@
+quoteSearchConfig:
+  avsHost: "avs-gke-aerospike-vector-search-lb.svc.cluster.local"
+  avsIsLoadbalancer: "True"
+  avsNamespace: "avs-meta"
+

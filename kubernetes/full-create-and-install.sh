@@ -1,27 +1,33 @@
 #!/bin/bash
 
-# This script sets up a GKE cluster with specific configurations for Aerospike and Proximus node pools.
+# This script sets up a GKE cluster with specific configurations for Aerospike and AVS node pools.
 # It handles the creation of the cluster, node pools, labeling, tainting of nodes, and deployment of necessary operators and configurations.
-# Additionally, it sets up monitoring using Prometheus and deploys a specific Helm chart for Proximus.
+# Additionally, it sets up monitoring using Prometheus and deploys a specific Helm chart for AVS.
 
 # Function to print environment variables for verification
+set -eo pipefail
+if [ -n "$DEBUG" ]; then set -x; fi
+trap 'echo "Error: $? at line $LINENO" >&2' ERR
+
 print_env() {
     echo "Environment Variables:"
     echo "export PROJECT_ID=$PROJECT_ID"
     echo "export CLUSTER_NAME=$CLUSTER_NAME"
     echo "export NODE_POOL_NAME_AEROSPIKE=$NODE_POOL_NAME_AEROSPIKE"
-    echo "export NODE_POOL_NAME_PROXIMUS=$NODE_POOL_NAME_PROXIMUS"
+    echo "export NODE_POOL_NAME_AVS=$NODE_POOL_NAME_AVS"
     echo "export ZONE=$ZONE"
     echo "export FEATURES_CONF=$FEATURES_CONF"
     echo "export AEROSPIKE_CR=$AEROSPIKE_CR"
 }
 
 # Set environment variables for the GKE cluster setup
-export PROJECT_ID="performance-eco"
-export CLUSTER_NAME="my-world-eco"
+export PROJECT_ID="$(gcloud config get-value project)"
+export CLUSTER_NAME="${PROJECT_ID}-modern-world"
 export NODE_POOL_NAME_AEROSPIKE="aerospike-pool"
-export NODE_POOL_NAME_PROXIMUS="proximus-pool"
+export NODE_POOL_NAME_AVS="avs-pool"
 export ZONE="us-central1-c"
+#export HELM_CHART="aerospike/aerospike-avs"
+export HELM_CHART="/home/joem/src/helm-charts/aerospike-vector-search"
 export FEATURES_CONF="./features.conf"
 export AEROSPIKE_CR="./manifests/ssd_storage_cluster_cr.yaml"
 
@@ -97,12 +103,13 @@ kubectl apply -f https://raw.githubusercontent.com/aerospike/aerospike-kubernete
 
 echo "Deploying Aerospike cluster..."
 kubectl apply -f "$AEROSPIKE_CR"
+
 ############################################## 
-# Proximus name space
+# AVS name space
 ##############################################
 
-echo "Adding Proximus node pool..."
-if ! gcloud container node-pools create "$NODE_POOL_NAME_PROXIMUS" \
+echo "Adding avs node pool..."
+if ! gcloud container node-pools create "$NODE_POOL_NAME_AVS" \
       --cluster "$CLUSTER_NAME" \
       --project "$PROJECT_ID" \
       --zone "$ZONE" \
@@ -110,27 +117,45 @@ if ! gcloud container node-pools create "$NODE_POOL_NAME_PROXIMUS" \
       --disk-type "pd-standard" \
       --disk-size "100" \
       --machine-type "e2-highmem-4"; then
-    echo "Failed to create Proximus node pool"
+    echo "Failed to create avs node pool"
     exit 1
 else
-    echo "Proximus node pool added successfully."
+    echo "avs node pool added successfully."
 fi
 
-echo "Labeling Proximus nodes..."
-kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_PROXIMUS" -o name | \
-    xargs -I {} kubectl label {} aerospike.com/node-pool=proximus --overwrite
+echo "Labeling avs nodes..."
+kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_AVS" -o name | \
+    xargs -I {} kubectl label {} aerospike.com/node-pool=avs --overwrite
 
 
 
 echo "Setup complete. Cluster and node pools are configured."
 
-kubectl create namespace proximus
+kubectl create namespace avs
 
-echo "Setting secrets for proximus cluster..."
-kubectl --namespace proximus create secret generic aerospike-secret --from-file=features.conf="$FEATURES_CONF"
-kubectl --namespace proximus create secret generic auth-secret --from-literal=password='admin123'
+echo "Setting secrets for avs cluster..."
+kubectl --namespace avs create secret generic aerospike-secret --from-file=features.conf="$FEATURES_CONF"
+kubectl --namespace avs create secret generic auth-secret --from-literal=password='admin123'
 
-helm install proximus-gke --values "manifests/proximus-gke-values.yaml" --namespace proximus aerospike/aerospike-proximus --wait
+
+# echo "Deploying Istio"
+# helm repo add istio https://istio-release.storage.googleapis.com/charts
+# helm repo update
+
+# helm install istio-base istio/base --namespace istio-system --set defaultRevision=default --create-namespace --wait
+# helm install istiod istio/istiod --namespace istio-system --create-namespace --wait
+# helm install istio-ingress istio/gateway \
+# --values "manifests/istio-ingressgateway-values.yaml" \
+# --namespace istio-ingress \
+# --create-namespace \
+# --wait
+
+# kubectl apply -f "manifests/gateway.yaml"
+# kubectl apply -f "manifests/virtual-service-vector-search.yaml"
+
+
+
+helm install avs-gke --values "manifests/avs-gke-values.yaml" --namespace avs $HELM_CHART --wait
 
 
 ##############################################
@@ -152,6 +177,6 @@ echo "To expose grafana ports publically 'kubectl apply -f helpers/EXPOSE-GRAFAN
 echo "To find the exposed port with 'kubectl get svc -n monitoring' " 
 
 
-#To run the quote search sample app on your new cluster you can use 
-# helm install sematic-search-app  aerospike/quote-semantic-search --namespace proximus --values manifests/sematic-search-values.yaml --wait
+echo To run the quote search sample app on your new cluster you can use 
+echo helm install sematic-search-app  aerospike/quote-semantic-search --namespace avs --values manifests/sematic-search-values.yaml --wait
 
