@@ -2,7 +2,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: avs-vs
-  namespace: aerospike
+  namespace: avs
 spec:
   hosts:
     - "*"
@@ -17,7 +17,7 @@ spec:
         - destination:
             port:
               number: 8080
-            host: quote-search-quote-semantic-search.aerospike.svc.cluster.local
+            host: sematic-search-app-quote-semantic-search.avs.svc.cluster.local
     - match:
         - uri:
             prefix: /
@@ -26,4 +26,4 @@ spec:
         - destination:
             port:
               number: 5000
-            host: avs-gke-aerospike-vector-search.aerospike.svc.cluster.local
+            host: avs-gke-aerospike-vector-search.avs.svc.cluster.local

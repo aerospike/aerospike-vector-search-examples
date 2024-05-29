@@ -34,7 +34,7 @@ aerospikeVectorSearchConfig:
     ticker-interval: 10
 
 service:
-  enabled: true
+  enabled: false
   annotations:
     networking.gke.io/load-balancer-type: "External"
   ports:
