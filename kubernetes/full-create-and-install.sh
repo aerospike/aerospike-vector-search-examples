@@ -150,8 +150,7 @@ kubectl --namespace avs create secret generic auth-secret --from-literal=passwor
  --create-namespace \
  --wait
 
- kubectl apply -f ./manifests/gateway.yaml
- kubectl apply -f ./manifests/virtual-service-vector-search.yaml
+ kubectl apply -f /manifests/istio
 
 
 
