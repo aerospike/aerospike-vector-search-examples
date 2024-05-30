@@ -26,8 +26,8 @@ export CLUSTER_NAME="${PROJECT_ID}-modern-world"
 export NODE_POOL_NAME_AEROSPIKE="aerospike-pool"
 export NODE_POOL_NAME_AVS="avs-pool"
 export ZONE="us-central1-c"
-export HELM_CHART_VECTOR="/Users/david/helm/aerospike/helm-charts/aerospike-vector-search"
-export HELM_CHART_APP="/Users/david/helm/aerospike/helm-charts/aerospike-vector-search-examples/quote-semantic-search/"
+#export HELM_CHART="aerospike/aerospike-avs"
+export HELM_CHART="/home/joem/src/helm-charts/aerospike-vector-search"
 export FEATURES_CONF="./features.conf"
 export AEROSPIKE_CR="./manifests/ssd_storage_cluster_cr.yaml"
 
@@ -138,24 +138,24 @@ kubectl --namespace avs create secret generic aerospike-secret --from-file=featu
 kubectl --namespace avs create secret generic auth-secret --from-literal=password='admin123'
 
 
- echo "Deploying Istio"
- helm repo add istio https://istio-release.storage.googleapis.com/charts
- helm repo update
+# echo "Deploying Istio"
+# helm repo add istio https://istio-release.storage.googleapis.com/charts
+# helm repo update
 
- helm install istio-base istio/base --namespace istio-system --set defaultRevision=default --create-namespace --wait
- helm install istiod istio/istiod --namespace istio-system --create-namespace --wait
- helm install istio-ingress istio/gateway \
- --values ./manifests/istio-ingressgateway-values.yaml \
- --namespace istio-ingress \
- --create-namespace \
- --wait
+# helm install istio-base istio/base --namespace istio-system --set defaultRevision=default --create-namespace --wait
+# helm install istiod istio/istiod --namespace istio-system --create-namespace --wait
+# helm install istio-ingress istio/gateway \
+# --values "manifests/istio-ingressgateway-values.yaml" \
+# --namespace istio-ingress \
+# --create-namespace \
+# --wait
 
- kubectl apply -f ./manifests/gateway.yaml
- kubectl apply -f ./manifests/virtual-service-vector-search.yaml
+# kubectl apply -f "manifests/gateway.yaml"
+# kubectl apply -f "manifests/virtual-service-vector-search.yaml"
 
 
 
-helm install avs-gke --values "manifests/avs-gke-values.yaml" --namespace avs $HELM_CHART_VECTOR --wait
+helm install avs-gke --values "manifests/avs-gke-values.yaml" --namespace avs $HELM_CHART --wait
 
 
 ##############################################
@@ -178,5 +178,5 @@ echo "To find the exposed port with 'kubectl get svc -n monitoring' "
 
 
 echo To run the quote search sample app on your new cluster you can use 
-echo helm install sematic-search-app  --namespace avs --values ./manifests/sematic-search-values.yaml $HELM_CHART_APP --wait
+echo helm install sematic-search-app  aerospike/quote-semantic-search --namespace avs --values manifests/sematic-search-values.yaml --wait
 
