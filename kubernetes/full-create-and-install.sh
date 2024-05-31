@@ -22,7 +22,7 @@ print_env() {
 
 # Set environment variables for the GKE cluster setup
 export PROJECT_ID="$(gcloud config get-value project)"
-export CLUSTER_NAME="${PROJECT_ID}-modern-world"
+export CLUSTER_NAME="${PROJECT_ID}-"
 export NODE_POOL_NAME_AEROSPIKE="aerospike-pool"
 export NODE_POOL_NAME_AVS="avs-pool"
 export ZONE="us-central1-c"
@@ -66,10 +66,6 @@ fi
 echo "Labeling Aerospike nodes..."
 kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_AEROSPIKE" -o name | \
     xargs -I {} kubectl label {} aerospike.com/node-pool=default-rack --overwrite
-
-# This does not work for some reason, suspecting bad label
-# kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_AEROSPIKE" -o name | \
-#     xargs -I {} kubectl taint nodes {} dedicated=aerospike:NoSchedule --overwrite
 
 echo "Deploying Aerospike Kubernetes Operator (AKO)..."
 curl -sL https://github.com/operator-framework/operator-lifecycle-manager/releases/download/v0.25.0/install.sh | bash -s v0.25.0
@@ -127,8 +123,6 @@ echo "Labeling avs nodes..."
 kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_AVS" -o name | \
     xargs -I {} kubectl label {} aerospike.com/node-pool=avs --overwrite
 
-
-
 echo "Setup complete. Cluster and node pools are configured."
 
 kubectl create namespace avs
@@ -137,26 +131,9 @@ echo "Setting secrets for avs cluster..."
 kubectl --namespace avs create secret generic aerospike-secret --from-file=features.conf="$FEATURES_CONF"
 kubectl --namespace avs create secret generic auth-secret --from-literal=password='admin123'
 
-
-# echo "Deploying Istio"
-# helm repo add istio https://istio-release.storage.googleapis.com/charts
-# helm repo update
-
-# helm install istio-base istio/base --namespace istio-system --set defaultRevision=default --create-namespace --wait
-# helm install istiod istio/istiod --namespace istio-system --create-namespace --wait
-# helm install istio-ingress istio/gateway \
-# --values "manifests/istio-ingressgateway-values.yaml" \
-# --namespace istio-ingress \
-# --create-namespace \
-# --wait
-
-# kubectl apply -f "manifests/gateway.yaml"
-# kubectl apply -f "manifests/virtual-service-vector-search.yaml"
-
-
-
-helm install avs-gke --values "manifests/avs-gke-values.yaml" --namespace avs $HELM_CHART --wait
-
+helm repo add aerospike-helm https://artifact.aerospike.io/artifactory/api/helm/aerospike-helm
+helm repo update
+helm install avs-gke --values "manifests/avs-gke-values.yaml" --namespace avs aerospike-helm/aerospike-vector-search --wait
 
 ##############################################
 # Monitoring namespace
