@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# This script sets up a GKE cluster with specific configurations for Aerospike and AVS node pools.
-# It handles the creation of the cluster, node pools, labeling, tainting of nodes, and deployment of necessary operators and configurations.
+# This script sets up a GKE cluster with configurations for Aerospike and AVS node pools.
+# It handles the creation of the GKE cluster, the use of AKO (Aerospike Kubernetes Operator) to deploy an Aerospike cluster, deploys the AVS cluster, 
+# and the deployment of necessary operators, configurations, node pools, etc.
 # Additionally, it sets up monitoring using Prometheus and deploys a specific Helm chart for AVS.
 
 # Function to print environment variables for verification
@@ -66,10 +67,6 @@ fi
 echo "Labeling Aerospike nodes..."
 kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_AEROSPIKE" -o name | \
     xargs -I {} kubectl label {} aerospike.com/node-pool=default-rack --overwrite
-
-# This does not work for some reason, suspecting bad label
-# kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_AEROSPIKE" -o name | \
-#     xargs -I {} kubectl taint nodes {} dedicated=aerospike:NoSchedule --overwrite
 
 echo "Deploying Aerospike Kubernetes Operator (AKO)..."
 curl -sL https://github.com/operator-framework/operator-lifecycle-manager/releases/download/v0.25.0/install.sh | bash -s v0.25.0
