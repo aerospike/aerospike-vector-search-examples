@@ -1,27 +1,33 @@
 #!/bin/bash
 
-# This script sets up a GKE cluster with specific configurations for Aerospike and Proximus node pools.
-# It handles the creation of the cluster, node pools, labeling, tainting of nodes, and deployment of necessary operators and configurations.
-# Additionally, it sets up monitoring using Prometheus and deploys a specific Helm chart for Proximus.
+# This script sets up a GKE cluster with configurations for Aerospike and AVS node pools.
+# It handles the creation of the GKE cluster, the use of AKO (Aerospike Kubernetes Operator) to deploy an Aerospike cluster, deploys the AVS cluster, 
+# and the deployment of necessary operators, configurations, node pools, etc.
+# Additionally, it sets up monitoring using Prometheus and deploys a specific Helm chart for AVS.
 
 # Function to print environment variables for verification
+set -eo pipefail
+if [ -n "$DEBUG" ]; then set -x; fi
+trap 'echo "Error: $? at line $LINENO" >&2' ERR
+
 print_env() {
     echo "Environment Variables:"
     echo "export PROJECT_ID=$PROJECT_ID"
     echo "export CLUSTER_NAME=$CLUSTER_NAME"
     echo "export NODE_POOL_NAME_AEROSPIKE=$NODE_POOL_NAME_AEROSPIKE"
-    echo "export NODE_POOL_NAME_PROXIMUS=$NODE_POOL_NAME_PROXIMUS"
+    echo "export NODE_POOL_NAME_AVS=$NODE_POOL_NAME_AVS"
     echo "export ZONE=$ZONE"
     echo "export FEATURES_CONF=$FEATURES_CONF"
     echo "export AEROSPIKE_CR=$AEROSPIKE_CR"
 }
 
 # Set environment variables for the GKE cluster setup
-export PROJECT_ID="aerostation-dev"
-export CLUSTER_NAME="myworld"
+export PROJECT_ID="$(gcloud config get-value project)"
+export CLUSTER_NAME="${PROJECT_ID}-cluster"
 export NODE_POOL_NAME_AEROSPIKE="aerospike-pool"
-export NODE_POOL_NAME_PROXIMUS="proximus-pool"
+export NODE_POOL_NAME_AVS="avs-pool"
 export ZONE="us-central1-c"
+export HELM_CHART="/home/joem/src/helm-charts/aerospike-vector-search"
 export FEATURES_CONF="./features.conf"
 export AEROSPIKE_CR="./manifests/ssd_storage_cluster_cr.yaml"
 
@@ -61,31 +67,6 @@ echo "Labeling Aerospike nodes..."
 kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_AEROSPIKE" -o name | \
     xargs -I {} kubectl label {} aerospike.com/node-pool=default-rack --overwrite
 
-# This does not work for some reason, suspecting bad label
-# kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_AEROSPIKE" -o name | \
-#     xargs -I {} kubectl taint nodes {} dedicated=aerospike:NoSchedule --overwrite
-
-echo "Adding Proximus node pool..."
-if ! gcloud container node-pools create "$NODE_POOL_NAME_PROXIMUS" \
-      --cluster "$CLUSTER_NAME" \
-      --project "$PROJECT_ID" \
-      --zone "$ZONE" \
-      --num-nodes 3 \
-      --disk-type "pd-standard" \
-      --disk-size "100" \
-      --machine-type "e2-highmem-4"; then
-    echo "Failed to create Proximus node pool"
-    exit 1
-else
-    echo "Proximus node pool added successfully."
-fi
-
-echo "Labeling Proximus nodes..."
-kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_PROXIMUS" -o name | \
-    xargs -I {} kubectl label {} aerospike.com/node-pool=proximus --overwrite
-
-echo "Setup complete. Cluster and node pools are configured."
-
 echo "Deploying Aerospike Kubernetes Operator (AKO)..."
 curl -sL https://github.com/operator-framework/operator-lifecycle-manager/releases/download/v0.25.0/install.sh | bash -s v0.25.0
 kubectl create -f https://operatorhub.io/install/aerospike-kubernetes-operator.yaml
@@ -118,14 +99,45 @@ kubectl apply -f https://raw.githubusercontent.com/aerospike/aerospike-kubernete
 
 echo "Deploying Aerospike cluster..."
 kubectl apply -f "$AEROSPIKE_CR"
-# replace with helm repo add when helm chart is published. 
-echo "Deploying Proximus from Helm chart..."
-mkdir -p temp-helm
-cd temp-helm
-git clone  https://github.com/aerospike/helm-charts.git
-cd ..
-helm install proximus-gke "temp-helm/helm-charts/aerospike-proximus" --values "manifests/proximus-gke-values.yaml" --namespace aerospike --wait
 
+############################################## 
+# AVS namespace
+##############################################
+
+echo "Adding AVS node pool..."
+if ! gcloud container node-pools create "$NODE_POOL_NAME_AVS" \
+      --cluster "$CLUSTER_NAME" \
+      --project "$PROJECT_ID" \
+      --zone "$ZONE" \
+      --num-nodes 3 \
+      --disk-type "pd-standard" \
+      --disk-size "100" \
+      --machine-type "e2-highmem-4"; then
+    echo "Failed to create AVS node pool"
+    exit 1
+else
+    echo "AVS node pool added successfully."
+fi
+
+echo "Labeling AVS nodes..."
+kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_AVS" -o name | \
+    xargs -I {} kubectl label {} aerospike.com/node-pool=avs --overwrite
+
+echo "Setup complete. Cluster and node pools are configured."
+
+kubectl create namespace avs
+
+echo "Setting secrets for AVS cluster..."
+kubectl --namespace avs create secret generic aerospike-secret --from-file=features.conf="$FEATURES_CONF"
+kubectl --namespace avs create secret generic auth-secret --from-literal=password='admin123'
+
+helm repo add aerospike-helm https://artifact.aerospike.io/artifactory/api/helm/aerospike-helm
+helm repo update
+helm install avs-gke --values "manifests/avs-gke-values.yaml" --namespace avs aerospike-helm/aerospike-vector-search --wait
+
+##############################################
+# Monitoring namespace
+##############################################
 echo "Adding monitoring setup..."
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
@@ -137,7 +149,9 @@ kubectl apply -f manifests/monitoring
 echo "Setup complete."
 echo "To include your Grafana dashboards, use 'import-dashboards.sh <your grafana dashboard directory>'"
 
-echo "To view grafana dashboards from your machine use kubectl port-forward -n monitoring svc/monitoring-stack-grafana 3000:80"
-echo "To expose grafana ports publically 'kubectl apply -f helpers/EXPOSE-GRAFANA.yaml'"
-echo "To find the exposed port with 'kubectl get svc -n monitoring' " 
-echo "To run the quote-search app, use 'run-quote-search.sh'"
+echo "To view Grafana dashboards from your machine use 'kubectl port-forward -n monitoring svc/monitoring-stack-grafana 3000:80'"
+echo "To expose Grafana ports publicly, use 'kubectl apply -f helpers/EXPOSE-GRAFANA.yaml'"
+echo "To find the exposed port, use 'kubectl get svc -n monitoring'"
+
+echo "To run the quote search sample app on your new cluster, use:"
+echo "helm install semantic-search-app aerospike/quote-semantic-search --namespace avs --values manifests/semantic-search-values.yaml --wait"

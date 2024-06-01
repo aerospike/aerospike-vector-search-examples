@@ -22,9 +22,9 @@ spec:
             storageClass: ssd
             volumeMode: Filesystem
             size: 1Gi
-      - name: proximus-meta
+      - name: avs-meta
         aerospike:
-          path: /proximus/dev/xvdf
+          path: /avs/dev/xvdf
         source:
           persistentVolume:
             storageClass: ssd
@@ -91,7 +91,7 @@ spec:
           devices:
             - /test/dev/xvdf
 
-      - name: proximus-meta
+      - name: avs-meta
         nsup-period: 600
         nsup-threads: 2
         evict-tenths-pct: 5
@@ -99,4 +99,4 @@ spec:
         storage-engine:
           type: device
           devices:
-            - /proximus/dev/xvdf
+            - /avs/dev/xvdf
