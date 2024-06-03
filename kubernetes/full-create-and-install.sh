@@ -23,12 +23,10 @@ print_env() {
 
 # Set environment variables for the GKE cluster setup
 export PROJECT_ID="$(gcloud config get-value project)"
-export CLUSTER_NAME="${PROJECT_ID}-modern-world"
+export CLUSTER_NAME="${PROJECT_ID}-cluster"
 export NODE_POOL_NAME_AEROSPIKE="aerospike-pool"
 export NODE_POOL_NAME_AVS="avs-pool"
 export ZONE="us-central1-c"
-export HELM_CHART_VECTOR="/Users/david/helm/aerospike/helm-charts/aerospike-vector-search"
-export HELM_CHART_APP="/Users/david/helm/aerospike/helm-charts/aerospike-vector-search-examples/quote-semantic-search/"
 export FEATURES_CONF="./features.conf"
 export AEROSPIKE_CR="./manifests/ssd_storage_cluster_cr.yaml"
 
@@ -102,10 +100,10 @@ echo "Deploying Aerospike cluster..."
 kubectl apply -f "$AEROSPIKE_CR"
 
 ############################################## 
-# AVS name space
+# AVS namespace
 ##############################################
 
-echo "Adding avs node pool..."
+echo "Adding AVS node pool..."
 if ! gcloud container node-pools create "$NODE_POOL_NAME_AVS" \
       --cluster "$CLUSTER_NAME" \
       --project "$PROJECT_ID" \
@@ -114,45 +112,49 @@ if ! gcloud container node-pools create "$NODE_POOL_NAME_AVS" \
       --disk-type "pd-standard" \
       --disk-size "100" \
       --machine-type "e2-highmem-4"; then
-    echo "Failed to create avs node pool"
+    echo "Failed to create AVS node pool"
     exit 1
 else
-    echo "avs node pool added successfully."
+    echo "AVS node pool added successfully."
 fi
 
-echo "Labeling avs nodes..."
+echo "Labeling AVS nodes..."
 kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_AVS" -o name | \
     xargs -I {} kubectl label {} aerospike.com/node-pool=avs --overwrite
-
-
 
 echo "Setup complete. Cluster and node pools are configured."
 
 kubectl create namespace avs
 
-echo "Setting secrets for avs cluster..."
+echo "Setting secrets for AVS cluster..."
 kubectl --namespace avs create secret generic aerospike-secret --from-file=features.conf="$FEATURES_CONF"
 kubectl --namespace avs create secret generic auth-secret --from-literal=password='admin123'
 
+###################################################
+# Optional add Istio
+###################################################
+echo "Deploying Istio"
+helm repo add istio https://istio-release.storage.googleapis.com/charts
+helm repo update
 
- echo "Deploying Istio"
- helm repo add istio https://istio-release.storage.googleapis.com/charts
- helm repo update
-
- helm install istio-base istio/base --namespace istio-system --set defaultRevision=default --create-namespace --wait
- helm install istiod istio/istiod --namespace istio-system --create-namespace --wait
- helm install istio-ingress istio/gateway \
+helm install istio-base istio/base --namespace istio-system --set defaultRevision=default --create-namespace --wait
+helm install istiod istio/istiod --namespace istio-system --create-namespace --wait
+helm install istio-ingress istio/gateway \
  --values ./manifests/istio-ingressgateway-values.yaml \
  --namespace istio-ingress \
  --create-namespace \
  --wait
 
- kubectl apply -f /manifests/istio
+kubectl apply -f /manifests/istio
+
+###################################################
+# End Istio
+###################################################
 
 
-
-helm install avs-gke --values "manifests/avs-gke-values.yaml" --namespace avs $HELM_CHART_VECTOR --wait
-
+helm repo add aerospike-helm https://artifact.aerospike.io/artifactory/api/helm/aerospike-helm
+helm repo update
+helm install avs-gke --values "manifests/avs-gke-values.yaml" --namespace avs aerospike-helm/aerospike-vector-search --wait
 
 ##############################################
 # Monitoring namespace
@@ -168,11 +170,9 @@ kubectl apply -f manifests/monitoring
 echo "Setup complete."
 echo "To include your Grafana dashboards, use 'import-dashboards.sh <your grafana dashboard directory>'"
 
-echo "To view grafana dashboards from your machine use kubectl port-forward -n monitoring svc/monitoring-stack-grafana 3000:80"
-echo "To expose grafana ports publically 'kubectl apply -f helpers/EXPOSE-GRAFANA.yaml'"
-echo "To find the exposed port with 'kubectl get svc -n monitoring' " 
+echo "To view Grafana dashboards from your machine use 'kubectl port-forward -n monitoring svc/monitoring-stack-grafana 3000:80'"
+echo "To expose Grafana ports publicly, use 'kubectl apply -f helpers/EXPOSE-GRAFANA.yaml'"
+echo "To find the exposed port, use 'kubectl get svc -n monitoring'"
 
-
-echo To run the quote search sample app on your new cluster you can use 
-echo helm install sematic-search-app  --namespace avs --values ./manifests/sematic-search-values.yaml $HELM_CHART_APP --wait
-
+echo "To run the quote search sample app on your new cluster, use:"
+echo "helm install semantic-search-app aerospike/quote-semantic-search --namespace avs --values manifests/semantic-search-values.yaml --wait"
