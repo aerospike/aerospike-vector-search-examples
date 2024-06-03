@@ -145,7 +145,7 @@ helm install istio-ingress istio/gateway \
  --create-namespace \
  --wait
 
-kubectl apply -f /manifests/istio
+kubectl apply -f manifests/istio
 
 ###################################################
 # End Istio
