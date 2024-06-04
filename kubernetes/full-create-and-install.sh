@@ -27,7 +27,7 @@ export CLUSTER_NAME="${PROJECT_ID}-cluster"
 export NODE_POOL_NAME_AEROSPIKE="aerospike-pool"
 export NODE_POOL_NAME_AVS="avs-pool"
 export ZONE="us-central1-c"
-export FEATURES_CONF="./features.conf"
+export FEATURES_CONF="./features.conf" 
 export AEROSPIKE_CR="./manifests/ssd_storage_cluster_cr.yaml"
 
 # Print environment variables to ensure they are set correctly
@@ -140,12 +140,13 @@ helm repo update
 helm install istio-base istio/base --namespace istio-system --set defaultRevision=default --create-namespace --wait
 helm install istiod istio/istiod --namespace istio-system --create-namespace --wait
 helm install istio-ingress istio/gateway \
- --values ./manifests/istio-ingressgateway-values.yaml \
+ --values ./manifests/istio/istio-ingressgateway-values.yaml \
  --namespace istio-ingress \
  --create-namespace \
  --wait
 
-kubectl apply -f manifests/istio
+kubectl apply -f manifests/istio/gateway.yaml
+kubectl apply -f manifests/istio/avs-virtual-service.yaml
 
 ###################################################
 # End Istio
@@ -165,7 +166,11 @@ helm repo update
 helm install monitoring-stack prometheus-community/kube-prometheus-stack --namespace monitoring --create-namespace
 
 echo "Applying additional monitoring manifests..."
-kubectl apply -f manifests/monitoring
+kubectl apply -f manifests/monitoring/aerospike-exporter-service.yaml
+kubectl apply -f manifests/monitoring/aerospike-servicemonitor.yaml
+kubectl apply -f manifests/monitoring/avs-servicemonitor.yaml
+
+
 
 echo "Setup complete."
 echo "To include your Grafana dashboards, use 'import-dashboards.sh <your grafana dashboard directory>'"
@@ -174,5 +179,5 @@ echo "To view Grafana dashboards from your machine use 'kubectl port-forward -n 
 echo "To expose Grafana ports publicly, use 'kubectl apply -f helpers/EXPOSE-GRAFANA.yaml'"
 echo "To find the exposed port, use 'kubectl get svc -n monitoring'"
 
-echo "To run the quote search sample app on your new cluster, use:"
-echo "helm install semantic-search-app aerospike/quote-semantic-search --namespace avs --values manifests/semantic-search-values.yaml --wait"
+echo "To run the quote search sample app on your new cluster, for istio use:"
+echo "helm install semantic-search-app aerospike/quote-semantic-search --namespace avs --values manifests/quote-search/semantic-search-values.yaml --wait"
