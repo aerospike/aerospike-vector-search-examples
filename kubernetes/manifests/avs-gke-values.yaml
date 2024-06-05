@@ -1,5 +1,5 @@
 
-replicaCount: 1
+replicaCount: 3
 
 aerospikeVectorSearchConfig:
   heartbeat:
@@ -34,7 +34,7 @@ aerospikeVectorSearchConfig:
     ticker-interval: 10
 
 service:
-  enabled: false
+  enabled: true
   annotations:
     networking.gke.io/load-balancer-type: "External"
   ports:
