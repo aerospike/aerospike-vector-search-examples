@@ -18,7 +18,6 @@ print_env() {
     echo "export NODE_POOL_NAME_AVS=$NODE_POOL_NAME_AVS"
     echo "export ZONE=$ZONE"
     echo "export FEATURES_CONF=$FEATURES_CONF"
-    echo "export AEROSPIKE_CR=$AEROSPIKE_CR"
 }
 
 # Set environment variables for the GKE cluster setup
@@ -28,7 +27,6 @@ export NODE_POOL_NAME_AEROSPIKE="aerospike-pool"
 export NODE_POOL_NAME_AVS="avs-pool"
 export ZONE="us-central1-c"
 export FEATURES_CONF="./features.conf" 
-export AEROSPIKE_CR="./manifests/ssd_storage_cluster_cr.yaml"
 
 # Print environment variables to ensure they are set correctly
 print_env
@@ -97,7 +95,7 @@ echo "Adding storage class..."
 kubectl apply -f https://raw.githubusercontent.com/aerospike/aerospike-kubernetes-operator/master/config/samples/storage/gce_ssd_storage_class.yaml
 
 echo "Deploying Aerospike cluster..."
-kubectl apply -f "$AEROSPIKE_CR"
+kubectl apply -f https://raw.githubusercontent.com/aerospike/aerospike-vector-search-examples/898229feaf1f544c908ec204c97bd2eadc7717c1/kubernetes/manifests/ssd_storage_cluster_cr.yaml
 
 ############################################## 
 # AVS namespace
@@ -145,8 +143,8 @@ helm install istio-ingress istio/gateway \
  --create-namespace \
  --wait
 
-kubectl apply -f manifests/istio/gateway.yaml
-kubectl apply -f manifests/istio/avs-virtual-service.yaml
+kubectl apply -f https://raw.githubusercontent.com/aerospike/aerospike-vector-search-examples/898229feaf1f544c908ec204c97bd2eadc7717c1/kubernetes/manifests/istio/gateway.yaml
+kubectl apply -f https://raw.githubusercontent.com/aerospike/aerospike-vector-search-examples/898229feaf1f544c908ec204c97bd2eadc7717c1/kubernetes/manifests/istio/istio-ingressgateway-values.yaml
 
 ###################################################
 # End Istio
@@ -155,7 +153,7 @@ kubectl apply -f manifests/istio/avs-virtual-service.yaml
 
 helm repo add aerospike-helm https://artifact.aerospike.io/artifactory/api/helm/aerospike-helm
 helm repo update
-helm install avs-gke --values "manifests/avs-gke-values.yaml" --namespace avs aerospike-helm/aerospike-vector-search --wait
+helm install avs-gke --values "https://raw.githubusercontent.com/aerospike/aerospike-vector-search-examples/898229feaf1f544c908ec204c97bd2eadc7717c1/kubernetes/manifests/avs-gke-values.yaml" --namespace avs aerospike-helm/aerospike-vector-search --wait
 
 ##############################################
 # Monitoring namespace
@@ -166,18 +164,15 @@ helm repo update
 helm install monitoring-stack prometheus-community/kube-prometheus-stack --namespace monitoring --create-namespace
 
 echo "Applying additional monitoring manifests..."
-kubectl apply -f manifests/monitoring/aerospike-exporter-service.yaml
-kubectl apply -f manifests/monitoring/aerospike-servicemonitor.yaml
-kubectl apply -f manifests/monitoring/avs-servicemonitor.yaml
-
+kubectl apply -f https://raw.githubusercontent.com/aerospike/aerospike-vector-search-examples/898229feaf1f544c908ec204c97bd2eadc7717c1/kubernetes/manifests/monitoring/aerospike-exporter-service.yaml
+kubectl apply -f https://raw.githubusercontent.com/aerospike/aerospike-vector-search-examples/898229feaf1f544c908ec204c97bd2eadc7717c1/kubernetes/manifests/monitoring/aerospike-servicemonitor.yaml
+kubectl apply -f https://raw.githubusercontent.com/aerospike/aerospike-vector-search-examples/898229feaf1f544c908ec204c97bd2eadc7717c1/kubernetes/manifests/monitoring/avs-servicemonitor.yaml
 
 
 echo "Setup complete."
 echo "To include your Grafana dashboards, use 'import-dashboards.sh <your grafana dashboard directory>'"
 
 echo "To view Grafana dashboards from your machine use 'kubectl port-forward -n monitoring svc/monitoring-stack-grafana 3000:80'"
-echo "To expose Grafana ports publicly, use 'kubectl apply -f helpers/EXPOSE-GRAFANA.yaml'"
-echo "To find the exposed port, use 'kubectl get svc -n monitoring'"
 
 echo "To run the quote search sample app on your new cluster, for istio use:"
 echo "helm install semantic-search-app aerospike/quote-semantic-search --namespace avs --values manifests/quote-search/semantic-search-values.yaml --wait"
