@@ -27,8 +27,7 @@ export CLUSTER_NAME="${PROJECT_ID}-cluster"
 export NODE_POOL_NAME_AEROSPIKE="aerospike-pool"
 export NODE_POOL_NAME_AVS="avs-pool"
 export ZONE="us-central1-c"
-export HELM_CHART="/home/joem/src/helm-charts/aerospike-vector-search"
-export FEATURES_CONF="./features.conf"
+export FEATURES_CONF="./features.conf" 
 export AEROSPIKE_CR="./manifests/ssd_storage_cluster_cr.yaml"
 
 # Print environment variables to ensure they are set correctly
@@ -131,6 +130,29 @@ echo "Setting secrets for AVS cluster..."
 kubectl --namespace avs create secret generic aerospike-secret --from-file=features.conf="$FEATURES_CONF"
 kubectl --namespace avs create secret generic auth-secret --from-literal=password='admin123'
 
+###################################################
+# Optional add Istio
+###################################################
+echo "Deploying Istio"
+helm repo add istio https://istio-release.storage.googleapis.com/charts
+helm repo update
+
+helm install istio-base istio/base --namespace istio-system --set defaultRevision=default --create-namespace --wait
+helm install istiod istio/istiod --namespace istio-system --create-namespace --wait
+helm install istio-ingress istio/gateway \
+ --values ./manifests/istio/istio-ingressgateway-values.yaml \
+ --namespace istio-ingress \
+ --create-namespace \
+ --wait
+
+kubectl apply -f manifests/istio/gateway.yaml
+kubectl apply -f manifests/istio/avs-virtual-service.yaml
+
+###################################################
+# End Istio
+###################################################
+
+
 helm repo add aerospike-helm https://artifact.aerospike.io/artifactory/api/helm/aerospike-helm
 helm repo update
 helm install avs-gke --values "manifests/avs-gke-values.yaml" --namespace avs aerospike-helm/aerospike-vector-search --wait
@@ -144,7 +166,11 @@ helm repo update
 helm install monitoring-stack prometheus-community/kube-prometheus-stack --namespace monitoring --create-namespace
 
 echo "Applying additional monitoring manifests..."
-kubectl apply -f manifests/monitoring
+kubectl apply -f manifests/monitoring/aerospike-exporter-service.yaml
+kubectl apply -f manifests/monitoring/aerospike-servicemonitor.yaml
+kubectl apply -f manifests/monitoring/avs-servicemonitor.yaml
+
+
 
 echo "Setup complete."
 echo "To include your Grafana dashboards, use 'import-dashboards.sh <your grafana dashboard directory>'"
@@ -153,5 +179,5 @@ echo "To view Grafana dashboards from your machine use 'kubectl port-forward -n 
 echo "To expose Grafana ports publicly, use 'kubectl apply -f helpers/EXPOSE-GRAFANA.yaml'"
 echo "To find the exposed port, use 'kubectl get svc -n monitoring'"
 
-echo "To run the quote search sample app on your new cluster, use:"
-echo "helm install semantic-search-app aerospike/quote-semantic-search --namespace avs --values manifests/semantic-search-values.yaml --wait"
+echo "To run the quote search sample app on your new cluster, for istio use:"
+echo "helm install semantic-search-app aerospike/quote-semantic-search --namespace avs --values manifests/quote-search/semantic-search-values.yaml --wait"

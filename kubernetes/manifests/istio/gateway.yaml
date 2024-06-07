@@ -2,7 +2,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
   name: avs-gw
-  namespace: aerospike
+  namespace: avs
 spec:
   selector:
     istio: ingress
