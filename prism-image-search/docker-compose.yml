@@ -19,14 +19,23 @@ services:
     volumes:
       - ./container-volumes/avs/etc/avs:/etc/aerospike-proximus
   app:
+    build:
+      context: .
+      dockerfile: Dockerfile-prism
+    develop:
+      watch:
+        - path: ./prism
+          action: rebuild
     image: prism
     ports:
       - "8080:8080"
     networks:
       - avs-demo
     environment:
-      - AVS_HOST=avs
-      - AVS_PORT=5000
+      AVS_HOST: avs
+      AVS_PORT: "5000"
+      APP_NUM_QUOTES: "5000"
+      GRPC_DNS_RESOLVER: native
     volumes:
       - ./container-volumes/prism/images:/prism/static/images/data
 

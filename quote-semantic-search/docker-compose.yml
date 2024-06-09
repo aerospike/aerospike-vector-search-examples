@@ -19,6 +19,13 @@ services:
     volumes:
       - ./container-volumes/avs/etc/aerospike-vector-search:/etc/aerospike-proximus
   app:
+    build:
+      context: .
+      dockerfile: Dockerfile-quote-search
+    develop:
+      watch:
+        - path: ./quote-search
+          action: rebuild
     image: quote-search
     ports:
       - "8080:8080"
@@ -28,14 +35,10 @@ services:
       - ./container-volumes/quote-search/data:/container-volumes/quote-search/data
       # ./usr/local/lib/python3.10/dist-packages/sentence_transformers
     environment:
-      - AVS_HOST=avs
-      - AVS_PORT=5000
-      - APP_NUM_QUOTES=5000
-      - GRPC_DNS_RESOLVER=native
+      AVS_HOST: avs
+      AVS_PORT: "5000"
+      APP_NUM_QUOTES: "5000"
+      GRPC_DNS_RESOLVER: native
 
-  
 networks:
   avs-demo: {}
-
-volumes:
- app_data: {}
