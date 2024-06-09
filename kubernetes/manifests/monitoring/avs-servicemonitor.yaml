@@ -1,17 +1,17 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: proximus-monitor
+  name: avs-monitor
   namespace: monitoring
   labels:
     release: monitoring-stack  # Ensure this matches the Helm release name
 spec:
   selector:
     matchLabels:
-      app: proximus-gke-aerospike-proximus
+      app: avs-gke-aerospike-vector-search
   namespaceSelector:
     matchNames:
-      - aerospike
+      - avs
   endpoints:
     - port: manage-5040
       path: /manage/rest/v1/prometheus

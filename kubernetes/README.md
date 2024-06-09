@@ -13,7 +13,6 @@ Before you start, make sure you have installed the necessary tools:
 ## Scripts
 
 - `full-create-and-install.sh`: Creates a GKE cluster, installs Aerospike, Proximus, and sets up monitoring services.
-- `run-quote-search.sh`: Runs the Quote Search sample application.
 
 ### Grafana Dashboards
 

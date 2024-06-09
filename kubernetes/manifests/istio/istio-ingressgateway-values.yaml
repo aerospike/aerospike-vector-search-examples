@@ -1,0 +1,17 @@
+service:
+  type: LoadBalancer
+  annotations:
+    cloud.google.com/l4-rbs: "enabled"
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+    - name: https
+      port: 443
+      targetPort: 443
+    - name: status-port
+      port: 15021
+      targetPort: 15021
+    - name: grpc
+      port: 5000
+      targetPort: 5000
