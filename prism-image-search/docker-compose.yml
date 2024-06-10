@@ -19,14 +19,7 @@ services:
     volumes:
       - ./container-volumes/avs/etc/avs:/etc/aerospike-proximus
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile-prism
-    develop:
-      watch:
-        - path: ./prism
-          action: rebuild
-    image: prism
+    image: aerospike/prism-search-example:latest
     ports:
       - "8080:8080"
     networks:
