@@ -17,7 +17,7 @@ services:
     networks:
       - avs-demo
     volumes:
-      - ./container-volumes/avs/etc/avs:/etc/aerospike-proximus
+      - ./container-volumes/avs/etc/aerospike-vector-search:/etc/aerospike-proximus
   app:
     image: aerospike/prism-search-example:latest
     ports:
