@@ -19,7 +19,14 @@ services:
     volumes:
       - ./container-volumes/avs/etc/aerospike-vector-search:/etc/aerospike-proximus
   app:
-    image: aerospike/quote-search-example:latest
+    build:
+      context: .
+      dockerfile: Dockerfile-quote-search
+    develop:
+      watch:
+        - path: ./quote-search
+          action: rebuild
+    image: quote-search
     ports:
       - "8080:8080"
     networks:
