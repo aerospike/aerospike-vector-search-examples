@@ -1,0 +1,117 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "quote-semantic-search.fullname" . }}
+  labels:
+    {{- include "quote-semantic-search.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "quote-semantic-search.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "quote-semantic-search.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "quote-semantic-search.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: pull-dataset
+          image: curlimages/curl:latest
+          command:
+            - curl
+            - "-L"
+            - "-o"
+            - "/data/quotes.csv.tgz"
+            - "https://github.com/aerospike/aerospike-vector-search-examples/raw/main/quote-semantic-search/container-volumes/quote-search/data/quotes.csv.tgz"
+          volumeMounts:
+            - mountPath: /data
+              name: data
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: GRPC_DNS_RESOLVER
+              value: {{ .Values.quoteSearchConfig.grpcDnsResolver | quote }}
+            - name: BASIC_AUTH_USERNAME
+              value: {{ .Values.quoteSearchConfig.basicAutUsername | quote }}
+            - name: BASIC_AUTH_PASSWORD
+              value: {{ .Values.quoteSearchConfig.basicAuthPassword | quote }}
+            - name: NUM_QUOTES
+              value: {{ .Values.quoteSearchConfig.numQuotes | quote }}
+            - name: AVS_HOST
+              value: {{ .Values.quoteSearchConfig.avsHost | quote }}
+            - name: AVS_PORT
+              value: {{ .Values.quoteSearchConfig.avsPort | quote }}
+            - name: AVS_ADVERTISED_LISTENER
+              value: {{ .Values.quoteSearchConfig.avsAdvertisedListener | quote }}
+            - name: AVS_INDEX_NAME
+              value: {{ .Values.quoteSearchConfig.avsIndexName | quote }}
+            - name: AVS_NAMESPACE
+              value: {{ .Values.quoteSearchConfig.avsNamespace | quote }}
+            - name: AVS_SET
+              value: {{ .Values.quoteSearchConfig.avsSet | quote }}
+            - name: AVS_VERIFY_TLS
+              value: {{ .Values.quoteSearchConfig.avsVerifyTls | quote }}
+            - name: AVS_MAX_RESULTS
+              value: {{ .Values.quoteSearchConfig.avsMaxResults | quote }}
+            - name: INDEXER_PARALLELISM
+              value: {{ .Values.quoteSearchConfig.indexerParallelism | quote }}
+            - name: MAX_CONTENT_LENGTH
+              value: {{ .Values.quoteSearchConfig.maxContentLength | quote }}
+            - name: AVS_IS_LOADBALANCER
+              value: {{ .Values.quoteSearchConfig.avsIsLoadbalancer | quote }}
+            - name: DATASET_FILE_PATH
+              value: {{ .Values.quoteSearchConfig.datasetFilePath | quote }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          {{- with .Values.volumeMounts }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: data
+          emptyDir: {}
+      {{- with .Values.volumes }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
