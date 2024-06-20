@@ -3,7 +3,7 @@
 > [!NOTE]
 > Aerospike Vector Search (AVS) is currently in Beta. [Request an invite](https://aerospike.com/lp/aerospike-vector-search-preview-access/)
 
-This repo is a companion repo for scripts, and examples helpful for AVS users. See our full [full documentation](https://aerospike.com/docs/vector) for details how AVS works.
+This is a companion repo for scripts and examples that are helpful to AVS users. See our [full documentation](https://aerospike.com/docs/vector) for details about how AVS works.
 
 ## Installation Examples
 This repo contains scripts and configuration for installing AVS. 
