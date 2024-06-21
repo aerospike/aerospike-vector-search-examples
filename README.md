@@ -7,7 +7,7 @@ This is a companion repo for scripts and examples that are helpful to AVS users.
 
 ## Installation Examples
 This repo contains scripts and configuration details for installing AVS. 
-For more information about AVS, see our [install documentation](https://aerospike.com/docs/vector/operate/install), which contains the following:
+For more information about AVS, see our [install documentation](https://aerospike.com/docs/vector/operate/install). This repo contains the following:
 
 * [Kubernetes install script](./kubernetes) - A bash script and configuration details for [Installing on Kubernetes](https://aerospike.com/docs/vector/operate/install/kubernetes).
 * [Docker-compose files](./docker) - The `./docker` folder contains a docker-compose file for deploying Aerospike and AVS as containers. Additionally, each example app has a docker-compose file that deploys Aerospike, AVS, and the application itself. 
