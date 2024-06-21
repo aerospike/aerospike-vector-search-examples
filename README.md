@@ -1,26 +1,22 @@
 # Aerospike Vector Search
 
 > [!NOTE]
-> Aerospike Vector Search (AVS) is currently in Alpha and available by invitation only. Breaking changes to our client and APIs are expected. Please refer to our [documentation](https://aerospike-vector-search.netlify.app/vector/) for more details and to request access.
+> Aerospike Vector Search (AVS) is currently in Beta. [Request an invite](https://aerospike.com/lp/aerospike-vector-search-preview-access/).
 
+This is a companion repo for scripts and examples that are helpful to AVS users. See our [full documentation](https://aerospike.com/docs/vector) for details about how AVS works.
 
-## Sample Applications
-This repo contains sample apps for utilizing Aerospike Vector Search. All of the current 
-apps are written in Python. The available apps are:
+## Installation Examples
+This repo contains scripts and configuration details for installing AVS. 
+For more information about AVS, see our [install documentation](https://aerospike.com/docs/vector/operate/install), which contains the following:
+
+* [Kubernetes install script](./kubernetes) - A bash script and configuration details for [Installing on Kubernetes](https://aerospike.com/docs/vector/operate/install/kubernetes).
+* [Docker-compose files](./docker) - The `./docker` folder contains a docker-compose file for deploying Aerospike and AVS as containers. Additionally, each example app has a docker-compose file that deploys Aerospike, AVS, and the application itself. 
+  
+
+## Example Applications
+This repo contains example apps for developing with AVS. Try these apps to gain a basic understanding before you
+start developing your own AVS apps.
 
 * [Basic Search](./basic-search/README.md) - A simple application used to showcase the Python client.
-* [Quote Search](./quote-semantic-search/) - A application for semantic text search that includes a small dataset of quotes. 
+* [Quote Search](./quote-semantic-search/) - An application for semantic text search that includes a small dataset of quotes. 
 * [Prism Image Search](./prism-image-search/) - An image search demo that can be used to search JPEG images (no sample dataset included).
-
-## Prerequisites
-You don't have to know Aerospike to get started, but you do need the following:
-
-1. A Python 3.10 - 3.11 environment and familiarity with the Python programming language (see [Setup Python Virtual Environment](#setup-python-virtual-environment)).
-1. The URL to your private sandbox environment (this will be provided).
-
-## Development
-To develop, you can run AVS using [docker](./docker/README.md), and each of the sample applications
-contains a docker-compose file that deploys all the necessary components. 
-
-# Contributing
-If you have an idea for a sample application, open a PR and we will review it. We're excited to provide more examples of what Vector Search can do.
