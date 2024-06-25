@@ -10,6 +10,7 @@ werkzeug
 waitress
 
 # Image processing
+numpy==1.26.4 # fix issues in dependencies after 2.0.0 release
 sentence-transformers==2.2.2
 torch==2.0.1
 tqdm~=4.66.1
