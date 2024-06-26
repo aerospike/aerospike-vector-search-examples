@@ -167,7 +167,7 @@ kubectl create secret docker-registry private-docker \
         --docker-server=aerospike.jfrog.io \
         --docker-username=$DOCKER_REPO_USER  \
         --docker-password=$DOCKER_REPO_PASS \
-        --docker-email=$DOCKER_REPO_PASS
+        --docker-email=$DOCKER_REPO_USER
 
 ###################################################
 # Optional add Istio
