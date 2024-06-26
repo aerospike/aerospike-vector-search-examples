@@ -10,18 +10,16 @@ set -eo pipefail
 if [ -n "$DEBUG" ]; then set -x; fi
 trap 'echo "Error: $? at line $LINENO" >&2' ERR
 
-
 usage() {
     echo "Usage: $0 [OPTIONS]"
     echo "Options:"
     echo "  -f, --features-conf <features-conf>             Specify the path to the features configuration file (mandatory)"
     echo "  -r, --helm-repo <helm-repo>                     Specify the Helm repository URL (default: https://aerospike.jfrog.io/artifactory/api/helm/ecosystem-helm-dev-local)"
-    echo "  -u, --helm-repo-user <helm-repo-user>           Specify the Helm repository username (default: jmartin@aerospike.com)"
-    echo "  -p, --helm-repo-pass <helm-repo-pass>           Specify the Helm repository password"
-    echo "  -d, --docker-repo-user <docker-repo-user>       Specify the Docker repository username (default: jmartin@aerospike.com)"
-    echo "  -a, --docker-repo-pass <docker-repo-pass>       Specify the Docker repository password"
     echo "  -t, --docker-image-tag <docker-image-tag>       Specify the Docker image tag (default: 0.2.1)"
     echo "  -o, --docker-repo <docker-repo>                 Specify the Docker repository (default: aerospike.jfrog.io/ecosystem-container-dev-local/aerospike-proximus)"
+    echo "  -c, --cluster-name <cluster-name>               Specify the GKE cluster name"
+    echo "  -u, --jfrog-user <jfrog-user>                   Specify the JFrog username"
+    echo "  -p, --jfrog-pass <jfrog-pass>                   Specify the JFrog password"
     echo "  -h, --help                                      Display this help message"
     exit 1
 }
@@ -33,10 +31,8 @@ export NODE_POOL_NAME_AEROSPIKE="aerospike-pool"
 export NODE_POOL_NAME_AVS="avs-pool"
 export ZONE="us-central1-c"
 export HELM_REPO=""
-export HELM_REPO_USER=""
-export HELM_REPO_PASS=""
-export DOCKER_REPO_USER=""
-export DOCKER_REPO_PASS=""
+export JFROG_USER=""
+export JFROG_PASS=""
 export DOCKER_IMAGE_TAG="0.2.0"
 export DOCKER_REPO="https://artifact.aerospike.io/container/aerospike-proximus"
 
@@ -45,12 +41,11 @@ while [[ "$#" -gt 0 ]]; do
     case $1 in
         -f|--features-conf) FEATURES_CONF="$2"; shift ;;
         -r|--helm-repo) HELM_REPO="$2"; shift ;;
-        -u|--helm-repo-user) HELM_REPO_USER="$2"; shift ;;
-        -p|--helm-repo-pass) HELM_REPO_PASS="$2"; shift ;;
-        -d|--docker-repo-user) DOCKER_REPO_USER="$2"; shift ;;
-        -a|--docker-repo-pass) DOCKER_REPO_PASS="$2"; shift ;;
         -t|--docker-image-tag) DOCKER_IMAGE_TAG="$2"; shift ;;
         -o|--docker-repo) DOCKER_REPO="$2"; shift ;;
+        -c|--cluster-name) CLUSTER_NAME="$2"; shift ;;
+        -u|--jfrog-user) JFROG_USER="$2"; shift ;;
+        -p|--jfrog-pass) JFROG_PASS="$2"; shift ;;
         -h|--help) usage ;;
         *) echo "Unknown parameter passed: $1"; usage ;;
     esac
@@ -63,7 +58,22 @@ if [ -z "$FEATURES_CONF" ]; then
     usage
 fi
 
-echo  Starting GKE cluster creation...
+# Check if the features configuration file exists
+if [ ! -f "$FEATURES_CONF" ]; then
+    echo "Error: The features configuration file '$FEATURES_CONF' does not exist."
+    exit 1
+fi
+
+# Check Docker login
+echo "Checking Docker login to aerospike.jfrog.io..."
+if ! echo "$JFROG_PASS" | docker login aerospike.jfrog.io -u "$JFROG_USER" --password-stdin; then
+    echo "Error: Invalid credentials for '$JFROG_USER'."
+    exit 1
+else
+    echo "Docker login succeeds."
+fi
+
+echo "Starting GKE cluster creation..."
 if ! gcloud container clusters create "$CLUSTER_NAME" \
       --project "$PROJECT_ID" \
       --zone "$ZONE" \
@@ -165,9 +175,9 @@ kubectl --namespace avs create secret generic auth-secret --from-literal=passwor
 kubectl create secret docker-registry private-docker \
         --namespace avs \
         --docker-server=aerospike.jfrog.io \
-        --docker-username=$DOCKER_REPO_USER  \
-        --docker-password=$DOCKER_REPO_PASS \
-        --docker-email=$DOCKER_REPO_USER
+        --docker-username=$JFROG_USER  \
+        --docker-password=$JFROG_PASS \
+        --docker-email=$JFROG_USER
 
 ###################################################
 # Optional add Istio
@@ -193,7 +203,7 @@ kubectl apply -f manifests/istio/avs-virtual-service.yaml
 
 
 #helm repo add aerospike-helm https://artifact.aerospike.io/artifactory/api/helm/aerospike-helm
-helm repo add ecosystem-helm-dev-local "$HELM_REPO" --username "$HELM_REPO_USER" --password "$HELM_REPO_PASS"
+helm repo add ecosystem-helm-dev-local "$HELM_REPO" --username "$JFROG_USER" --password "$JFROG_PASS"
 helm repo update
 helm install avs-gke --values "manifests/avs-gke-values.yaml" --namespace avs ecosystem-helm-dev-local/aerospike-vector-search \
         --set image.repository=aerospike.jfrog.io/ecosystem-container-dev-local/aerospike-proximus \
@@ -227,3 +237,8 @@ echo "To find the exposed port, use 'kubectl get svc -n monitoring'"
 
 echo "To run the quote search sample app on your new cluster, for istio use:"
 echo "helm install semantic-search-app aerospike/quote-semantic-search --namespace avs --values manifests/quote-search/semantic-search-values.yaml --wait"
+
+#Instalation successful
+kubectl get pods -n avs
+
+kubectl get svc -n istio-ingress
