@@ -1,7 +1,16 @@
 
 replicaCount: 3
+image:
+  repository: aerospike.jfrog.io/ecosystem-container-dev-local/aerospike-proximus
+  tag: 0.5.0-SNAPSHOT
+  pullPolicy: IfNotPresent
+imagePullSecrets:
+  - name: private-docker
 
 aerospikeVectorSearchConfig:
+  service:
+    metadata-namespace: "avs-meta"
+
   heartbeat:
     seeds:
       - address: avs-gke-aerospike-vector-search-0.avs-gke-aerospike-vector-search.avs.svc.cluster.local
@@ -17,7 +26,6 @@ aerospikeVectorSearchConfig:
         addresses:
           0.0.0.0
   aerospike:
-    metadata-namespace: "avs-meta"
     seeds:
       - aerocluster-0-0.aerocluster.aerospike.svc.cluster.local:
           port: 3000

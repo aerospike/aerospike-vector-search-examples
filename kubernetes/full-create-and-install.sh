@@ -10,30 +10,60 @@ set -eo pipefail
 if [ -n "$DEBUG" ]; then set -x; fi
 trap 'echo "Error: $? at line $LINENO" >&2' ERR
 
-print_env() {
-    echo "Environment Variables:"
-    echo "export PROJECT_ID=$PROJECT_ID"
-    echo "export CLUSTER_NAME=$CLUSTER_NAME"
-    echo "export NODE_POOL_NAME_AEROSPIKE=$NODE_POOL_NAME_AEROSPIKE"
-    echo "export NODE_POOL_NAME_AVS=$NODE_POOL_NAME_AVS"
-    echo "export ZONE=$ZONE"
-    echo "export FEATURES_CONF=$FEATURES_CONF"
-    echo "export AEROSPIKE_CR=$AEROSPIKE_CR"
+
+usage() {
+    echo "Usage: $0 [OPTIONS]"
+    echo "Options:"
+    echo "  -f, --features-conf <features-conf>             Specify the path to the features configuration file (mandatory)"
+    echo "  -r, --helm-repo <helm-repo>                     Specify the Helm repository URL (default: https://aerospike.jfrog.io/artifactory/api/helm/ecosystem-helm-dev-local)"
+    echo "  -u, --helm-repo-user <helm-repo-user>           Specify the Helm repository username (default: jmartin@aerospike.com)"
+    echo "  -p, --helm-repo-pass <helm-repo-pass>           Specify the Helm repository password"
+    echo "  -d, --docker-repo-user <docker-repo-user>       Specify the Docker repository username (default: jmartin@aerospike.com)"
+    echo "  -a, --docker-repo-pass <docker-repo-pass>       Specify the Docker repository password"
+    echo "  -t, --docker-image-tag <docker-image-tag>       Specify the Docker image tag (default: 0.2.1)"
+    echo "  -o, --docker-repo <docker-repo>                 Specify the Docker repository (default: aerospike.jfrog.io/ecosystem-container-dev-local/aerospike-proximus)"
+    echo "  -h, --help                                      Display this help message"
+    exit 1
 }
 
-# Set environment variables for the GKE cluster setup
+# Default values
 export PROJECT_ID="$(gcloud config get-value project)"
 export CLUSTER_NAME="${PROJECT_ID}-cluster"
 export NODE_POOL_NAME_AEROSPIKE="aerospike-pool"
 export NODE_POOL_NAME_AVS="avs-pool"
 export ZONE="us-central1-c"
-export FEATURES_CONF="./features.conf" 
-export AEROSPIKE_CR="./manifests/ssd_storage_cluster_cr.yaml"
+export HELM_REPO=""
+export HELM_REPO_USER=""
+export HELM_REPO_PASS=""
+export DOCKER_REPO_USER=""
+export DOCKER_REPO_PASS=""
+export DOCKER_IMAGE_TAG="0.2.0"
+export DOCKER_REPO="https://artifact.aerospike.io/container/aerospike-proximus"
 
-# Print environment variables to ensure they are set correctly
-print_env
+# Parse command-line arguments
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -f|--features-conf) FEATURES_CONF="$2"; shift ;;
+        -r|--helm-repo) HELM_REPO="$2"; shift ;;
+        -u|--helm-repo-user) HELM_REPO_USER="$2"; shift ;;
+        -p|--helm-repo-pass) HELM_REPO_PASS="$2"; shift ;;
+        -d|--docker-repo-user) DOCKER_REPO_USER="$2"; shift ;;
+        -a|--docker-repo-pass) DOCKER_REPO_PASS="$2"; shift ;;
+        -t|--docker-image-tag) DOCKER_IMAGE_TAG="$2"; shift ;;
+        -o|--docker-repo) DOCKER_REPO="$2"; shift ;;
+        -h|--help) usage ;;
+        *) echo "Unknown parameter passed: $1"; usage ;;
+    esac
+    shift
+done
 
-echo "$(date '+%Y-%m-%d %H:%M:%S') - Starting GKE cluster creation..."
+# Check if mandatory argument is set
+if [ -z "$FEATURES_CONF" ]; then
+    echo "Error: a valid feature file must be provided (--features-conf)."
+    usage
+fi
+
+echo  Starting GKE cluster creation...
 if ! gcloud container clusters create "$CLUSTER_NAME" \
       --project "$PROJECT_ID" \
       --zone "$ZONE" \
@@ -97,7 +127,8 @@ echo "Adding storage class..."
 kubectl apply -f https://raw.githubusercontent.com/aerospike/aerospike-kubernetes-operator/master/config/samples/storage/gce_ssd_storage_class.yaml
 
 echo "Deploying Aerospike cluster..."
-kubectl apply -f "$AEROSPIKE_CR"
+kubectl apply -f https://raw.githubusercontent.com/aerospike/aerospike-vector-search-examples/main/kubernetes/manifests/ssd_storage_cluster_cr.yaml
+
 
 ############################################## 
 # AVS namespace
@@ -130,6 +161,14 @@ echo "Setting secrets for AVS cluster..."
 kubectl --namespace avs create secret generic aerospike-secret --from-file=features.conf="$FEATURES_CONF"
 kubectl --namespace avs create secret generic auth-secret --from-literal=password='admin123'
 
+
+kubectl create secret docker-registry private-docker \
+        --namespace avs \
+        --docker-server=aerospike.jfrog.io \
+        --docker-username=$DOCKER_REPO_USER  \
+        --docker-password=$DOCKER_REPO_PASS \
+        --docker-email=$DOCKER_REPO_PASS
+
 ###################################################
 # Optional add Istio
 ###################################################
@@ -153,9 +192,16 @@ kubectl apply -f manifests/istio/avs-virtual-service.yaml
 ###################################################
 
 
-helm repo add aerospike-helm https://artifact.aerospike.io/artifactory/api/helm/aerospike-helm
+#helm repo add aerospike-helm https://artifact.aerospike.io/artifactory/api/helm/aerospike-helm
+helm repo add ecosystem-helm-dev-local "$HELM_REPO" --username "$HELM_REPO_USER" --password "$HELM_REPO_PASS"
 helm repo update
-helm install avs-gke --values "manifests/avs-gke-values.yaml" --namespace avs aerospike-helm/aerospike-vector-search --wait
+helm install avs-gke --values "manifests/avs-gke-values.yaml" --namespace avs ecosystem-helm-dev-local/aerospike-vector-search \
+        --set image.repository=aerospike.jfrog.io/ecosystem-container-dev-local/aerospike-proximus \
+        --set image.tag=$DOCKER_IMAGE_TAG \
+        --set imagePullSecrets[0].name=private-docker \
+      --version 0.2.1
+  
+  #helm install avs-gke --values "manifests/avs-gke-values.yaml" --namespace avs aerospike-helm/aerospike-vector-search --wait
 
 ##############################################
 # Monitoring namespace
