@@ -1,0 +1,81 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.aerospike</groupId>
+  <artifactId>aerospike-vectordb-java-client-demo</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <name>aerospike-vectordb-java-client-demo</name>
+  <description>Aerospike Vector Database Java Client Demo Project</description>
+  <url>https://aerospike.com/docs/vector  </url>
+
+  <licenses>
+    <license>
+      <name>The Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <organization>
+    <name>Aerospike Inc.</name>
+    <url>https://www.aerospike.com</url>
+  </organization>
+
+  <developers>
+    <developer>
+      <id>rkumar-aerospike</id>
+      <name>Rahul Kumar</name>
+      <email>rkumar@aerospike.com</email>
+      <url>http://www.yourcompany.com/team/your-name</url>
+      <organization>Aerospike Inc.</organization>
+      <organizationUrl>https://www.aerospike.com</organizationUrl>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>America/Los_Angeles</timezone>
+    </developer>
+  </developers>
+
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.13.0</version>
+        <configuration>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
+          <encoding>${project.build.sourceEncoding}</encoding>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+
+    <!-- Logback dependencies -->
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.2.3</version>
+    </dependency>
+
+    <!-- Aerospike client dependencies -->
+    <dependency>
+      <groupId>com.aerospike</groupId>
+      <artifactId>avs-client-java</artifactId>
+      <version>0.2.0</version>
+    </dependency>
+  </dependencies>
+
+</project>
