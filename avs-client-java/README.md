@@ -66,5 +66,6 @@ Necessary `pom.xml` configuration for the project:
           -  `testVectorSearchAsync()`: Executes the vector search tests and computes recall metrics.
 
 
-Please refer to the client javadocs for 
+### Javadocs
+Please refer to the [javadocs](https://javadoc.io/doc/com.aerospike/avs-client-java/latest/index.html) for more details.
 
