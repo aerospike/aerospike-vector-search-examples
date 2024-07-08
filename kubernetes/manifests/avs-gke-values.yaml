@@ -22,7 +22,7 @@ aerospikeVectorSearchConfig:
       - aerocluster-0-0.aerocluster.aerospike.svc.cluster.local:
           port: 3000
   logging:
-    #    file: /var/log/aerospike-proximus/aerospike-proximus.log
+    #    file: /var/log/aerospike-vector-search/aerospike-vector-search.log
     enable-console-logging: false
     format: simple
     max-history: 30

@@ -4,7 +4,7 @@ cluster:
   # node-id: a1
 
   # Unique identifier for this cluster.
-  cluster-name: prism-image-search
+  cluster-name: aerospike-vector-search
 
 # The Proximus service listening ports, TLS and network interface.
 service:
@@ -29,7 +29,7 @@ interconnect:
 # Target Aerospike cluster
 aerospike:
   seeds:
-    - aerospike:
+    - aerospike-cluster:
         port: 3000
 
 # File based credentials store only if security should be enabled.
@@ -63,7 +63,7 @@ aerospike:
 # The logging properties.
 logging:
   #format: json
-  #file: /var/log/aerospike-proximus/aerospike-proximus.log
+  #file: /var/log/aerospike-vector-search/aerospike-vector-search.log
   enable-console-logging: true
   levels:
     metrics-ticker: off

@@ -19,9 +19,9 @@ services:
       retries: 3
     networks:
       - svc
-  aerospike-proximus:
-    image: aerospike/aerospike-proximus:0.4.0
-    container_name: "aerospike-proximus"
+  aerospike-vector-search:
+    image: aerospike/aerospike-vector-search:0.5.0
+    container_name: "aerospike-vector-search"
     depends_on:
       aerospike-cluster:
         condition: service_healthy
@@ -31,9 +31,9 @@ services:
     networks:
       - svc
     volumes:
-      - ${PWD}/config:/etc/aerospike-proximus
+      - ${PWD}/config:/etc/aerospike-vector-search
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://aerospike-proximus:5040/manage/rest/v1"]
+      test: ["CMD", "curl", "-f", "http://aerospike-vector-search:5040/manage/rest/v1"]
       interval: 30s
       timeout: 20s
       retries: 3
