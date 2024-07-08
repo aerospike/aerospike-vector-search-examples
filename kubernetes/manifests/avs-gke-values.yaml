@@ -2,6 +2,17 @@
 replicaCount: 3
 
 aerospikeVectorSearchConfig:
+  cluster:
+    cluster-name: "avs-db-1"
+  feature-key-file: "/etc/aerospike-proximus/features.conf"
+  service:
+    ports:
+      5000:
+        addresses:
+          "0.0.0.0"
+  manage:
+    ports:
+      5040: { }
   heartbeat:
     seeds:
       - address: avs-gke-aerospike-vector-search-0.avs-gke-aerospike-vector-search.avs.svc.cluster.local
