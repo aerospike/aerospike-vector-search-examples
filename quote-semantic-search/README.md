@@ -71,7 +71,7 @@ and [Vue.js](https://vuejs.org/). In order to developer follow the steps to
 setup your Python environment.
 
 ### Setup pip
-Setup pip to use Aerospike PyPI repository following instructions [here](https://github.com/citrusleaf/aerospike-proximus-client-python/tree/main#using-the-client-from-your-application-using-pip).
+Setup pip to use Aerospike PyPI repository following instructions [here](https://github.com/citrusleaf/avs-client-python/tree/main#using-the-client-from-your-application-using-pip).
 
 ### Setup Python Virtual Environment
 

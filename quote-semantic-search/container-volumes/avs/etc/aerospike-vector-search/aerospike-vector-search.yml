@@ -31,7 +31,7 @@ interconnect:
 #      port: 6001
 
 # Target Aerospike cluster
-aerospike:
+storage:
   seeds:
     - aerospike:
         port: 3000
@@ -66,8 +66,6 @@ aerospike:
 
 # The logging properties.
 logging:
-  #format: json
-  #file: /var/log/aerospike-proximus/aerospike-proximus.log
   enable-console-logging: true
   levels:
     metrics-ticker: off
