@@ -4,7 +4,7 @@ replicaCount: 3
 aerospikeVectorSearchConfig:
   cluster:
     cluster-name: "avs-db-1"
-  feature-key-file: "/etc/aerospike-proximus/features.conf"
+  feature-key-file: "/etc/aerospike-vector-search/features.conf"
   service:
     ports:
       5000:
@@ -63,7 +63,7 @@ service:
 #       port: 5000
 #       targetPort: 5000
 
-# schedule proximus nodes
+# schedule avs nodes
   affinity:
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:

@@ -1,6 +1,6 @@
-# Aerospike, Proximus, and Monitoring Deployment on GKE (Google Kubernetes Engine)
+# Aerospike Vector Search, and Monitoring Deployment on GKE (Google Kubernetes Engine)
 
-Use the scripts and manifests in this directory deploy Aerospike, Proximus, and monitoring tools on Google Kubernetes Engine (GKE).
+Use the scripts and manifests in this directory deploy Aerospike Vector Search, and monitoring tools on Google Kubernetes Engine (GKE).
 
 ## Prerequisites
 
@@ -12,7 +12,7 @@ Before you start, make sure you have installed the necessary tools:
 
 ## Scripts
 
-- `full-create-and-install.sh`: Creates a GKE cluster, installs Aerospike, Proximus, and sets up monitoring services.
+- `full-create-and-install.sh`: Creates a GKE cluster, installs Aerospike Vector Search, and sets up monitoring services.
 
 ### Grafana Dashboards
 
