@@ -2,6 +2,7 @@ import csv
 import itertools
 from multiprocessing import get_context
 import os
+import sys
 from threading import Thread
 import logging
 from tqdm import tqdm
@@ -31,24 +32,33 @@ def read_csv(filename):
 
 DATASET_FILE = Config.DATASET_FILE_PATH
 dataset = itertools.islice(read_csv(DATASET_FILE), Config.NUM_QUOTES)
+index_created = False
 
 
 def create_index():
-    for index in avs_admin_client.index_list():
-        if (
-            index["id"]["namespace"] == Config.AVS_NAMESPACE
-            and index["id"]["name"] == Config.AVS_INDEX_NAME
-        ):
-            return
+    global index_created
 
-    avs_admin_client.index_create(
-        namespace=Config.AVS_NAMESPACE,
-        name=Config.AVS_INDEX_NAME,
-        sets=Config.AVS_SET,
-        vector_field="quote_embedding",
-        dimensions=MODEL_DIM,
-        vector_distance_metric=types.VectorDistanceMetric.COSINE,
-    )
+    try:
+        for index in avs_admin_client.index_list():
+            if (
+                index["id"]["namespace"] == Config.AVS_NAMESPACE
+                and index["id"]["name"] == Config.AVS_INDEX_NAME
+            ):
+                return
+
+        avs_admin_client.index_create(
+            namespace=Config.AVS_NAMESPACE,
+            name=Config.AVS_INDEX_NAME,
+            sets=Config.AVS_SET,
+            vector_field="quote_embedding",
+            dimensions=MODEL_DIM,
+            vector_distance_metric=types.VectorDistanceMetric.COSINE,
+        )
+
+        index_created = True
+    except Exception as e:
+        logger.critical("Failed to connect to avs client %s", str(e))
+        sys.exit(1)
 
 
 def either(c):
@@ -59,6 +69,7 @@ def index_data():
     try:
         logger.info("Creating index")
         create_index()
+        logger.info("Successfully created the index")
 
         if Config.INDEXER_PARALLELISM <= 1:
             for quote in tqdm(
@@ -103,7 +114,7 @@ def index_quote(id_quote):
             key=doc["quote_id"],
             record_data=doc,
         )
-    except Exception as e:
+    except types.AVSServerError as e:
         logger.warning(
             f"Error inserting vector embedding into avs {id}: {str(e)} quote: {quote}"
         )

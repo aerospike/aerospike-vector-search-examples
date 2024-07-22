@@ -4,7 +4,6 @@ FROM ubuntu:22.04
 RUN apt-get update \
     && apt-get install -y python3 python3-pip \
     && pip3 install setuptools sql
-
 RUN mkdir /quote-search
 COPY ./quote-search /quote-search
 WORKDIR /quote-search

@@ -3,7 +3,7 @@ from flask_basicauth import BasicAuth
 from config import Config
 import logging
 
-logging.basicConfig(level=logging.CRITICAL)
+logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
 # The flask application.
