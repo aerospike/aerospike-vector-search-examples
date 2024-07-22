@@ -1,0 +1,43 @@
+services:
+  aerospike:
+    image: aerospike/aerospike-server-enterprise:7.0.0.2
+    ports:
+      - "3000:3000"
+    networks:
+      - avs-demo
+    volumes:
+      - ./container-volumes/aerospike/etc/aerospike:/opt/aerospike/etc/aerospike
+    command:
+      - "--config-file"
+      - "/opt/aerospike/etc/aerospike/aerospike.conf"
+  avs:
+    image: aerospike/aerospike-proximus:0.4.0
+    # ports:
+      # - "5000:5000"
+    networks:
+      - avs-demo
+    volumes:
+      - ./container-volumes/avs/etc/aerospike-vector-search:/etc/aerospike-proximus
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile-prism
+    develop:
+      watch:
+        - path: ./prism
+          action: rebuild
+    image: prism
+    ports:
+      - "8080:8080"
+    networks:
+      - avs-demo
+    environment:
+      AVS_HOST: avs
+      AVS_PORT: "5000"
+      APP_NUM_QUOTES: "5000"
+      GRPC_DNS_RESOLVER: native
+    volumes:
+      - ./container-volumes/prism/images:/prism/static/images/data
+
+networks:
+  avs-demo: {}
