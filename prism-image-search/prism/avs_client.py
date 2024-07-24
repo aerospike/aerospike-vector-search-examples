@@ -5,7 +5,6 @@ from config import Config
 seeds = types.HostPort(
     host=Config.AVS_HOST,
     port=Config.AVS_PORT,
-    is_tls=Config.AVS_VERIFY_TLS,
 )
 
 avs_client = Client(

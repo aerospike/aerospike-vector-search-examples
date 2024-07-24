@@ -74,6 +74,7 @@ Add your features.conf file to container-volumes/avs/etc/avs.
 ```
 docker compose up
 ```
+
 ## Developing
 This demo is built using [Python Flask](https://flask.palletsprojects.com/en/2.3.x/)
 and [Vue.js](https://vuejs.org/). To start developing, follow the steps to 

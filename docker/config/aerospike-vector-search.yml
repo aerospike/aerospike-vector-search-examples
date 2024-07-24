@@ -4,16 +4,12 @@ cluster:
   # node-id: a1
 
   # Unique identifier for this cluster.
-  cluster-name: quote-semantic-search
+  cluster-name: aerospike-vector-search
 
-# The Proximus service listening ports, TLS and network interface.
+# The AVS service listening ports, TLS and network interface.
 service:
   ports:
     5000: {}
-  # advertised-listeners:
-  #   default:
-  #     address: 127.0.0.1
-  #     port: 5002
 
 # Management API listening ports, TLS and network interface.
 manage:
@@ -33,7 +29,7 @@ interconnect:
 # Target Aerospike cluster
 aerospike:
   seeds:
-    - aerospike:
+    - aerospike-cluster:
         port: 3000
 
 # File based credentials store only if security should be enabled.
@@ -67,7 +63,7 @@ aerospike:
 # The logging properties.
 logging:
   #format: json
-  #file: /var/log/aerospike-proximus/aerospike-proximus.log
+  #file: /var/log/aerospike-vector-search/aerospike-vector-search.log
   enable-console-logging: true
   levels:
     metrics-ticker: off

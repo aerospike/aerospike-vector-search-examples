@@ -6,18 +6,18 @@ services:
     networks:
       - avs-demo
     volumes:
-      - ./container-volumes/aerospike/etc/aerospike:/opt/aerospike/etc/aerospike
+      - ./quote-semantic-search/container-volumes/aerospike/etc/aerospike:/opt/aerospike/etc/aerospike
     command:
       - "--config-file"
       - "/opt/aerospike/etc/aerospike/aerospike.conf"
   avs:
-    image: aerospike/aerospike-proximus:0.4.0
+    image: aerospike/aerospike-vector-search:0.9.0
     # ports:
     #   - "5002:5002"
     networks:
       - avs-demo
     volumes:
-      - ./container-volumes/avs/etc/aerospike-vector-search:/etc/aerospike-proximus
+      - ./quote-semantic-search/container-volumes/avs/etc/aerospike-vector-search:/etc/aerospike-proximus
   app:
     build:
       context: .
@@ -32,8 +32,7 @@ services:
     networks:
       - avs-demo
     volumes:
-      - ./container-volumes/quote-search/data:/container-volumes/quote-search/data
-      # ./usr/local/lib/python3.10/dist-packages/sentence_transformers
+      - ./quote-semantic-search/container-volumes/quote-search/data:/container-volumes/quote-search/data
     environment:
       AVS_HOST: avs
       AVS_PORT: "5000"

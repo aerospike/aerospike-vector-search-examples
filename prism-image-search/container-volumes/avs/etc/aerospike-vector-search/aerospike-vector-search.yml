@@ -1,0 +1,39 @@
+# Change the configuration for your use case.
+cluster:
+  # Custom node-id. It will be auto-generated if not specified.
+  # node-id: a1
+
+  # Unique identifier for this cluster.
+  cluster-name: prism-image-search
+
+# The AVS service listening ports, TLS and network interface.
+service:
+  ports:
+    5000: {}
+
+# Management API listening ports, TLS and network interface.
+manage:
+  ports:
+    5040: {}
+
+# Intra cluster interconnect listening ports, TLS and network interface.
+interconnect:
+  ports:
+    5001: {}
+
+#heartbeat:
+#  seeds:
+#    - address: localhost
+#      port: 6001
+
+# Target Aerospike cluster
+storage:
+  seeds:
+    - aerospike:
+        port: 3000
+
+# The logging properties.
+logging:
+  enable-console-logging: true
+  levels:
+    metrics-ticker: off
