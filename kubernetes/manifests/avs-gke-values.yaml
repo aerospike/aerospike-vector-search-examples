@@ -1,11 +1,17 @@
 
 replicaCount: 3
-
+image:
+  repository: "aerospike/aerospike-vector-search"
+  pullPolicy: "IfNotPresent"
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "0.9.0"
+  
 aerospikeVectorSearchConfig:
   cluster:
     cluster-name: "avs-db-1"
   feature-key-file: "/etc/aerospike-vector-search/features.conf"
   service:
+    metadata-namespace: "avs-meta"
     ports:
       5000:
         addresses:
@@ -27,8 +33,7 @@ aerospikeVectorSearchConfig:
       5001:
         addresses:
           0.0.0.0
-  aerospike:
-    metadata-namespace: "avs-meta"
+  storage:
     seeds:
       - aerocluster-0-0.aerocluster.aerospike.svc.cluster.local:
           port: 3000

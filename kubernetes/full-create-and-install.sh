@@ -155,7 +155,7 @@ kubectl apply -f manifests/istio/avs-virtual-service.yaml
 
 helm repo add aerospike-helm https://artifact.aerospike.io/artifactory/api/helm/aerospike-helm
 helm repo update
-helm install avs-gke --values "manifests/avs-gke-values.yaml" --namespace avs aerospike-helm/aerospike-vector-search --wait
+helm install avs-gke --values "manifests/avs-gke-values.yaml" --namespace avs aerospike-helm/aerospike-vector-search --version 0.4.0 --wait
 
 ##############################################
 # Monitoring namespace
