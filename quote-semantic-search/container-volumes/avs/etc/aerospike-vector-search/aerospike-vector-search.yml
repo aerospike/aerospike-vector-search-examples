@@ -10,10 +10,11 @@ cluster:
 service:
   ports:
     5000: {}
-  # advertised-listeners:
-  #   default:
-  #     address: 127.0.0.1
-  #     port: 5002
+    # 5002:
+    #   advertised-listeners:
+    #     default:
+    #       address: 127.0.0.1
+    #       port: 5002
 
 # Management API listening ports, TLS and network interface.
 manage:
@@ -31,43 +32,13 @@ interconnect:
 #      port: 6001
 
 # Target Aerospike cluster
-aerospike:
+storage:
   seeds:
     - aerospike:
         port: 3000
 
-# File based credentials store only if security should be enabled.
-#security:
-#  credentials-store:
-#    type: file
-#    credentials-file: samples/credentials.yml
-#  auth-token:
-#    private-key: samples/auth/private_key.pem
-#    public-key: samples/auth/public_key.pem
-
-# Vault based credentials store only if security should be enabled.
-#security:
-#  credentials-store:
-#    type: vault
-#    url: https://vault:8200
-#    secrets-path: /secret/aerospike/aerodb1
-#    tls:
-#      key-store:
-#        store-type: PEM
-#        store-file: key.pem
-#        store-password-file: keypass.txt # Password protecting key.pem.
-#        certificate-chain-files: certchain.pem
-#      trust-store:
-#        store-type: PEM
-#        certificate-files: cacert.pem
-#  auth-token:
-#    private-key: samples/auth/private_key.pem
-#    public-key: samples/auth/public_key.pem
-
 # The logging properties.
 logging:
-  #format: json
-  #file: /var/log/aerospike-vector-search/aerospike-vector-search.log
   enable-console-logging: true
   levels:
-    metrics-ticker: off
+    metrics-ticker: info

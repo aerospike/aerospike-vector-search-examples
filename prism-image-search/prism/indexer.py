@@ -1,5 +1,6 @@
 import glob
 import os
+import sys
 import threading
 from multiprocessing import get_context
 from threading import Thread
@@ -23,22 +24,26 @@ logger.setLevel(logging.INFO)
 
 
 def create_index():
-    for index in avs_admin_client.index_list():
-        if (
-            index["id"]["namespace"] == Config.AVS_NAMESPACE
-            and index["id"]["name"] == Config.AVS_INDEX_NAME
-        ):
-            logger.info("Index already exists")
-            return
+    try:
+        for index in avs_admin_client.index_list():
+            if (
+                index["id"]["namespace"] == Config.AVS_NAMESPACE
+                and index["id"]["name"] == Config.AVS_INDEX_NAME
+            ):
+                logger.info("Index already exists")
+                return
 
-    avs_admin_client.index_create(
-        namespace=Config.AVS_NAMESPACE,
-        name=Config.AVS_INDEX_NAME,
-        sets=Config.AVS_SET,
-        vector_field="image_embedding",
-        dimensions=MODEL_DIM,
-        vector_distance_metric=types.VectorDistanceMetric.COSINE,
-    )
+        avs_admin_client.index_create(
+            namespace=Config.AVS_NAMESPACE,
+            name=Config.AVS_INDEX_NAME,
+            sets=Config.AVS_SET,
+            vector_field="image_embedding",
+            dimensions=MODEL_DIM,
+            vector_distance_metric=types.VectorDistanceMetric.COSINE,
+        )
+    except Exception as e:
+        logger.critical("Failed to connect to avs client %s", str(e))
+        sys.exit(1)
 
 
 def either(c):

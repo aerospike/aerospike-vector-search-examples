@@ -3,3 +3,4 @@ venv/
 pip.conf
 container-volumes/quote-search/data/quotes.csv
 container-volumes/avs/etc/aerospike-vector-search/features.conf
+data/

@@ -12,14 +12,12 @@ services:
       - "/opt/aerospike/etc/aerospike/aerospike.conf"
   avs:
     image: aerospike/aerospike-vector-search:0.9.0
-    # ports:
-      # - "5000:5000"
     networks:
       - avs-demo
     volumes:
       - ./container-volumes/avs/etc/aerospike-vector-search:/etc/aerospike-vector-search
   app:
-    image: aerospike/prism-search-example:latest
+    image: prism:latest
     ports:
       - "8080:8080"
     networks:

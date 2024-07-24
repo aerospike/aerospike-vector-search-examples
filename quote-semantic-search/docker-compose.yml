@@ -19,14 +19,13 @@ services:
     volumes:
       - ./container-volumes/avs/etc/aerospike-vector-search:/etc/aerospike-vector-search
   app:
-    image: aerospike/quote-search-example:latest
+    image: quote-search
     ports:
       - "8080:8080"
     networks:
       - avs-demo
     volumes:
       - ./container-volumes/quote-search/data:/container-volumes/quote-search/data
-      # ./usr/local/lib/python3.10/dist-packages/sentence_transformers
     environment:
       AVS_HOST: avs
       AVS_PORT: "5000"
