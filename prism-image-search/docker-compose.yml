@@ -13,9 +13,9 @@ services:
     healthcheck:
 #      test: [ "CMD", "asinfo", "-U", "admin", "-P", "admin", "-p", "3000", "-v", "build" ]
       test: [ "CMD", "asinfo", "-p", "3000", "-v", "build" ]
-      interval: 30s
+      interval: 5s
       timeout: 20s
-      retries: 3
+      retries: 10
   avs:
     image: aerospike/aerospike-vector-search:0.9.0
     depends_on:
@@ -27,9 +27,9 @@ services:
       - ./container-volumes/avs/etc/aerospike-vector-search:/etc/aerospike-vector-search
     healthcheck:
       test: ["CMD", "curl", "-f", "http://avs:5040/manage/rest/v1"]
-      interval: 30s
+      interval: 5s
       timeout: 20s
-      retries: 3
+      retries: 10
   app:
     image: prism:latest
     depends_on: 
