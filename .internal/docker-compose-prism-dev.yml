@@ -6,7 +6,7 @@ services:
     networks:
       - avs-demo
     volumes:
-      - ./container-volumes/aerospike/etc/aerospike:/opt/aerospike/etc/aerospike
+      - ./prism-image-search/container-volumes/aerospike/etc/aerospike:/opt/aerospike/etc/aerospike
     command:
       - "--config-file"
       - "/opt/aerospike/etc/aerospike/aerospike.conf"
@@ -17,7 +17,7 @@ services:
     networks:
       - avs-demo
     volumes:
-      - ./container-volumes/avs/etc/aerospike-vector-search:/etc/aerospike-proximus
+      - ./prism-image-search/container-volumes/avs/etc/aerospike-vector-search:/etc/aerospike-proximus
   app:
     build:
       context: .
@@ -37,7 +37,7 @@ services:
       APP_NUM_QUOTES: "5000"
       GRPC_DNS_RESOLVER: native
     volumes:
-      - ./container-volumes/prism/images:/prism/static/images/data
+      - ./prism-image-search/container-volumes/prism/images:/prism/static/images/data
 
 networks:
   avs-demo: {}
