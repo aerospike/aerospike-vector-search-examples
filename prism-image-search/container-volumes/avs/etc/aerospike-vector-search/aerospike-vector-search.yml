@@ -6,7 +6,7 @@ cluster:
   # Unique identifier for this cluster.
   cluster-name: prism-image-search
 
-# The Proximus service listening ports, TLS and network interface.
+# The AVS service listening ports, TLS and network interface.
 service:
   ports:
     5000: {}
