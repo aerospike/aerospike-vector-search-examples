@@ -1,0 +1,55 @@
+services:
+  aerospike:
+    image: aerospike/aerospike-server-enterprise:7.0.0.2
+    # ports:
+    #   - "3000:3000"
+    volumes:
+      - ./container-volumes/aerospike/etc/aerospike:/opt/aerospike/etc/aerospike
+    command:
+      - "--config-file"
+      - "/opt/aerospike/etc/aerospike/aerospike.conf"
+    healthcheck:
+      test: [ "CMD", "asinfo", "-p", "3000", "-v", "build" ]
+      interval: 5s
+      timeout: 20s
+      retries: 10
+    networks:
+      - avs-demo
+  avs-1:
+    depends_on:
+      aerospike:
+        condition: service_healthy
+    image: aerospike/aerospike-vector-search:0.9.0
+    ports:
+      - "5000:5000" # change this to 5002 if you are using mac
+    volumes:
+      - ./container-volumes/avs-1/etc/aerospike-vector-search:/etc/aerospike-vector-search
+      - ./container-volumes/features/features.conf:/etc/aerospike-vector-search/features.conf
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://avs-1:5040/manage/rest/v1"]
+      interval: 5s
+      timeout: 20s
+      retries: 10
+    networks:
+      - avs-demo
+  avs-2:
+    depends_on:
+      aerospike:
+        condition: service_healthy
+    image: aerospike/aerospike-vector-search:0.9.0
+    # ports:
+    #   - "5000:5000"
+    volumes:
+      - ./container-volumes/avs-2/etc/aerospike-vector-search:/etc/aerospike-vector-search
+      - ./container-volumes/features/features.conf:/etc/aerospike-vector-search/features.conf
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://avs-2:5040/manage/rest/v1"]
+      interval: 5s
+      timeout: 20s
+      retries: 10
+    networks:
+      - avs-demo
+    
+
+networks:
+  avs-demo: {}
