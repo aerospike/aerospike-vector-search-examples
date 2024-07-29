@@ -28,6 +28,12 @@ python3 -m pip install -r requirements.txt
 
 ## Run the search demo
 
+Run with --help to see available the example's available configuration.
+```shell
+python3 search.py --help
+```
+
+Run the example.
 ```shell
 python3 search.py
 ```
