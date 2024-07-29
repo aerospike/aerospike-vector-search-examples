@@ -7,11 +7,42 @@ listener_name = None
 index_name = "basic_index"
 
 arg_parser = argparse.ArgumentParser(description="Aerospike Vector Search Example")
-arg_parser.add_argument("--host", dest="host", required=False, default="localhost", help="Aerospike Vector Search host.")
-arg_parser.add_argument("--port", dest="port", required=False, default=5000, help="Aerospike Vector Search port.")
-arg_parser.add_argument("--namespace", dest="namespace", required=False, default="test", help="Aerospike namespace for vector index and data.")
-arg_parser.add_argument("--set", dest="set", required=False, default="basic_search", help="Aerospike set for vector index and data.")
-arg_parser.add_argument("--load-balancer", dest="load_balancer", action="store_true", required=False, default=False, help="Use this if the host is a load balancer.")
+arg_parser.add_argument(
+    "--host",
+    dest="host",
+    required=False,
+    default="localhost",
+    help="Aerospike Vector Search host.",
+)
+arg_parser.add_argument(
+    "--port",
+    dest="port",
+    required=False,
+    default=5000,
+    help="Aerospike Vector Search port.",
+)
+arg_parser.add_argument(
+    "--namespace",
+    dest="namespace",
+    required=False,
+    default="test",
+    help="Aerospike namespace for vector index and data.",
+)
+arg_parser.add_argument(
+    "--set",
+    dest="set",
+    required=False,
+    default="basic_search",
+    help="Aerospike set for vector index and data.",
+)
+arg_parser.add_argument(
+    "--load-balancer",
+    dest="load_balancer",
+    action="store_true",
+    required=False,
+    default=False,
+    help="Use this if the host is a load balancer.",
+)
 args = arg_parser.parse_args()
 
 with AdminClient(
