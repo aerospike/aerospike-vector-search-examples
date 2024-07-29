@@ -7,7 +7,7 @@ RUN apt-get update \
 
 RUN mkdir /quote-search
 COPY ./quote-semantic-search/quote-search /quote-search
-COPY --parents ./quote-semantic-search/container-volumes/quote-search/data/quotes.csv.tgz .
+COPY ./quote-semantic-search/container-volumes/quote-search/data/quotes.csv.tgz ./container-volumes/quote-search/data/quotes.csv.tgz
 
 WORKDIR /quote-search
 RUN python3 -m pip install -r requirements.txt --extra-index-url https://aerospike.jfrog.io/artifactory/api/pypi/aerospike-pypi-dev/simple
