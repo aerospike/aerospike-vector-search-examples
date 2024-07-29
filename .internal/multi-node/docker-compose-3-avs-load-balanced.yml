@@ -14,7 +14,7 @@ services:
       timeout: 20s
       retries: 10
     networks:
-      - avs-demo
+      - avs-balanced
   avs-1:
     depends_on:
       aerospike:
@@ -31,7 +31,7 @@ services:
       timeout: 20s
       retries: 10
     networks:
-      - avs-demo
+      - avs-balanced
   avs-2:
     depends_on:
       aerospike:
@@ -48,7 +48,24 @@ services:
       timeout: 20s
       retries: 10
     networks:
-      - avs-demo
+      - avs-balanced
+  avs-3:
+    depends_on:
+      aerospike:
+        condition: service_healthy
+    image: aerospike/aerospike-vector-search:0.9.0
+    # ports:
+    #   - "5000:5000"
+    volumes:
+      - ./container-volumes/avs-3/etc/aerospike-vector-search:/etc/aerospike-vector-search
+      - ./container-volumes/features/features.conf:/etc/aerospike-vector-search/features.conf
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://avs-3:5040/manage/rest/v1"]
+      interval: 5s
+      timeout: 20s
+      retries: 10
+    networks:
+      - avs-balanced
   nginx:
     image: nginx:latest
     ports:
@@ -58,11 +75,13 @@ services:
         condition: service_healthy
       avs-2:
         condition: service_healthy
+      avs-3:
+        condition: service_healthy
     volumes:
       - ./container-volumes/nginx/nginx.conf:/etc/nginx/nginx.conf
     networks:
-      - avs-demo
+      - avs-balanced
     
 
 networks:
-  avs-demo: {}
+  avs-balanced: {}

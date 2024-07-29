@@ -9,12 +9,12 @@ Locate valid `features.conf` in the `./container-volumes/features` directory:
 
 ## Load Balanced 2 Node AVS Cluster
 ```shell
-docker compose -f docker-compose-2-avs-load-balanced.yaml up -d
+docker compose -f docker-compose-3-avs-load-balanced.yaml up -d
 ```
 
 ## Plain 2 Node AVS Cluster
 ```shell
-docker compose -f docker-compose-2-avs.yaml up -d
+docker compose -3 docker-compose-2-avs.yaml up -d
 ```
 
 

@@ -26,13 +26,13 @@ interconnect:
   ports:
     5001:
       addresses:
-        avs-2
+        avs-3
 
 heartbeat:
  seeds:
    - address: avs-1
      port: 5001
-   - address: avs-3
+   - address: avs-2
      port: 5001
 
 # Target Aerospike cluster

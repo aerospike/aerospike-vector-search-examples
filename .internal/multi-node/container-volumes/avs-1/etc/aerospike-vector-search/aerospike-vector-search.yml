@@ -32,6 +32,8 @@ heartbeat:
  seeds:
    - address: avs-2
      port: 5001
+   - address: avs-3
+     port: 5001
 
 # Target Aerospike cluster
 storage:
