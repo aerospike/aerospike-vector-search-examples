@@ -112,8 +112,8 @@ If not set defaults are used.
 | AVS_ADVERTISED_LISTENER|                    | An optional advertised listener to use if configured on the AVS server                              |
 | AVS_NAMESPACE     | test               | The Aerospike namespace for storing the image records           |
 | AVS_SET           | image-data         | The Aerospike set for storing the image records                 |
-| AVS_NAMESPACE     | test               | The Aerospike namespace for storing the HNSW index              |
-| AVS_SET           | image-index        | The Aerospike set for storing the HNSW index                    |
+| AVS_INDEX_NAMESPACE     | test               | The Aerospike namespace for storing the HNSW index              |
+| AVS_INDEX_SET           | image-index        | The Aerospike set for storing the HNSW index                    |
 | AVS_INDEX_NAME         | prism-image-search | The name of the  index                                          |
 | AVS_MAX_RESULTS        | 20                 | Maximum number of vector search results to return               |
 | AVS_IS_LOADBALANCER    | False              |                 If true, the first seed address will be treated as a load balancer node.```
