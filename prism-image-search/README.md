@@ -113,7 +113,7 @@ If not set defaults are used.
 | AVS_DATA_NAMESPACE     | test               | The Aerospike namespace for storing the image records           |
 | AVS_DATA_SET           | image-data         | The Aerospike set for storing the image records                 |
 | AVS_DATA_NAMESPACE     | test               | The Aerospike namespace for storing the HNSW index              |
-| AVS_DATA_NAMESPACE     | image-index               | The Aerospike set for storing the HNSW index              |
+| AVS_DATA_SET           | image-index        | The Aerospike set for storing the HNSW index                    |
 | AVS_INDEX_NAME         | prism-image-search | The name of the  index                                          |
 | AVS_MAX_RESULTS        | 20                 | Maximum number of vector search results to return               |
 | AVS_IS_LOADBALANCER    | False              |                 If true, the first seed address will be treated as a load balancer node.```
