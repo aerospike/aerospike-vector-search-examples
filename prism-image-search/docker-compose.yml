@@ -10,6 +10,8 @@ services:
     command:
       - "--config-file"
       - "/opt/aerospike/etc/aerospike/aerospike.conf"
+      # use this line to store all index and vector data in the default namespace (test)
+      # - "/opt/aerospike/etc/aerospike/aerospike-single-namespace.conf"
     healthcheck:
 #      test: [ "CMD", "asinfo", "-U", "admin", "-P", "admin", "-p", "3000", "-v", "build" ]
       test: [ "CMD", "asinfo", "-p", "3000", "-v", "build" ]
@@ -44,6 +46,11 @@ services:
       AVS_PORT: "5000"
       APP_NUM_QUOTES: "5000"
       GRPC_DNS_RESOLVER: native
+      # comment out the following lines to use the default namespace (test) to store all index and vector data
+      AVS_DATA_NAMESPACE: avs-data
+      AVS_DATA_SET: quote-data
+      AVS_INDEX_NAMESPACE: avs-index
+      AVS_INDEX_SET: quote-index
     volumes:
       - ./container-volumes/prism/images:/prism/static/images/data
 
