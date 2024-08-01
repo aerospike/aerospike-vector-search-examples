@@ -28,8 +28,8 @@ def collect_stats():
             for quote_id in range(Config.NUM_QUOTES):
                 # Check if record exists
                 if avs_client.is_indexed(
-                    namespace=Config.AVS_NAMESPACE,
-                    set_name=Config.AVS_SET,
+                    namespace=Config.AVS_DATA_NAMESPACE,
+                    set_name=Config.AVS_DATA_SET,
                     key=quote_id,
                     index_name=Config.AVS_INDEX_NAME,
                 ):
