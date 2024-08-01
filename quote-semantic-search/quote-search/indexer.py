@@ -41,15 +41,15 @@ def create_index():
     try:
         for index in avs_admin_client.index_list():
             if (
-                index["id"]["namespace"] == Config.AVS_DATA_NAMESPACE
+                index["id"]["namespace"] == Config.AVS_NAMESPACE
                 and index["id"]["name"] == Config.AVS_INDEX_NAME
             ):
                 return
 
         avs_admin_client.index_create(
-            namespace=Config.AVS_DATA_NAMESPACE,
+            namespace=Config.AVS_NAMESPACE,
             name=Config.AVS_INDEX_NAME,
-            sets=Config.AVS_DATA_SET,
+            sets=Config.AVS_SET,
             vector_field="quote_embedding",
             dimensions=MODEL_DIM,
             vector_distance_metric=types.VectorDistanceMetric.COSINE,
@@ -110,8 +110,8 @@ def index_quote(id_quote):
     # Insert record
     try:
         avs_client.upsert(
-            namespace=Config.AVS_DATA_NAMESPACE,
-            set_name=Config.AVS_DATA_SET,
+            namespace=Config.AVS_NAMESPACE,
+            set_name=Config.AVS_SET,
             key=doc["quote_id"],
             record_data=doc,
         )

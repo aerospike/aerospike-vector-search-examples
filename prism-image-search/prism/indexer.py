@@ -27,16 +27,16 @@ def create_index():
     try:
         for index in avs_admin_client.index_list():
             if (
-                index["id"]["namespace"] == Config.AVS_DATA_NAMESPACE
+                index["id"]["namespace"] == Config.AVS_NAMESPACE
                 and index["id"]["name"] == Config.AVS_INDEX_NAME
             ):
                 logger.info("Index already exists")
                 return
 
         avs_admin_client.index_create(
-            namespace=Config.AVS_DATA_NAMESPACE,
+            namespace=Config.AVS_NAMESPACE,
             name=Config.AVS_INDEX_NAME,
-            sets=Config.AVS_DATA_SET,
+            sets=Config.AVS_SET,
             vector_field="image_embedding",
             dimensions=MODEL_DIM,
             vector_distance_metric=types.VectorDistanceMetric.COSINE,
@@ -63,8 +63,8 @@ def index_data():
             # Check if record exists
             try:
                 if avs_client.is_indexed(
-                    namespace=Config.AVS_DATA_NAMESPACE,
-                    set_name=Config.AVS_DATA_SET,
+                    namespace=Config.AVS_NAMESPACE,
+                    set_name=Config.AVS_SET,
                     key=filename,
                     index_name=Config.AVS_INDEX_NAME,
                 ):
@@ -130,8 +130,8 @@ def index_image(filename):
     try:
         logger.debug(f"Inserting vector embedding into avs {filename}")
         avs_client.upsert(
-            namespace=Config.AVS_DATA_NAMESPACE,
-            set_name=Config.AVS_DATA_SET,
+            namespace=Config.AVS_NAMESPACE,
+            set_name=Config.AVS_SET,
             key=doc["image_id"],
             record_data=doc,
         )

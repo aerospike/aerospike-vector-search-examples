@@ -27,8 +27,8 @@ def collect_stats():
         for filename in filenames:
             # Check if record exists
             if avs_client.is_indexed(
-                namespace=Config.AVS_DATA_NAMESPACE,
-                set_name=Config.AVS_DATA_SET,
+                namespace=Config.AVS_NAMESPACE,
+                set_name=Config.AVS_SET,
                 key=filename,
                 index_name=Config.AVS_INDEX_NAME,
             ):

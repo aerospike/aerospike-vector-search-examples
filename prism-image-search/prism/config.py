@@ -23,8 +23,8 @@ class Config(object):
     AVS_PORT = int(os.environ.get("AVS_PORT") or 5000)
     AVS_ADVERTISED_LISTENER = os.environ.get("AVS_ADVERTISED_LISTENER") or None
     AVS_INDEX_NAME = os.environ.get("AVS_INDEX_NAME") or "prism-image-search"
-    AVS_DATA_NAMESPACE = os.environ.get("AVS_DATA_NAMESPACE") or "test"
-    AVS_DATA_SET = os.environ.get("AVS_DATA_SET") or "image-data"
+    AVS_NAMESPACE = os.environ.get("AVS_NAMESPACE") or "test"
+    AVS_SET = os.environ.get("AVS_SET") or "image-data"
     AVS_INDEX_NAMESPACE = os.environ.get("AVS_INDEX_NAMESPACE") or "test"
     AVS_INDEX_SET = os.environ.get("AVS_INDEX_SET") or "image-index"
     AVS_VERIFY_TLS = get_bool_env("VERIFY_TLS", True)

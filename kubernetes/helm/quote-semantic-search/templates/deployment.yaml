@@ -69,6 +69,10 @@ spec:
               value: {{ .Values.quoteSearchConfig.avsNamespace | quote }}
             - name: AVS_SET
               value: {{ .Values.quoteSearchConfig.avsSet | quote }}
+            - name: AVS_INDEX_NAMESPACE
+              value: {{ .Values.quoteSearchConfig.avsIndexNamespace | quote }}
+            - name: AVS_INDEX_SET
+              value: {{ .Values.quoteSearchConfig.avsIndexSet | quote }}
             - name: AVS_VERIFY_TLS
               value: {{ .Values.quoteSearchConfig.avsVerifyTls | quote }}
             - name: AVS_MAX_RESULTS

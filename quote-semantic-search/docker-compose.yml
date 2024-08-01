@@ -51,8 +51,8 @@ services:
       APP_NUM_QUOTES: "5000"
       GRPC_DNS_RESOLVER: native
       # comment out the following lines to use the default namespace (test) to store all index and vector data
-      AVS_DATA_NAMESPACE: avs-data
-      AVS_DATA_SET: quote-data
+      AVS_NAMESPACE: avs-data
+      AVS_SET: quote-data
       AVS_INDEX_NAMESPACE: avs-index
       AVS_INDEX_SET: quote-index
 
