@@ -40,6 +40,7 @@ def create_index():
             vector_field="image_embedding",
             dimensions=MODEL_DIM,
             vector_distance_metric=types.VectorDistanceMetric.COSINE,
+            index_storage=types.IndexStorage(namespace=Config.AVS_INDEX_NAMESPACE, set_name=Config.AVS_INDEX_SET),
         )
     except Exception as e:
         logger.critical("Failed to connect to avs client %s", str(e))

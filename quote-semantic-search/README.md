@@ -101,7 +101,10 @@ If not set defaults are used.
 | AVS_HOST               | localhost          | AVS server seed host                                       |
 | AVS_PORT               | 5000               | AVS server seed host port                                  |
 | AVS_ADVERTISED_LISTENER|                    | An optional advertised listener to use if configured on the AVS server                              |
-| AVS_NAMESPACE          | test               | The aerospike namespace for storing the image records and index |
+| AVS_NAMESPACE     | test               | The Aerospike namespace for storing the quote records           |
+| AVS_SET           | quote-data         | The Aerospike set for storing the quote records                 |
+| AVS_INDEX_NAMESPACE     | test               | The Aerospike namespace for storing the HNSW index              |
+| AVS_INDEX_SET           | quote-index        | The Aerospike set for storing the HNSW index                    |
 | AVS_INDEX_NAME         | quote-search       | The name of the  index                                          |
 | AVS_MAX_RESULTS        | 20                 | Maximum number of vector search results to return               |
 | AVS_IS_LOADBALANCER    | False                 |                 If true, the first seed address will be treated as a load balancer node.```

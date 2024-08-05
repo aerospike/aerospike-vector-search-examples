@@ -25,6 +25,8 @@ class Config(object):
     AVS_INDEX_NAME = os.environ.get("AVS_INDEX_NAME") or "prism-image-search"
     AVS_NAMESPACE = os.environ.get("AVS_NAMESPACE") or "test"
     AVS_SET = os.environ.get("AVS_SET") or "image-data"
+    AVS_INDEX_NAMESPACE = os.environ.get("AVS_INDEX_NAMESPACE") or "test"
+    AVS_INDEX_SET = os.environ.get("AVS_INDEX_SET") or "image-index"
     AVS_VERIFY_TLS = get_bool_env("VERIFY_TLS", True)
     AVS_MAX_RESULTS = int(os.environ.get("AVS_MAX_RESULTS") or 20)
     MAX_CONTENT_LENGTH = int(os.environ.get("MAX_CONTENT_LENGTH") or 10485760)

@@ -23,6 +23,8 @@ class Config(object):
     AVS_INDEX_NAME = os.environ.get("AVS_INDEX_NAME") or "quote-semantic-search"
     AVS_NAMESPACE = os.environ.get("AVS_NAMESPACE") or "test"
     AVS_SET = os.environ.get("AVS_SET") or "quote-data"
+    AVS_INDEX_NAMESPACE = os.environ.get("AVS_INDEX_NAMESPACE") or "test"
+    AVS_INDEX_SET = os.environ.get("AVS_INDEX_SET") or "quote-index"
     AVS_VERIFY_TLS = get_bool_env("VERIFY_TLS", True)
     AVS_MAX_RESULTS = int(os.environ.get("AVS_MAX_RESULTS") or 5)
     INDEXER_PARALLELISM = int(os.environ.get("APP_INDEXER_PARALLELISM") or 1)
