@@ -2,6 +2,8 @@ name: Build and Push Docker Images
 
 on:
   workflow_dispatch:
+  release:
+    types: [published]
 
 jobs:
   setup:
