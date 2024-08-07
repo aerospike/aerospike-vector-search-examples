@@ -45,7 +45,7 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         context: .
-        file: ./.internal/Dockerfile-quote-search-preview
+        file: .internal/Dockerfile-quote-search-preview
         platforms: linux/amd64,linux/arm64
         push: true
         tags: aerospike/quote-search-example:preview
@@ -67,8 +67,8 @@ jobs:
     - name: Build and push quote search Docker image
       uses: docker/build-push-action@v6
       with:
-        context: ./quote-semantic-search
-        file: ./quote-semantic-search/Dockerfile-quote-search
+        context: quote-semantic-search
+        file: Dockerfile-quote-search
         platforms: linux/amd64,linux/arm64
         push: true
         tags: |
@@ -92,8 +92,8 @@ jobs:
     - name: Build and push prism search Docker image
       uses: docker/build-push-action@v6
       with:
-        context: ./quote-semantic-search
-        file: ./quote-semantic-search/Dockerfile-prism
+        context: prism-image-search
+        file: Dockerfile-prism
         platforms: linux/amd64,linux/arm64
         push: true
         tags: |
