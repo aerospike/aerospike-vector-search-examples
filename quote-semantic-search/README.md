@@ -1,9 +1,9 @@
 # Quote Semantic search
 This demo application provides semantic search for an included [dataset of quotes](https://archive.org/details/quotes_20230625)
 by indexing them using the [MiniLM](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2)
-model created by OpenAI. This model generates vectors with semantic meaning 
-from each quote and stores it as a vector embedding in Aerospike. When a user
-performs a query a vector embedding for the provided text is generated and
+model created by OpenAI. This model was used to generate the vectors with semantic meaning in container-volumes/quote-search/data/quote-embeddings.csv.tgz
+which are loaded by this app into Aerospike.
+When a user performs a query a vector embedding for the provided text is generated and
 Aerospike Vector Search (AVS) performs Approximate Nearest Neighbor(ANN) search to find relevant results.
 
 
@@ -132,3 +132,7 @@ restart and hence is ideal for development.
 ```shell
 FLASK_ENV=development FLASK_DEBUG=1 python3 -m flask --app quote_search  run --port 8080
 ```
+
+### Generating the embeddings
+The quote search example application loads pre-computed quote embeddings from container-volumes/quote-search/data/quote-embeddings.csv.tgz.
+This file can be re-generated using the pre-embed.py script in the scripts folder.

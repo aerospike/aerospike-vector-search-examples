@@ -32,7 +32,7 @@ class Config(object):
     AVS_IS_LOADBALANCER = get_bool_env("AVS_IS_LOADBALANCER", False)
     DATASET_FILE_PATH = (
         os.environ.get("DATASET_FILE_PATH")
-        or "../container-volumes/quote-search/data/quotes.csv"
+        or "../container-volumes/quote-search/data/quote-embeddings.csv"
     )
 
     if NUM_QUOTES > 100000:

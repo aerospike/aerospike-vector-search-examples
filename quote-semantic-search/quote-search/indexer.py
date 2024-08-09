@@ -1,6 +1,8 @@
+import ast
 import csv
 import itertools
 from multiprocessing import get_context
+import numpy
 import os
 import sys
 from threading import Thread
@@ -9,7 +11,7 @@ from tqdm import tqdm
 import tarfile
 
 from config import Config
-from data_encoder import MODEL_DIM, encoder
+from data_encoder import MODEL_DIM
 from avs_client import avs_admin_client, avs_client
 from aerospike_vector_search import types
 
@@ -97,14 +99,14 @@ def index_data():
 
 def index_quote(id_quote):
     id, quote = id_quote
-    quote, author, catagory = quote
+    quote, author, catagory, embedding = quote
+    embedding = ast.literal_eval(embedding)
+    embedding = numpy.frombuffer(embedding, dtype=numpy.float32)
     doc = {"quote_id": id}
     doc["quote"] = quote
     doc["author"] = author
     doc["tags"] = catagory.split(",")
     logger.debug(f"Creating text vector embedding {id}")
-    text = quote + " ".join(doc["tags"])
-    embedding = encoder(text)
     doc["quote_embedding"] = embedding  # Numpy array is supported by aerospike
 
     # Insert record
