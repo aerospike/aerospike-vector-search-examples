@@ -13,8 +13,8 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.CRITICAL)
 
 # The text encoding model.
+# This needs to be the same as the model used in the data_encoder.py file in the quote search app.
 model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
-MODEL_DIM = 384
 
 
 def encoder(data):
@@ -59,6 +59,5 @@ if __name__ == "__main__":
         writer.writerow(["quote", "author", "tags", "quote_embedding_ndarray"])
         for quote in dataset:
             quote_embedding = embed_quote(quote)
-            breakpoint()
             quote.append(quote_embedding.tobytes())
             writer.writerow(quote)
