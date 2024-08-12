@@ -102,6 +102,12 @@ python3 -m pip install -r requirements.txt
 The application can be configured by setting the following environment variable.
 If not set defaults are used.
 
+[!NOTE]
+It is best practice to store AVS index and record data in separate namespaces.
+By default this application stores its AVS index in the "avs-index" namespace, and AVS records in "avs-data".
+If your Aerospike database configuration does not define these namespaces you will see an error.
+You may change the AVS_NAMESPACE and AVS_INDEX_NAMESPACE to other values, like the default Aerospike "test" namespace, to use other namespaces.
+
 | Environment Variable   | Default            | Description                                                     |
 |------------------------|--------------------|-----------------------------------------------------------------|
 | APP_USERNAME           |                    | If set, the username for basic authentication                   |
@@ -110,9 +116,9 @@ If not set defaults are used.
 | AVS_HOST               | localhost          | AVS server seed host                                            |
 | AVS_PORT               | 5000               | AVS server seed host port                                       |
 | AVS_ADVERTISED_LISTENER|                    | An optional advertised listener to use if configured on the AVS server                              |
-| AVS_NAMESPACE     | test               | The Aerospike namespace for storing the image records           |
+| AVS_NAMESPACE     | avs-data               | The Aerospike namespace for storing the image records           |
 | AVS_SET           | image-data         | The Aerospike set for storing the image records                 |
-| AVS_INDEX_NAMESPACE     | test               | The Aerospike namespace for storing the HNSW index              |
+| AVS_INDEX_NAMESPACE     | avs-index               | The Aerospike namespace for storing the HNSW index              |
 | AVS_INDEX_SET           | image-index        | The Aerospike set for storing the HNSW index                    |
 | AVS_INDEX_NAME         | prism-image-search | The name of the  index                                          |
 | AVS_MAX_RESULTS        | 20                 | Maximum number of vector search results to return               |
