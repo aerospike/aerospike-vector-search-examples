@@ -12,7 +12,7 @@ import tarfile
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.CRITICAL)
 
-# The image or text encoding model.
+# The text encoding model.
 model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 MODEL_DIM = 384
 
