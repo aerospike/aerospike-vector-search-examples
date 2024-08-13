@@ -37,7 +37,7 @@ You may change the --namespace and --index-namespace to other values, like the d
 
 | Command Line Flag        | Default            | Description                                                        |
 |-----------------------------|--------------------|-----------------------------------------------------------------|
-| --host               | localhost          | AVS server seed host                                                   |
+| --host               | localhost          | AVS host used for initial connection                                                   |
 | --port               | 5000               | AVS server seed host port                                              |
 | --namespace          | avs-data           | The Aerospike namespace for storing the quote records                  |
 | --set                | basic-data         | The Aerospike set for storing the quote records                        |
