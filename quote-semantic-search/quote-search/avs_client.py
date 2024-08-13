@@ -7,6 +7,9 @@ avs_client = Client(
         host=Config.AVS_HOST,
         port=Config.AVS_PORT,
     ),
+    root_certificate=Config.AVS_TLS_CA,
+    certificate_chain=Config.AVS_TLS_CERT,
+    private_key=Config.AVS_TLS_KEY,
     listener_name=Config.AVS_ADVERTISED_LISTENER,
     is_loadbalancer=Config.AVS_IS_LOADBALANCER,
 )
@@ -17,6 +20,9 @@ avs_admin_client = AdminClient(
         host=Config.AVS_HOST,
         port=Config.AVS_PORT,
     ),
+    root_certificate=Config.AVS_TLS_CA,
+    certificate_chain=Config.AVS_TLS_CERT,
+    private_key=Config.AVS_TLS_KEY,
     listener_name=Config.AVS_ADVERTISED_LISTENER,
     is_loadbalancer=Config.AVS_IS_LOADBALANCER,
 )
