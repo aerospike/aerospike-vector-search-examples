@@ -32,6 +32,7 @@ def collect_stats():
                     set_name=Config.AVS_SET,
                     key=quote_id,
                     index_name=Config.AVS_INDEX_NAME,
+                    index_namespace=Config.AVS_INDEX_NAMESPACE,
                 ):
                     # Record exists
                     quote_id = str(quote_id)
