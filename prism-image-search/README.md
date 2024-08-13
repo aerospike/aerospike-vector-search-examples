@@ -102,6 +102,11 @@ python3 -m pip install -r requirements.txt
 The application can be configured by setting the following environment variable.
 If not set defaults are used.
 
+[!NOTE]
+Using a load balancer with AVS is best practice. Therefore AVS_IS_LOADBAlANCER defaults to True.
+This works fine for AVS clusters with a load balancer or clusters with only 1 node. If you are using
+the examples with an AVS cluster larger than 1 node without load balancing you should set AVS_IS_LOADBAlANCER to False.
+
 | Environment Variable   | Default            | Description                                                     |
 |------------------------|--------------------|-----------------------------------------------------------------|
 | APP_USERNAME           |                    | If set, the username for basic authentication                   |
@@ -116,7 +121,7 @@ If not set defaults are used.
 | AVS_INDEX_SET           | image-index        | The Aerospike set for storing the HNSW index                    |
 | AVS_INDEX_NAME         | prism-image-search | The name of the  index                                          |
 | AVS_MAX_RESULTS        | 20                 | Maximum number of vector search results to return               |
-| AVS_IS_LOADBALANCER    | False              |                 If true, the first seed address will be treated as a load balancer node.```
+| AVS_IS_LOADBALANCER    | True              |                 If true, the first seed address will be treated as a load balancer node.```
 
 ### Setup networking (optional)
 

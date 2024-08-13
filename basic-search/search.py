@@ -40,7 +40,9 @@ arg_parser.add_argument(
     dest="load_balancer",
     action="store_true",
     required=False,
-    default=False,
+    # using a load balancer with AVS is best practice so this is the default
+    # you should set this to False if you are not using a load balancer with an AVS cluster of more than 1 node
+    default=True,
     help="Use this if the host is a load balancer.",
 )
 args = arg_parser.parse_args()
