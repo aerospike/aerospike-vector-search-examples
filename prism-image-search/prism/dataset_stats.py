@@ -31,6 +31,7 @@ def collect_stats():
                 set_name=Config.AVS_SET,
                 key=filename,
                 index_name=Config.AVS_INDEX_NAME,
+                index_namespace=Config.AVS_INDEX_NAMESPACE,
             ):
                 # Record exists
                 path = relative_path(filename)

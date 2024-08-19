@@ -108,6 +108,12 @@ By default this application stores its AVS index in the "avs-index" namespace, a
 If your Aerospike database configuration does not define these namespaces you will see an error.
 You may change the AVS_NAMESPACE and AVS_INDEX_NAMESPACE to other values, like the default Aerospike "test" namespace, to use other namespaces.
 
+[!NOTE]
+Using a load balancer with AVS is best practice. Therefore AVS_IS_LOADBAlANCER defaults to True.
+This works fine for AVS clusters with a load balancer or clusters with only 1 node. If you are using
+the examples with an AVS cluster larger than 1 node without load balancing you should set AVS_IS_LOADBAlANCER to False.
+
+
 | Environment Variable   | Default            | Description                                                     |
 |------------------------|--------------------|-----------------------------------------------------------------|
 | APP_USERNAME           |                    | If set, the username for basic authentication                   |
@@ -122,7 +128,7 @@ You may change the AVS_NAMESPACE and AVS_INDEX_NAMESPACE to other values, like t
 | AVS_INDEX_SET           | image-index        | The Aerospike set for storing the HNSW index                    |
 | AVS_INDEX_NAME         | prism-image-search | The name of the  index                                          |
 | AVS_MAX_RESULTS        | 20                 | Maximum number of vector search results to return               |
-| AVS_IS_LOADBALANCER    | False              |                 If true, the first seed address will be treated as a load balancer node.```
+| AVS_IS_LOADBALANCER    | True              |                 If true, the first seed address will be treated as a load balancer node.```
 
 ### Setup networking (optional)
 

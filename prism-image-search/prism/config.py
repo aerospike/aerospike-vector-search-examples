@@ -30,4 +30,6 @@ class Config(object):
     AVS_VERIFY_TLS = get_bool_env("VERIFY_TLS", True)
     AVS_MAX_RESULTS = int(os.environ.get("AVS_MAX_RESULTS") or 20)
     MAX_CONTENT_LENGTH = int(os.environ.get("MAX_CONTENT_LENGTH") or 10485760)
-    AVS_IS_LOADBALANCER = get_bool_env("AVS_IS_LOADBALANCER", False)
+    # using a load balancer with AVS is best practice so this is the default
+    # you should set this to False if you are not using a load balancer with an AVS cluster of more than 1 node
+    AVS_IS_LOADBALANCER = get_bool_env("AVS_IS_LOADBALANCER", True)

@@ -1,6 +1,8 @@
+import ast
 import csv
 import itertools
 from multiprocessing import get_context
+import numpy
 import os
 import sys
 from threading import Thread
@@ -9,7 +11,7 @@ from tqdm import tqdm
 import tarfile
 
 from config import Config
-from data_encoder import MODEL_DIM, encoder
+from data_encoder import MODEL_DIM
 from avs_client import avs_admin_client, avs_client
 from aerospike_vector_search import types
 
@@ -97,14 +99,24 @@ def index_data():
 
 def index_quote(id_quote):
     id, quote = id_quote
-    quote, author, catagory = quote
+    # The quotes from the dataset are in the format: [quote, author, catagory, embedding]
+    # The embedding is a string representation of a numpy.ndarray of floats that was pre-computed
+    # using the pre-embed.py script in the /scripts directory.
+    quote, author, catagory, embedding = quote
+    # The embedding is stored as a string in the CSV file, It is a bytes object that was wrapped in quotes by the CSV writer,
+    # so the embedding format is as follows: "b'[0.1, 0.2, 0.3, ...]'". 
+    # We need to convert this string to a bytes object and then convert the bytes object to a numpy array.
+    # First we evaluate the string including the quotes as a Python literal, which will give us a bytes object.
+    embedding = ast.literal_eval(embedding)
+    # Then we convert the bytes object to a numpy array.
+    # dtype=numpy.float32 is required to convert the bytes object with its original float32 element type.
+    # The dtype depends on the model used to generate the embeddings, which is defined in the pre-embed.py script.
+    embedding = numpy.frombuffer(embedding, dtype=numpy.float32)
     doc = {"quote_id": id}
     doc["quote"] = quote
     doc["author"] = author
     doc["tags"] = catagory.split(",")
     logger.debug(f"Creating text vector embedding {id}")
-    text = quote + " ".join(doc["tags"])
-    embedding = encoder(text)
     doc["quote_embedding"] = embedding  # Numpy array is supported by aerospike
 
     # Insert record
