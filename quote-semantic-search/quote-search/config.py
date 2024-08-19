@@ -35,7 +35,9 @@ class Config(object):
     AVS_MAX_RESULTS = int(os.environ.get("AVS_MAX_RESULTS") or 5)
     INDEXER_PARALLELISM = int(os.environ.get("APP_INDEXER_PARALLELISM") or 1)
     MAX_CONTENT_LENGTH = int(os.environ.get("MAX_CONTENT_LENGTH") or 10485760)
-    AVS_IS_LOADBALANCER = get_bool_env("AVS_IS_LOADBALANCER", False)
+    # using a load balancer with AVS is best practice so this is the default
+    # you should set this to False if you are not using a load balancer with an AVS cluster of more than 1 node
+    AVS_IS_LOADBALANCER = get_bool_env("AVS_IS_LOADBALANCER", True)
     DATASET_FILE_PATH = (
         os.environ.get("DATASET_FILE_PATH")
         or "../container-volumes/quote-search/data/quote-embeddings.csv"
