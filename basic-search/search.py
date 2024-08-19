@@ -25,15 +25,29 @@ arg_parser.add_argument(
     "--namespace",
     dest="namespace",
     required=False,
-    default="test",
-    help="Aerospike namespace for vector index and data.",
+    default="avs-data",
+    help="Aerospike namespace for vector data.",
 )
 arg_parser.add_argument(
     "--set",
     dest="set",
     required=False,
-    default="basic_search",
-    help="Aerospike set for vector index and data.",
+    default="basic-data",
+    help="Aerospike set for vector data.",
+)
+arg_parser.add_argument(
+    "--index-namespace",
+    dest="index_namespace",
+    required=False,
+    default="avs-index",
+    help="Aerospike namespace the for vector index.",
+)
+arg_parser.add_argument(
+    "--index-set",
+    dest="index_set",
+    required=False,
+    default="basic-index",
+    help="Aerospike set for the vector index.",
 )
 arg_parser.add_argument(
     "--load-balancer",
@@ -60,6 +74,7 @@ with AdminClient(
             vector_field="vector",
             dimensions=2,
             sets=args.set,
+            index_storage=types.IndexStorage(namespace=args.index_namespace, set_name=args.index_set),
         )
     except Exception as e:
         print("failed creating index " + str(e))
