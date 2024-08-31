@@ -1,5 +1,5 @@
 
-replicaCount: 3
+replicaCount: 5
 image:
   repository: "aerospike/aerospike-vector-search"
   pullPolicy: "IfNotPresent"
@@ -22,10 +22,6 @@ aerospikeVectorSearchConfig:
   heartbeat:
     seeds:
       - address: avs-gke-aerospike-vector-search-0.avs-gke-aerospike-vector-search.avs.svc.cluster.local
-        port: 5001
-      - address: avs-gke-aerospike-vector-search-1.avs-gke-aerospike-vector-search.avs.svc.cluster.local
-        port: 5001
-      - address: avs-gke-aerospike-vector-search-2.avs-gke-aerospike-vector-search.avs.svc.cluster.local
         port: 5001
  
   interconnect:
