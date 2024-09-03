@@ -31,12 +31,14 @@ set_env_variables() {
     export FEATURES_CONF="$WORKSPACE/features.conf"
     export AEROSPIKE_CR="$WORKSPACE/manifests/ssd_storage_cluster_cr.yaml"
     export BUILD_DIR="$WORKSPACE/generated"
+    rm -rf /tmp/lastfull-create-and-install
+    mv $BUILD_DIR /tmp/lastfull-create-and-install/
     mkdir -p "$BUILD_DIR/input" "$BUILD_DIR/output" "$BUILD_DIR/secrets" "$BUILD_DIR/certs"
 }
 
 generate_certs() {
     echo "Generating certificates..."
-
+    # cp -r $WORKSPACE/certs $BUILD_DIR/certs
     echo "Generate Root"
     openssl genrsa \
     -out "$BUILD_DIR/output/ca.aerospike.com.key" 2048
@@ -45,7 +47,7 @@ generate_certs() {
     -x509 \
     -new \
     -nodes \
-    -config "$WORKSPACE/aerospike-vector-search/examples/gke-tls/openssl_ca.conf" \
+    -config "$WORKSPACE/ssl/openssl_ca.conf" \
     -extensions v3_ca \
     -key "$BUILD_DIR/output/ca.aerospike.com.key" \
     -sha256 \
@@ -57,7 +59,7 @@ generate_certs() {
     SVC_NAME="aerospike-cluster.aerospike.svc.cluster.local" COMMON_NAME="asd.aerospike.com" openssl req \
     -new \
     -nodes \
-    -config "$WORKSPACE/aerospike-vector-search/examples/gke-tls/openssl.conf" \
+    -config "$WORKSPACE/ssl/openssl.conf" \
     -extensions v3_req \
     -out "$BUILD_DIR/input/asd.aerospike.com.req" \
     -keyout "$BUILD_DIR/output/asd.aerospike.com.key" \
@@ -67,7 +69,7 @@ generate_certs() {
     SVC_NAME="avs-gke-aerospike-vector-search.aerospike.svc.cluster.local" COMMON_NAME="avs.aerospike.com" openssl req \
     -new \
     -nodes \
-    -config "$WORKSPACE/aerospike-vector-search/examples/gke-tls/openssl.conf" \
+    -config "$WORKSPACE/ssl/openssl.conf" \
     -extensions v3_req \
     -out "$BUILD_DIR/input/avs.aerospike.com.req" \
     -keyout "$BUILD_DIR/output/avs.aerospike.com.key" \
@@ -77,154 +79,154 @@ generate_certs() {
     SVC_NAME="avs-gke-aerospike-vector-search.aerospike.svc.cluster.local" COMMON_NAME="svc.aerospike.com" openssl req \
     -new \
     -nodes \
-    -config "$WORKSPACE/aerospike-vector-search/examples/gke-tls/openssl_svc.conf" \
+    -config "$WORKSPACE/ssl/openssl_svc.conf" \
     -extensions v3_req \
-    -out "$WORKSPACE/aerospike-vector-search/examples/gke-tls/input/svc.aerospike.com.req" \
-    -keyout "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/svc.aerospike.com.key" \
+    -out "$BUILD_DIR/input/svc.aerospike.com.req" \
+    -keyout "$BUILD_DIR/output/svc.aerospike.com.key" \
     -subj "/C=UK/ST=London/L=London/O=abs/OU=Client/CN=svc.aerospike.com" \
 
     echo "Generate Certificates"
     SVC_NAME="aerospike-cluster.aerospike.svc.cluster.local" COMMON_NAME="asd.aerospike.com" openssl x509 \
     -req \
-    -extfile "$WORKSPACE/aerospike-vector-search/examples/gke-tls/openssl.conf" \
-    -in "$WORKSPACE/aerospike-vector-search/examples/gke-tls/input/asd.aerospike.com.req" \
-    -CA "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/ca.aerospike.com.pem" \
-    -CAkey "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/ca.aerospike.com.key" \
+    -extfile "$WORKSPACE/ssl/openssl.conf" \
+    -in "$BUILD_DIR/input/asd.aerospike.com.req" \
+    -CA "$BUILD_DIR/output/ca.aerospike.com.pem" \
+    -CAkey "$BUILD_DIR/output/ca.aerospike.com.key" \
     -extensions v3_req \
     -days 3649 \
     -outform PEM \
-    -out "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/asd.aerospike.com.pem" \
+    -out "$BUILD_DIR/output/asd.aerospike.com.pem" \
     -set_serial 110 \
 
     SVC_NAME="avs-gke-aerospike-vector-search.aerospike.svc.cluster.local" COMMON_NAME="avs.aerospike.com" openssl x509 \
     -req \
-    -extfile "$WORKSPACE/aerospike-vector-search/examples/gke-tls/openssl.conf" \
-    -in "$WORKSPACE/aerospike-vector-search/examples/gke-tls/input/avs.aerospike.com.req" \
-    -CA "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/ca.aerospike.com.pem" \
-    -CAkey "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/ca.aerospike.com.key" \
+    -extfile "$WORKSPACE/ssl/openssl.conf" \
+    -in "$BUILD_DIR/input/avs.aerospike.com.req" \
+    -CA "$BUILD_DIR/output/ca.aerospike.com.pem" \
+    -CAkey "$BUILD_DIR/output/ca.aerospike.com.key" \
     -extensions v3_req \
     -days 3649 \
     -outform PEM \
-    -out "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/avs.aerospike.com.pem" \
+    -out "$BUILD_DIR/output/avs.aerospike.com.pem" \
     -set_serial 210 \
 
     SVC_NAME="avs-gke-aerospike-vector-search.aerospike.svc.cluster.local" COMMON_NAME="svc.aerospike.com" openssl x509 \
     -req \
-    -extfile "$WORKSPACE/aerospike-vector-search/examples/gke-tls/openssl_svc.conf" \
-    -in "$WORKSPACE/aerospike-vector-search/examples/gke-tls/input/svc.aerospike.com.req" \
-    -CA "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/ca.aerospike.com.pem" \
-    -CAkey "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/ca.aerospike.com.key" \
+    -extfile "$WORKSPACE/ssl/openssl_svc.conf" \
+    -in "$BUILD_DIR/input/svc.aerospike.com.req" \
+    -CA "$BUILD_DIR/output/ca.aerospike.com.pem" \
+    -CAkey "$BUILD_DIR/output/ca.aerospike.com.key" \
     -extensions v3_req \
     -days 3649 \
     -outform PEM \
-    -out "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/svc.aerospike.com.pem" \
+    -out "$BUILD_DIR/output/svc.aerospike.com.pem" \
     -set_serial 310 \
 
     echo "Verify Certificate signed by root"
     openssl verify \
     -verbose \
-    -CAfile "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/ca.aerospike.com.pem" \
-    "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/asd.aerospike.com.pem"
+    -CAfile "$BUILD_DIR/output/ca.aerospike.com.pem" \
+    "$BUILD_DIR/output/asd.aerospike.com.pem"
 
     openssl verify \
     -verbose\
-    -CAfile "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/ca.aerospike.com.pem" \
-    "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/asd.aerospike.com.pem"
+    -CAfile "$BUILD_DIR/output/ca.aerospike.com.pem" \
+    "$BUILD_DIR/output/asd.aerospike.com.pem"
 
     openssl verify \
     -verbose\
-    -CAfile "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/ca.aerospike.com.pem" \
-    "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/svc.aerospike.com.pem"
+    -CAfile "$BUILD_DIR/output/ca.aerospike.com.pem" \
+    "$BUILD_DIR/output/svc.aerospike.com.pem"
 
     PASSWORD="citrusstore"
-    echo -n "$PASSWORD" | tee "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/storepass" \
-    "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/keypass" > \
-    "$WORKSPACE/aerospike-vector-search/examples/gke-tls/secrets/client-password.txt"
+    echo -n "$PASSWORD" | tee "$BUILD_DIR/output/storepass" \
+    "$BUILD_DIR/output/keypass" > \
+    "$BUILD_DIR/secrets/client-password.txt"
 
     ADMIN_PASSWORD="admin123"
-    echo -n "$ADMIN_PASSWORD" > "$WORKSPACE/aerospike-vector-search/examples/gke-tls/secrets/aerospike-password.txt"
+    echo -n "$ADMIN_PASSWORD" > "$BUILD_DIR/secrets/aerospike-password.txt"
 
     keytool \
     -import \
-    -file "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/ca.aerospike.com.pem" \
+    -file "$BUILD_DIR/output/ca.aerospike.com.pem" \
     --storepass "$PASSWORD" \
-    -keystore "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/ca.aerospike.com.truststore.jks" \
+    -keystore "$BUILD_DIR/output/ca.aerospike.com.truststore.jks" \
     -alias "ca.aerospike.com" \
     -noprompt
 
     openssl pkcs12 \
     -export \
-    -out "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/avs.aerospike.com.p12" \
-    -in "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/avs.aerospike.com.pem" \
-    -inkey "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/avs.aerospike.com.key" \
-    -password file:"$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/storepass"
+    -out "$BUILD_DIR/output/avs.aerospike.com.p12" \
+    -in "$BUILD_DIR/output/avs.aerospike.com.pem" \
+    -inkey "$BUILD_DIR/output/avs.aerospike.com.key" \
+    -password file:"$BUILD_DIR/output/storepass"
 
     keytool \
     -importkeystore \
-    -srckeystore "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/avs.aerospike.com.p12" \
-    -destkeystore "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/avs.aerospike.com.keystore.jks" \
+    -srckeystore "$BUILD_DIR/output/avs.aerospike.com.p12" \
+    -destkeystore "$BUILD_DIR/output/avs.aerospike.com.keystore.jks" \
     -srcstoretype pkcs12 \
-    -srcstorepass "$(cat $WORKSPACE/aerospike-vector-search/examples/gke-tls/output/storepass)" \
-    -deststorepass "$(cat $WORKSPACE/aerospike-vector-search/examples/gke-tls/output/storepass)" \
+    -srcstorepass "$(cat $BUILD_DIR/output/storepass)" \
+    -deststorepass "$(cat $BUILD_DIR/output/storepass)" \
     -noprompt
 
     openssl pkcs12 \
     -export \
-    -out "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/svc.aerospike.com.p12" \
-    -in "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/svc.aerospike.com.pem" \
-    -inkey "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/svc.aerospike.com.key" \
-    -password file:"$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/storepass"
+    -out "$BUILD_DIR/output/svc.aerospike.com.p12" \
+    -in "$BUILD_DIR/output/svc.aerospike.com.pem" \
+    -inkey "$BUILD_DIR/output/svc.aerospike.com.key" \
+    -password file:"$BUILD_DIR/output/storepass"
 
     keytool \
     -importkeystore \
-    -srckeystore "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/svc.aerospike.com.p12" \
-    -destkeystore "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/svc.aerospike.com.keystore.jks" \
+    -srckeystore "$BUILD_DIR/output/svc.aerospike.com.p12" \
+    -destkeystore "$BUILD_DIR/output/svc.aerospike.com.keystore.jks" \
     -srcstoretype pkcs12 \
-    -srcstorepass "$(cat $WORKSPACE/aerospike-vector-search/examples/gke-tls/output/storepass)" \
-    -deststorepass "$(cat $WORKSPACE/aerospike-vector-search/examples/gke-tls/output/storepass)" \
+    -srcstorepass "$(cat $BUILD_DIR/output/storepass)" \
+    -deststorepass "$(cat $BUILD_DIR/output/storepass)" \
     -noprompt
 
-    mv "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/svc.aerospike.com.keystore.jks" \
-    "$WORKSPACE/aerospike-vector-search/examples/gke-tls/certs/svc.aerospike.com.keystore.jks"
+    mv "$BUILD_DIR/output/svc.aerospike.com.keystore.jks" \
+    "$BUILD_DIR/certs/svc.aerospike.com.keystore.jks"
 
-    mv "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/avs.aerospike.com.keystore.jks" \
-    "$WORKSPACE/aerospike-vector-search/examples/gke-tls/certs/avs.aerospike.com.keystore.jks"
+    mv "$BUILD_DIR/output/avs.aerospike.com.keystore.jks" \
+    "$BUILD_DIR/certs/avs.aerospike.com.keystore.jks"
 
-    mv "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/ca.aerospike.com.truststore.jks" \
-    "$WORKSPACE/aerospike-vector-search/examples/gke-tls/certs/ca.aerospike.com.truststore.jks"
+    mv "$BUILD_DIR/output/ca.aerospike.com.truststore.jks" \
+    "$BUILD_DIR/certs/ca.aerospike.com.truststore.jks"
 
-    mv "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/asd.aerospike.com.pem" \
-    "$WORKSPACE/aerospike-vector-search/examples/gke-tls/certs/asd.aerospike.com.pem"
+    mv "$BUILD_DIR/output/asd.aerospike.com.pem" \
+    "$BUILD_DIR/certs/asd.aerospike.com.pem"
 
-    mv "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/avs.aerospike.com.pem" \
-    "$WORKSPACE/aerospike-vector-search/examples/gke-tls/certs/avs.aerospike.com.pem"
+    mv "$BUILD_DIR/output/avs.aerospike.com.pem" \
+    "$BUILD_DIR/certs/avs.aerospike.com.pem"
 
-    mv "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/svc.aerospike.com.pem" \
-    "$WORKSPACE/aerospike-vector-search/examples/gke-tls/certs/svc.aerospike.com.pem"
+    mv "$BUILD_DIR/output/svc.aerospike.com.pem" \
+    "$BUILD_DIR/certs/svc.aerospike.com.pem"
 
-    mv "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/asd.aerospike.com.key" \
-    "$WORKSPACE/aerospike-vector-search/examples/gke-tls/certs/asd.aerospike.com.key"
+    mv "$BUILD_DIR/output/asd.aerospike.com.key" \
+    "$BUILD_DIR/certs/asd.aerospike.com.key"
 
-    mv "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/ca.aerospike.com.pem" \
-    "$WORKSPACE/aerospike-vector-search/examples/gke-tls/certs/ca.aerospike.com.pem"
+    mv "$BUILD_DIR/output/ca.aerospike.com.pem" \
+    "$BUILD_DIR/certs/ca.aerospike.com.pem"
 
-    mv "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/keypass" \
-    "$WORKSPACE/aerospike-vector-search/examples/gke-tls/certs/keypass"
+    mv "$BUILD_DIR/output/keypass" \
+    "$BUILD_DIR/certs/keypass"
 
-    mv "$WORKSPACE/aerospike-vector-search/examples/gke-tls/output/storepass" \
-    "$WORKSPACE/aerospike-vector-search/examples/gke-tls/certs/storepass"
+    mv "$BUILD_DIR/output/storepass" \
+    "$BUILD_DIR/certs/storepass"
 
     echo "Generate Auth Keys"
     openssl genpkey \
     -algorithm RSA \
-    -out "$WORKSPACE/aerospike-vector-search/examples/gke-tls/secrets/private_key.pem" \
+    -out "$BUILD_DIR/secrets/private_key.pem" \
     -pkeyopt rsa_keygen_bits:2048 \
     -pass "pass:$PASSWORD"
 
     openssl rsa \
     -pubout \
-    -in "$WORKSPACE/aerospike-vector-search/examples/gke-tls/secrets/private_key.pem" \
-    -out "$WORKSPACE/aerospike-vector-search/examples/gke-tls/secrets/public_key.pem" \
+    -in "$BUILD_DIR/secrets/private_key.pem" \
+    -out "$BUILD_DIR/secrets/public_key.pem" \
     -passin "pass:$PASSWORD"
 }
 
@@ -292,6 +294,8 @@ setup_aerospike() {
     echo "Setting secrets for Aerospike cluster..."
     kubectl --namespace aerospike create secret generic aerospike-secret --from-file=features.conf="$FEATURES_CONF"
     kubectl --namespace aerospike create secret generic auth-secret --from-literal=password='admin123'
+    kubectl --namespace aerospike create secret generic aerospike-tls \
+        --from-file="$BUILD_DIR/certs"
 
     echo "Adding storage class..."
     kubectl apply -f https://raw.githubusercontent.com/aerospike/aerospike-kubernetes-operator/master/config/samples/storage/gce_ssd_storage_class.yaml
@@ -327,6 +331,8 @@ setup_avs() {
     echo "Setting secrets for AVS cluster..."
     kubectl --namespace avs create secret generic aerospike-secret --from-file=features.conf="$FEATURES_CONF"
     kubectl --namespace avs create secret generic auth-secret --from-literal=password='admin123'
+    kubectl --namespace avs create secret generic aerospike-tls \
+        --from-file="$BUILD_DIR/certs"
 }
 
 # Function to optionally deploy Istio
@@ -381,15 +387,22 @@ print_final_instructions() {
 
 # Main script execution
 main() {
+    set -eo pipefail
+    if [ -n "$DEBUG" ]; then set -x; fi
+    trap 'echo "Error: $? at line $LINENO" >&2' ERR
+
     set_env_variables
     print_env
-    create_gke_cluster
-    setup_aerospike
-    setup_avs
-    deploy_istio
-    deploy_avs_helm_chart
-    setup_monitoring
-    print_final_instructions
+    generate_certs
+    # set_env_variables
+    # print_env
+    # create_gke_cluster
+    # setup_aerospike
+    # setup_avs
+    # deploy_istio
+    # deploy_avs_helm_chart
+    # setup_monitoring
+    # print_final_instructions
 }
 
 # Run the main function
