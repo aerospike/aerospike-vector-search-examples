@@ -34,13 +34,14 @@ print_env() {
 set_env_variables() {
     export WORKSPACE="$(pwd)"
     export PROJECT_ID="$(gcloud config get-value project)"
-    export CLUSTER_NAME="${PROJECT_ID}-avs2"
+    export CLUSTER_NAME="${PROJECT_ID}-avs-auth"
     export NODE_POOL_NAME_AEROSPIKE="aerospike-pool"
     export NODE_POOL_NAME_AVS="avs-pool"
     export ZONE="us-central1-c"
     export FEATURES_CONF="$WORKSPACE/features.conf"
     export AEROSPIKE_CR="$WORKSPACE/manifests/ssd_storage_cluster_cr.yaml"
     export BUILD_DIR="$WORKSPACE/generated"
+    export REVERSE_DNS_AVS
 
 }
 
@@ -301,7 +302,10 @@ create_gke_cluster() {
     echo "Labeling AVS nodes..."
     kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_AVS" -o name | \
         xargs -I {} kubectl label {} aerospike.com/node-pool=avs --overwrite
-
+    
+    echo "Setting up namespaces..."
+    kubectl create namespace aerospike
+    kubectl create namespace avs
 }
 
 # Function to create Aerospike node pool and deploy AKO
@@ -325,7 +329,6 @@ setup_aerospike() {
     done
 
     echo "Granting permissions to the target namespace..."
-    kubectl create namespace aerospike
     kubectl --namespace aerospike create serviceaccount aerospike-operator-controller-manager
     kubectl create clusterrolebinding aerospike-cluster \
         --clusterrole=aerospike-cluster --serviceaccount=aerospike:aerospike-operator-controller-manager
@@ -346,8 +349,6 @@ setup_aerospike() {
 # Function to setup AVS node pool and namespace
 setup_avs() {
 
-    echo "Setting up AVS namespace..."
-    kubectl create namespace avs
 
     echo "Setting secrets for AVS cluster..."
     kubectl --namespace avs create secret generic auth-secret --from-literal=password='admin123'
@@ -373,8 +374,13 @@ deploy_istio() {
 
     kubectl apply -f manifests/istio/gateway.yaml
     kubectl apply -f manifests/istio/avs-virtual-service.yaml
-}
+ }
 
+get_reverse_dns() {
+    INGRESS_IP=$(kubectl get svc istio-ingress -n istio-ingress -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    REVERSE_DNS_AVS=$(dig +short -x $INGRESS_IP)
+    echo "Reverse DNS: $REVERSE_DNS_AVS"
+}
 # Function to deploy AVS Helm chart
 deploy_avs_helm_chart() {
     echo "Deploying AVS Helm chart..."
@@ -401,24 +407,40 @@ setup_monitoring() {
 }
 
 print_final_instructions() {
-    echo "Setup complete."
     echo "To include your Grafana dashboards, use 'import-dashboards.sh <your grafana dashboard directory>'"
-    echo "To view Grafana dashboards from your machine use 'kubectl port-forward -n monitoring svc/monitoring-stack-grafana 3000:80'"
-    echo "To expose Grafana ports publicly, use 'kubectl apply -f helpers/EXPOSE-GRAFANA.yaml'"
-    echo "To find the exposed port, use 'kubectl get svc -n monitoring'"
-    echo "To run the quote search sample app on your new cluster, for istio use:"
-    echo "helm install semantic-search-app aerospike/quote-semantic-search --namespace avs --values manifests/quote-search/semantic-search-values.yaml --wait"
+    # echo "To view Grafana dashboards from your machine use 'kubectl port-forward -n monitoring svc/monitoring-stack-grafana 3000:80'"
+    # echo "To expose Grafana ports publicly, use 'kubectl apply -f helpers/EXPOSE-GRAFANA.yaml'"
+    # echo "To find the exposed port, use 'kubectl get svc -n monitoring'"
+    # echo "To run the quote search sample app on your new cluster, for istio use:"
+    # echo "helm install semantic-search-app aerospike/quote-semantic-search --namespace avs --values manifests/quote-search/semantic-search-values.yaml --wait"
+    
+    echo your new deployment is available at $REVERSE_DNS_AVS
+    echo "connect with asvec using cert "
+    cat $BUILD_DIR/certs/ca.aerospike.com.pem
+    echo
+    echo "Your new Aerospike Vector Search deployment is available at $REVERSE_DNS_AVS"
+    echo "To connect with asvec, use the following certificate:"
+    cat "$BUILD_DIR/certs/ca.aerospike.com.pem"
+
+    echo Use the asvec tool to change your password with 
+    echo asvec  -h  $REVERSE_DNS_AVS:5433  --tls-cafile path/to/tls/file  -U admin -P admin  user new-password --name admin --new-password your-new-password
+
+    echo "Setup Complete!"
+    
 }
+
+
 #This script runs in this order.
 main() {
     set_env_variables
     print_env
     reset_build
-    generate_certs
     create_gke_cluster
+    deploy_istio
+    get_reverse_dns
+    generate_certs
     setup_aerospike
     setup_avs
-    deploy_istio
     deploy_avs_helm_chart
     setup_monitoring
     print_final_instructions
