@@ -8,6 +8,15 @@ set -eo pipefail
 if [ -n "$DEBUG" ]; then set -x; fi
 trap 'echo "Error: $? at line $LINENO" >&2' ERR
 
+# Parse command line arguments
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --chart-location) CHART_LOCATION="$2"; shift ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+
 # Function to print environment variables for verification
 print_env() {
     echo "Environment Variables:"
@@ -18,13 +27,14 @@ print_env() {
     echo "export ZONE=$ZONE"
     echo "export FEATURES_CONF=$FEATURES_CONF"
     echo "export AEROSPIKE_CR=$AEROSPIKE_CR"
+    echo "export CHART_LOCATION=$CHART_LOCATION"
 }
 
 # Function to set environment variables
 set_env_variables() {
     export WORKSPACE="$(pwd)"
     export PROJECT_ID="$(gcloud config get-value project)"
-    export CLUSTER_NAME="${PROJECT_ID}-avs"
+    export CLUSTER_NAME="${PROJECT_ID}-avs2"
     export NODE_POOL_NAME_AEROSPIKE="aerospike-pool"
     export NODE_POOL_NAME_AVS="avs-pool"
     export ZONE="us-central1-c"
@@ -32,12 +42,16 @@ set_env_variables() {
     export AEROSPIKE_CR="$WORKSPACE/manifests/ssd_storage_cluster_cr.yaml"
     export BUILD_DIR="$WORKSPACE/generated"
 
+}
+
+reset_build() {
     if [ -d "$BUILD_DIR" ]; then
         temp_dir=$(mktemp -d /tmp/avs-deploy-previous.XXXXXX)
         mv -f "$BUILD_DIR" "$temp_dir"
     fi
     mkdir -p "$BUILD_DIR/input" "$BUILD_DIR/output" "$BUILD_DIR/secrets" "$BUILD_DIR/certs"
     cp "$FEATURES_CONF" "$BUILD_DIR/secrets/features.conf"
+
 }
 
 generate_certs() {
@@ -336,9 +350,6 @@ setup_avs() {
     kubectl create namespace avs
 
     echo "Setting secrets for AVS cluster..."
-    # kubectl --namespace avs create secret generic aerospike-secret --from-file=features.conf="$FEATURES_CONF"
-    # kubectl --namespace avs create secret generic aerospike-client-password --from-file=client-password="$BUILD_DIR/secrets/client-password.txt"
-    # kubectl --namespace avs create secret generic aerospike-aerospike-password --from-file=aerospike-password="$BUILD_DIR/secrets/aerospike-password.txt"
     kubectl --namespace avs create secret generic auth-secret --from-literal=password='admin123'
     kubectl --namespace avs create secret generic aerospike-tls \
         --from-file="$BUILD_DIR/certs"
@@ -369,7 +380,11 @@ deploy_avs_helm_chart() {
     echo "Deploying AVS Helm chart..."
     helm repo add aerospike-helm https://artifact.aerospike.io/artifactory/api/helm/aerospike-helm
     helm repo update
-    helm install avs-gke --values "manifests/avs-gke-values.yaml" --namespace avs aerospike-helm/aerospike-vector-search --version 0.4.0 --wait
+    if [ -z "$CHART_LOCATION" ]; then
+        helm install avs-gke --values "manifests/avs-gke-values.yaml" --namespace avs aerospike-helm/aerospike-vector-search --version 0.4.0 --wait
+    else
+        helm install avs-gke --values "manifests/avs-gke-values.yaml" --namespace avs "$CHART_LOCATION" --wait
+    fi
 }
 
 # Function to setup monitoring
@@ -385,7 +400,6 @@ setup_monitoring() {
     kubectl apply -f manifests/monitoring/avs-servicemonitor.yaml
 }
 
-# Function to print final instructions
 print_final_instructions() {
     echo "Setup complete."
     echo "To include your Grafana dashboards, use 'import-dashboards.sh <your grafana dashboard directory>'"
@@ -395,11 +409,11 @@ print_final_instructions() {
     echo "To run the quote search sample app on your new cluster, for istio use:"
     echo "helm install semantic-search-app aerospike/quote-semantic-search --namespace avs --values manifests/quote-search/semantic-search-values.yaml --wait"
 }
-
-# Main script execution
+#This script runs in this order.
 main() {
     set_env_variables
     print_env
+    reset_build
     generate_certs
     create_gke_cluster
     setup_aerospike
