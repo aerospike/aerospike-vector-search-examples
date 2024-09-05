@@ -2,7 +2,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
   name: avs-gw
-  namespace: avs
+  namespace: aerospike
 spec:
   selector:
     istio: ingress
@@ -14,9 +14,9 @@ spec:
       hosts:
         - "*"
     - port:
-        number: 5000
-        name: grpc
-        protocol: GRPC
+        number: 5433
+        name: grpc-svc
+        protocol: tls
       hosts:
         - "*"
       tls:

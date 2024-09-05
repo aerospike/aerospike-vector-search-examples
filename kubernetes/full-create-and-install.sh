@@ -31,9 +31,13 @@ set_env_variables() {
     export FEATURES_CONF="$WORKSPACE/features.conf"
     export AEROSPIKE_CR="$WORKSPACE/manifests/ssd_storage_cluster_cr.yaml"
     export BUILD_DIR="$WORKSPACE/generated"
-    rm -rf /tmp/lastfull-create-and-install
-    mv $BUILD_DIR /tmp/lastfull-create-and-install/
+
+    if [ -d "$BUILD_DIR" ]; then
+        temp_dir=$(mktemp -d /tmp/avs-deploy-previous.XXXXXX)
+        mv -f "$BUILD_DIR" "$temp_dir"
+    fi
     mkdir -p "$BUILD_DIR/input" "$BUILD_DIR/output" "$BUILD_DIR/secrets" "$BUILD_DIR/certs"
+    cp "$FEATURES_CONF" "$BUILD_DIR/secrets/features.conf"
 }
 
 generate_certs() {
@@ -244,10 +248,7 @@ create_gke_cluster() {
     else
         echo "GKE cluster created successfully."
     fi
-}
 
-# Function to create Aerospike node pool and deploy AKO
-setup_aerospike() {
     echo "Creating Aerospike node pool..."
     if ! gcloud container node-pools create "$NODE_POOL_NAME_AEROSPIKE" \
         --cluster "$CLUSTER_NAME" \
@@ -267,6 +268,30 @@ setup_aerospike() {
     echo "Labeling Aerospike nodes..."
     kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_AEROSPIKE" -o name | \
         xargs -I {} kubectl label {} aerospike.com/node-pool=default-rack --overwrite
+
+    echo "Adding AVS node pool..."
+    if ! gcloud container node-pools create "$NODE_POOL_NAME_AVS" \
+        --cluster "$CLUSTER_NAME" \
+        --project "$PROJECT_ID" \
+        --zone "$ZONE" \
+        --num-nodes 5 \
+        --disk-type "pd-standard" \
+        --disk-size "100" \
+        --machine-type "n2d-standard-32"; then
+        echo "Failed to create AVS node pool"
+        exit 1
+    else
+        echo "AVS node pool added successfully."
+    fi
+
+    echo "Labeling AVS nodes..."
+    kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_AVS" -o name | \
+        xargs -I {} kubectl label {} aerospike.com/node-pool=avs --overwrite
+
+}
+
+# Function to create Aerospike node pool and deploy AKO
+setup_aerospike() {
 
     echo "Deploying Aerospike Kubernetes Operator (AKO)..."
     curl -sL https://github.com/operator-framework/operator-lifecycle-manager/releases/download/v0.25.0/install.sh | bash -s v0.25.0
@@ -292,7 +317,7 @@ setup_aerospike() {
         --clusterrole=aerospike-cluster --serviceaccount=aerospike:aerospike-operator-controller-manager
 
     echo "Setting secrets for Aerospike cluster..."
-    kubectl --namespace aerospike create secret generic aerospike-secret --from-file=features.conf="$FEATURES_CONF"
+    kubectl --namespace aerospike create secret generic aerospike-secret --from-file="$BUILD_DIR/secrets"
     kubectl --namespace aerospike create secret generic auth-secret --from-literal=password='admin123'
     kubectl --namespace aerospike create secret generic aerospike-tls \
         --from-file="$BUILD_DIR/certs"
@@ -306,33 +331,19 @@ setup_aerospike() {
 
 # Function to setup AVS node pool and namespace
 setup_avs() {
-    echo "Adding AVS node pool..."
-    if ! gcloud container node-pools create "$NODE_POOL_NAME_AVS" \
-        --cluster "$CLUSTER_NAME" \
-        --project "$PROJECT_ID" \
-        --zone "$ZONE" \
-        --num-nodes 5 \
-        --disk-type "pd-standard" \
-        --disk-size "100" \
-        --machine-type "n2d-standard-32"; then
-        echo "Failed to create AVS node pool"
-        exit 1
-    else
-        echo "AVS node pool added successfully."
-    fi
-
-    echo "Labeling AVS nodes..."
-    kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_AVS" -o name | \
-        xargs -I {} kubectl label {} aerospike.com/node-pool=avs --overwrite
 
     echo "Setting up AVS namespace..."
     kubectl create namespace avs
 
     echo "Setting secrets for AVS cluster..."
-    kubectl --namespace avs create secret generic aerospike-secret --from-file=features.conf="$FEATURES_CONF"
+    # kubectl --namespace avs create secret generic aerospike-secret --from-file=features.conf="$FEATURES_CONF"
+    # kubectl --namespace avs create secret generic aerospike-client-password --from-file=client-password="$BUILD_DIR/secrets/client-password.txt"
+    # kubectl --namespace avs create secret generic aerospike-aerospike-password --from-file=aerospike-password="$BUILD_DIR/secrets/aerospike-password.txt"
     kubectl --namespace avs create secret generic auth-secret --from-literal=password='admin123'
     kubectl --namespace avs create secret generic aerospike-tls \
         --from-file="$BUILD_DIR/certs"
+    kubectl --namespace avs create secret generic aerospike-secret \
+        --from-file="$BUILD_DIR/secrets"
 }
 
 # Function to optionally deploy Istio
@@ -387,22 +398,16 @@ print_final_instructions() {
 
 # Main script execution
 main() {
-    set -eo pipefail
-    if [ -n "$DEBUG" ]; then set -x; fi
-    trap 'echo "Error: $? at line $LINENO" >&2' ERR
-
     set_env_variables
     print_env
     generate_certs
-    # set_env_variables
-    # print_env
-    # create_gke_cluster
-    # setup_aerospike
-    # setup_avs
-    # deploy_istio
-    # deploy_avs_helm_chart
-    # setup_monitoring
-    # print_final_instructions
+    create_gke_cluster
+    setup_aerospike
+    setup_avs
+    deploy_istio
+    deploy_avs_helm_chart
+    setup_monitoring
+    print_final_instructions
 }
 
 # Run the main function

@@ -45,6 +45,13 @@ spec:
             secretName: aerospike-secret
         aerospike:
           path: /etc/aerospike/secret
+      - name: aerospike-tls-config
+        source:
+          secret:
+            secretName: aerospike-tls
+        aerospike:
+          path: /etc/aerospike/ssl
+
 
   podSpec:
     sidecars:
@@ -64,25 +71,56 @@ spec:
               - "default-rack"
     multiPodPerHost: false
 
-  # aerospikeAccessControl:
-  #   users:
-  #     - name: admin
-  #       secretName: auth-secret
-  #       roles:
-  #         - sys-admin
-  #         - user-admin
+  aerospikeAccessControl:
+    users:
+      - name: admin
+        secretName: auth-secret
+        roles:
+          - sys-admin
+          - user-admin
+      - name: tester
+        secretName: auth-secret
+        roles:
+          - truncate
+          - sindex-admin
+          - user-admin
+          - data-admin
+          - read-write
+          - read
+          - write
+          - read-write-udf
+          - sys-admin
+          - udf-admin
+  operatorClientCert:
+    secretCertSource:
+      secretName: aerospike-tls
+      caCertsFilename: ca.aerospike.com.pem
+      clientCertFilename: asd.aerospike.com.pem
+      clientKeyFilename: asd.aerospike.com.key
 
   aerospikeConfig:
     service:
       feature-key-file: /etc/aerospike/secret/features.conf
-#    security: {}
+    security: {}
     network:
       service:
-        port: 3000
+        #        port: 3000
+        tls-name: asd.aerospike.com
+        tls-authenticate-client: "false"
+        tls-port: 4333
       fabric:
-        port: 3001
+        #        port: 3001
+        tls-name: asd.aerospike.com
+        tls-port: 3012
       heartbeat:
-        port: 3002
+        #        port: 3002
+        tls-name: asd.aerospike.com
+        tls-port: 3011
+      tls:
+        - name: asd.aerospike.com
+          cert-file: /etc/aerospike/ssl/asd.aerospike.com.pem
+          key-file: /etc/aerospike/ssl/asd.aerospike.com.key
+          ca-file: /etc/aerospike/ssl/ca.aerospike.com.pem
     namespaces:
       - name: test
         replication-factor: 2
