@@ -387,7 +387,7 @@ deploy_avs_helm_chart() {
     helm repo add aerospike-helm https://artifact.aerospike.io/artifactory/api/helm/aerospike-helm
     helm repo update
     if [ -z "$CHART_LOCATION" ]; then
-        helm install avs-gke --values "manifests/avs-gke-values.yaml" --namespace avs aerospike-helm/aerospike-vector-search --version 0.4.0 --wait
+        helm install avs-gke --values "manifests/avs-gke-values.yaml" --namespace avs aerospike-helm/aerospike-vector-search --version 0.4.1 --wait
     else
         helm install avs-gke --values "manifests/avs-gke-values.yaml" --namespace avs "$CHART_LOCATION" --wait
     fi
