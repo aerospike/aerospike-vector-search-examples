@@ -43,11 +43,11 @@ aerospikeVectorSearchConfig:
 #          port: 3000
           port: 4333
           tls-name: "asd.aerospike.com"
-  # security:
-  #   auth-token:
-  #     private-key: "/etc/aerospike-vector-search/secrets/private_key.pem"
-  #     private-key-password: "/etc/aerospike-vector-search/secrets/client-password.txt"
-  #     public-key: "/etc/aerospike-vector-search/secrets/public_key.pem"
+  security:
+    auth-token:
+      private-key: "/etc/aerospike-vector-search/secrets/private_key.pem"
+      private-key-password: "/etc/aerospike-vector-search/secrets/client-password.txt"
+      public-key: "/etc/aerospike-vector-search/secrets/public_key.pem"
   tls:
     service-tls:
       trust-store:

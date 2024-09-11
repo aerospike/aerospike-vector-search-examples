@@ -26,21 +26,21 @@ print_env() {
     echo "export NODE_POOL_NAME_AVS=$NODE_POOL_NAME_AVS"
     echo "export ZONE=$ZONE"
     echo "export FEATURES_CONF=$FEATURES_CONF"
-    echo "export AEROSPIKE_CR=$AEROSPIKE_CR"
     echo "export CHART_LOCATION=$CHART_LOCATION"
+
 }
 
 # Function to set environment variables
 set_env_variables() {
     export WORKSPACE="$(pwd)"
     export PROJECT_ID="$(gcloud config get-value project)"
-    export CLUSTER_NAME="${PROJECT_ID}-avs-auth"
+    export CLUSTER_NAME="${PROJECT_ID}-avs-noauth"
     export NODE_POOL_NAME_AEROSPIKE="aerospike-pool"
     export NODE_POOL_NAME_AVS="avs-pool"
     export ZONE="us-central1-c"
     export FEATURES_CONF="$WORKSPACE/features.conf"
-    export AEROSPIKE_CR="$WORKSPACE/manifests/ssd_storage_cluster_cr.yaml"
     export BUILD_DIR="$WORKSPACE/generated"
+    export RUN_INSECURE=1
     export REVERSE_DNS_AVS
 
 }
@@ -50,9 +50,15 @@ reset_build() {
         temp_dir=$(mktemp -d /tmp/avs-deploy-previous.XXXXXX)
         mv -f "$BUILD_DIR" "$temp_dir"
     fi
-    mkdir -p "$BUILD_DIR/input" "$BUILD_DIR/output" "$BUILD_DIR/secrets" "$BUILD_DIR/certs"
+    mkdir -p "$BUILD_DIR/input" "$BUILD_DIR/output" "$BUILD_DIR/secrets" "$BUILD_DIR/certs" "$BUILD_DIR/manifests"
     cp "$FEATURES_CONF" "$BUILD_DIR/secrets/features.conf"
-
+    if [[ "${RUN_INSECURE}" == 1 ]]; then
+        cp $WORKSPACE/manifests/avs-gke-values.yaml $BUILD_DIR/manifests/avs-gke-values.yaml
+        cp $WORKSPACE/manifests/aerospike-cr.yaml $BUILD_DIR/manifests/aerospike-cr.yaml
+    else
+        cp $WORKSPACE/manifests/avs-gke-values-auth.yaml $BUILD_DIR/manifests/avs-gke-values.yaml
+        cp $WORKSPACE/manifests/aerospike-cr-auth.yaml $BUILD_DIR/manifests/aerospike-cr.yaml
+    fi
 }
 
 generate_certs() {
@@ -343,7 +349,7 @@ setup_aerospike() {
     kubectl apply -f https://raw.githubusercontent.com/aerospike/aerospike-kubernetes-operator/master/config/samples/storage/gce_ssd_storage_class.yaml
 
     echo "Deploying Aerospike cluster..."
-    kubectl apply -f "$AEROSPIKE_CR"
+    kubectl apply -f $BUILD_DIR/manifests/aerospike-cr.yaml
 }
 
 # Function to setup AVS node pool and namespace
@@ -387,9 +393,9 @@ deploy_avs_helm_chart() {
     helm repo add aerospike-helm https://artifact.aerospike.io/artifactory/api/helm/aerospike-helm
     helm repo update
     if [ -z "$CHART_LOCATION" ]; then
-        helm install avs-gke --values "manifests/avs-gke-values.yaml" --namespace avs aerospike-helm/aerospike-vector-search --version 0.4.1 --wait
+        helm install avs-gke --values $BUILD_DIR/manifests/avs-gke-values.yaml --namespace avs aerospike-helm/aerospike-vector-search --version 0.4.1 --wait
     else
-        helm install avs-gke --values "manifests/avs-gke-values.yaml" --namespace avs "$CHART_LOCATION" --wait
+        helm install avs-gke --values $BUILD_DIR/manifests/avs-gke-values.yaml --namespace avs "$CHART_LOCATION" --wait
     fi
 }
 
