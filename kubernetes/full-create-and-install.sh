@@ -34,7 +34,7 @@ print_env() {
 set_env_variables() {
     export WORKSPACE="$(pwd)"
     export PROJECT_ID="$(gcloud config get-value project)"
-    export CLUSTER_NAME="${PROJECT_ID}-avs-noauth"
+    export CLUSTER_NAME="${PROJECT_ID}-avs-noauth-010"
     export NODE_POOL_NAME_AEROSPIKE="aerospike-pool"
     export NODE_POOL_NAME_AVS="avs-pool"
     export ZONE="us-central1-c"
