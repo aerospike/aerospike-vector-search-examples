@@ -1,6 +1,6 @@
 # TODO: Include exact versions
 # Aerospike dependencies
-aerospike-vector-search==1.0.2
+aerospike-vector-search==2.0.0
 
 
 # Flask framework
