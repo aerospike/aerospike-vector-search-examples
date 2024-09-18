@@ -17,7 +17,6 @@ USERNAME=$(whoami)
 DEFAULT_CLUSTER_NAME_SUFFIX="avs"
 RUN_INSECURE=0  # Default value for insecure mode (false meaning secure with auth + tls)
 
- 
 # Function to display the script usage
 usage() {
     echo "Usage: $0 [options]"
@@ -32,13 +31,12 @@ usage() {
 # Parse command line arguments
 while [[ "$#" -gt 0 ]]; do
     case $1 in
-        --chart-location|-l) CHART_LOCATION="$2"; shift ;;
-        --cluster-name|-c) CLUSTER_NAME_OVERRIDE="$2"; shift ;;
-        --run-insecure|-r) RUN_INSECURE=1 ; shift ;;  # Set RUN_INSECURE to true if the flag is present
+        --chart-location|-l) CHART_LOCATION="$2"; shift 2 ;;
+        --cluster-name|-c) CLUSTER_NAME_OVERRIDE="$2"; shift 2 ;;
+        --run-insecure|-r) RUN_INSECURE=1; shift ;;   # just flag no argument
         --help|-h) usage ;;  # Display the help/usage if --help or -h is passed
         *) echo "Unknown parameter passed: $1"; usage ;;  # Unknown parameter triggers usage
     esac
-    shift
 done
 
 # Function to print environment variables for verification
@@ -53,6 +51,7 @@ print_env() {
     echo "export CHART_LOCATION=$CHART_LOCATION"
     echo "export RUN_INSECURE=$RUN_INSECURE"
 }
+
 
 # Function to set environment variables
 set_env_variables() {
