@@ -14,7 +14,7 @@ spec:
       hosts:
         - "*"
     - port:
-        number: 5433
+        number: 5000
         name: grpc-svc
         protocol: tls
       hosts:

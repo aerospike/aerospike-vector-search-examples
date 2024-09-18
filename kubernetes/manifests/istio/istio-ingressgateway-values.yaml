@@ -13,5 +13,5 @@ service:
       port: 15021
       targetPort: 15021
     - name: grpc
-      port: 5433
-      targetPort: 5433
+      port: 5000
+      targetPort: 5000

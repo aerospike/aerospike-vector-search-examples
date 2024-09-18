@@ -10,11 +10,11 @@ spec:
     - avs-gw
   tls:
     - match:
-        - port: 5433
+        - port: 5000
           sniHosts:
             - "*"
       route:
         - destination:
             host: avs-gke-aerospike-vector-search.avs.svc.cluster.local
             port:
-              number: 5433
+              number: 5000

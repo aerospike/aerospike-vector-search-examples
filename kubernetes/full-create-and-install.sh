@@ -8,11 +8,35 @@ set -eo pipefail
 if [ -n "$DEBUG" ]; then set -x; fi
 trap 'echo "Error: $? at line $LINENO" >&2' ERR
 
+WORKSPACE="$(pwd)"
+PROJECT_ID="$(gcloud config get-value project)"
+# Prepend the current username to the cluster name
+USERNAME=$(whoami)
+
+# Default values
+DEFAULT_CLUSTER_NAME_SUFFIX="avs"
+RUN_INSECURE=0  # Default value for insecure mode (false meaning secure with auth + tls)
+
+ 
+# Function to display the script usage
+usage() {
+    echo "Usage: $0 [options]"
+    echo "Options:"
+    echo "  --chart-location, -l <path>  If specified expects a local directory for AVS Helm chart (default: official repo)"
+    echo "  --cluster-name, -c <name>    Override the default cluster name (default: ${USERNAME}-${PROJECT_ID}-${DEFAULT_CLUSTER_NAME_SUFFIX})"
+    echo "  --run-insecure, -r           Run setup cluster without auth or tls. No argument required."
+    echo "  --help, -h                   Show this help message"
+    exit 1
+}
+
 # Parse command line arguments
 while [[ "$#" -gt 0 ]]; do
     case $1 in
-        --chart-location) CHART_LOCATION="$2"; shift ;;
-        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+        --chart-location|-l) CHART_LOCATION="$2"; shift ;;
+        --cluster-name|-c) CLUSTER_NAME_OVERRIDE="$2"; shift ;;
+        --run-insecure|-r) RUN_INSECURE=1 ; shift ;;  # Set RUN_INSECURE to true if the flag is present
+        --help|-h) usage ;;  # Display the help/usage if --help or -h is passed
+        *) echo "Unknown parameter passed: $1"; usage ;;  # Unknown parameter triggers usage
     esac
     shift
 done
@@ -27,22 +51,25 @@ print_env() {
     echo "export ZONE=$ZONE"
     echo "export FEATURES_CONF=$FEATURES_CONF"
     echo "export CHART_LOCATION=$CHART_LOCATION"
-
+    echo "export RUN_INSECURE=$RUN_INSECURE"
 }
 
 # Function to set environment variables
 set_env_variables() {
-    export WORKSPACE="$(pwd)"
-    export PROJECT_ID="$(gcloud config get-value project)"
-    export CLUSTER_NAME="${PROJECT_ID}-avs-noauth-010"
+   
+    # Use provided cluster name or fallback to the default
+    if [ -n "$CLUSTER_NAME_OVERRIDE" ]; then
+        export CLUSTER_NAME="${USERNAME}-${CLUSTER_NAME_OVERRIDE}"
+    else
+        export CLUSTER_NAME="${USERNAME}-${PROJECT_ID}-${DEFAULT_CLUSTER_NAME_SUFFIX}"
+    fi
+
     export NODE_POOL_NAME_AEROSPIKE="aerospike-pool"
     export NODE_POOL_NAME_AVS="avs-pool"
     export ZONE="us-central1-c"
     export FEATURES_CONF="$WORKSPACE/features.conf"
     export BUILD_DIR="$WORKSPACE/generated"
-    export RUN_INSECURE=1
     export REVERSE_DNS_AVS
-
 }
 
 reset_build() {
@@ -295,7 +322,7 @@ create_gke_cluster() {
         --cluster "$CLUSTER_NAME" \
         --project "$PROJECT_ID" \
         --zone "$ZONE" \
-        --num-nodes 5 \
+        --num-nodes 3 \
         --disk-type "pd-standard" \
         --disk-size "100" \
         --machine-type "n2d-standard-32"; then
@@ -413,23 +440,18 @@ setup_monitoring() {
 }
 
 print_final_instructions() {
-    echo "To include your Grafana dashboards, use 'import-dashboards.sh <your grafana dashboard directory>'"
-    # echo "To view Grafana dashboards from your machine use 'kubectl port-forward -n monitoring svc/monitoring-stack-grafana 3000:80'"
-    # echo "To expose Grafana ports publicly, use 'kubectl apply -f helpers/EXPOSE-GRAFANA.yaml'"
-    # echo "To find the exposed port, use 'kubectl get svc -n monitoring'"
-    # echo "To run the quote search sample app on your new cluster, for istio use:"
-    # echo "helm install semantic-search-app aerospike/quote-semantic-search --namespace avs --values manifests/quote-search/semantic-search-values.yaml --wait"
     
-    echo your new deployment is available at $REVERSE_DNS_AVS
-    echo "connect with asvec using cert "
-    cat $BUILD_DIR/certs/ca.aerospike.com.pem
-    echo
-    echo "Your new Aerospike Vector Search deployment is available at $REVERSE_DNS_AVS"
-    echo "To connect with asvec, use the following certificate:"
-    cat "$BUILD_DIR/certs/ca.aerospike.com.pem"
+    echo Your new deployment is available at $REVERSE_DNS_AVS.
+    echo Check your deployment using our command line tool asvec available at https://github.com/aerospike/asvec.
 
-    echo Use the asvec tool to change your password with 
-    echo asvec  -h  $REVERSE_DNS_AVS:5433  --tls-cafile path/to/tls/file  -U admin -P admin  user new-password --name admin --new-password your-new-password
+ 
+    if [[ "${RUN_INSECURE}" != 1 ]]; then
+        echo "connect with asvec using cert "
+        cat $BUILD_DIR/certs/ca.aerospike.com.pem
+        echo Use the asvec tool to change your password with 
+        echo asvec  -h  $REVERSE_DNS_AVS:5000  --tls-cafile path/to/tls/file  -U admin -P admin  user new-password --name admin --new-password your-new-password
+    fi
+
 
     echo "Setup Complete!"
     
@@ -444,7 +466,9 @@ main() {
     create_gke_cluster
     deploy_istio
     get_reverse_dns
-    generate_certs
+    if [[ "${RUN_INSECURE}" != 1 ]]; then
+        generate_certs
+    fi
     setup_aerospike
     setup_avs
     deploy_avs_helm_chart

@@ -6,7 +6,7 @@ aerospikeVectorSearchConfig:
   service:
     metadata-namespace: "avs-meta"
     ports:
-      5433:
+      5000:
         addresses:
           "0.0.0.0"
         tls-id: service-tls
@@ -17,23 +17,16 @@ aerospikeVectorSearchConfig:
   heartbeat:
     seeds:
       - address: avs-gke-aerospike-vector-search-0.avs-gke-aerospike-vector-search.avs.svc.cluster.local
-#        port: 5001
-        port: 5444
+        port: 5001
   interconnect:
     client-tls-id: interconnect-tls
     ports:
-      5444:
+      5001:
         addresses:
           "0.0.0.0"
         tls-id: interconnect-tls
-#    ports:
-#      5001:
-#        addresses:
-#          "0.0.0.0"
   storage:
     client-policy:
-#      cluster-name: aerocluster
-#      max-conns-per-node: 1000
       tls-id: aerospike-tls
       credentials:
         username: tester
@@ -98,7 +91,7 @@ image:
   repository: "aerospike/aerospike-vector-search"
   pullPolicy: "IfNotPresent"
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "0.9.0"
+  tag: "0.10.0"
 extraSecretVolumeMounts:
   - name: aerospike-tls
     mountPath: "/etc/ssl/certs"
