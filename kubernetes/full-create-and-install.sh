@@ -15,7 +15,7 @@ USERNAME=$(whoami)
 
 # Default values
 DEFAULT_CLUSTER_NAME_SUFFIX="avs"
-RUN_INSECURE=0  # Default value for insecure mode (false meaning secure with auth + tls)
+RUN_INSECURE=1  # Default value for insecure mode (false meaning secure with auth + tls)
 
 # Function to display the script usage
 usage() {
@@ -116,7 +116,6 @@ generate_certs() {
     -keyout "$BUILD_DIR/output/asd.aerospike.com.key" \
     -subj "/C=UK/ST=London/L=London/O=abs/OU=Server/CN=asd.aerospike.com"
 
-    echo "1"
     SVC_NAME="avs-gke-aerospike-vector-search.aerospike.svc.cluster.local" COMMON_NAME="avs.aerospike.com" openssl req \
     -new \
     -nodes \
@@ -126,7 +125,6 @@ generate_certs() {
     -keyout "$BUILD_DIR/output/avs.aerospike.com.key" \
     -subj "/C=UK/ST=London/L=London/O=abs/OU=Client/CN=avs.aerospike.com" \
 
-    echo "2"
     SVC_NAME="avs-gke-aerospike-vector-search.aerospike.svc.cluster.local" COMMON_NAME="svc.aerospike.com" openssl req \
     -new \
     -nodes \
