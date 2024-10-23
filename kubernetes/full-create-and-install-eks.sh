@@ -1,5 +1,6 @@
 #!/bin/bash
-
+export AWS_SDK_LOAD_CONFIG=1
+printenv
 # This script sets up a GKE cluster with configurations for Aerospike and AVS node pools.
 # It handles the creation of the GKE cluster, the use of AKO (Aerospike Kubernetes Operator) to deploy an Aerospike cluster,
 # deploys the AVS cluster, and the deployment of necessary operators, configurations, node pools, and monitoring.
@@ -11,6 +12,7 @@ trap 'echo "Error: $? at line $LINENO" >&2' ERR
 WORKSPACE="$(pwd)"
 # Prepend the current username to the cluster name
 USERNAME=$(whoami)
+PROFILE="default"
 
 # Default values
 DEFAULT_CLUSTER_NAME_SUFFIX="avs"
@@ -63,10 +65,9 @@ set_env_variables() {
 
     export NODE_POOL_NAME_AEROSPIKE="aerospike-pool"
     export NODE_POOL_NAME_AVS="avs-pool"
-    export REGION="eu-central1"
+    export REGION="eu-central-1"
     export FEATURES_CONF="$WORKSPACE/features.conf"
     export BUILD_DIR="$WORKSPACE/generated"
-    export REVERSE_DNS_AVS
 }
 
 reset_build() {
@@ -280,10 +281,11 @@ generate_certs() {
 # Function to create GKE cluster
 create_eks_cluster() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - Starting EKS cluster creation..."
+    set -x
     if ! eksctl create cluster \
         --name "$CLUSTER_NAME" \
         --region "$REGION" \
-        --profile "sso" \
+        --profile "$PROFILE" \
         --with-oidc \
         --without-nodegroup \
         --alb-ingress-access \
@@ -295,6 +297,8 @@ create_eks_cluster() {
         echo "EKS cluster created successfully."
     fi
 
+    eksctl create addon --name aws-ebs-csi-driver --cluster "$CLUSTER_NAME" --region "$REGION" --profile "$PROFILE" --force
+
     echo "Creating Aerospike node pool..."
 
     if ! eksctl create nodegroup \
@@ -305,9 +309,9 @@ create_eks_cluster() {
         --nodes-min 3 \
         --nodes-max 3 \
         --region "$REGION" \
-        --profile "sso" \
+        --profile "$PROFILE" \
         --node-volume-size 100 \
-        --node-volume-type "gp3" \
+        --node-volume-type "gp2" \
         --managed; then
         echo "Failed to create Aerospike node pool"
         exit 1
@@ -328,9 +332,9 @@ create_eks_cluster() {
         --nodes-min 3 \
         --nodes-max 3 \
         --region "$REGION" \
-        --profile "sso" \
+        --profile "$PROFILE" \
         --node-volume-size 100 \
-        --node-volume-type "gp3" \
+        --node-volume-type "gp2" \
         --managed; then
         echo "Failed to create AVS node pool"
         exit 1
@@ -416,9 +420,8 @@ deploy_istio() {
  }
 
 get_reverse_dns() {
-    INGRESS_IP=$(kubectl get svc istio-ingress -n istio-ingress -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-    REVERSE_DNS_AVS=$(dig +short -x $INGRESS_IP)
-    echo "Reverse DNS: $REVERSE_DNS_AVS"
+    INGRESS_HOSTNAME=$(kubectl get svc istio-ingress -n istio-ingress -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+    echo "Hostname DNS: $INGRESS_HOSTNAME"
 }
 # Function to deploy AVS Helm chart
 deploy_avs_helm_chart() {
@@ -447,7 +450,7 @@ setup_monitoring() {
 
 print_final_instructions() {
     
-    echo Your new deployment is available at $REVERSE_DNS_AVS.
+    echo Your new deployment is available at $INGRESS_HOSTNAME.
     echo Check your deployment using our command line tool asvec available at https://github.com/aerospike/asvec.
 
  
@@ -455,7 +458,7 @@ print_final_instructions() {
         echo "connect with asvec using cert "
         cat $BUILD_DIR/certs/ca.aerospike.com.pem
         echo Use the asvec tool to change your password with 
-        echo asvec  -h  $REVERSE_DNS_AVS:5000  --tls-cafile path/to/tls/file  -U admin -P admin  user new-password --name admin --new-password your-new-password
+        echo asvec  -h  $INGRESS_HOSTNAME:5000  --tls-cafile path/to/tls/file  -U admin -P admin  user new-password --name admin --new-password your-new-password
     fi
 
 
