@@ -62,7 +62,7 @@ Add your features.conf file to container-volumes/avs/etc/aerospike-vector-search
 
 ### 3. Start the environment
 ```
-docker compose up
+docker compose -f docker-compose-dev.yml up
 ```
 
 ## Developing
