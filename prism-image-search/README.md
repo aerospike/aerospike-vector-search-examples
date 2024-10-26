@@ -65,14 +65,14 @@ ln -s ~/Pictures container-volumes/prism/images/static/data
 cd prism-image-search && \\
 docker build -t prism . -f Dockerfile-prism
 ```
-
 ### 2. Add features.conf
 AVS needs an Aerospike features.conf file with the vector-search feature enabled.
-Add your features.conf file to container-volumes/avs/etc/avs.
+You can set the `features.conf` location in an environment variable: `FEATURE_KEY' 
+or add your features.conf file to `container-volumes/avs/etc/aerospike-vector-search`
 
 ### 3. Start the environment
 ```
-docker compose -f docker-compose-dev.yml up
+FEATURE_KEY=/path/to/features.conf docker compose -f docker-compose-dev.yml up
 ```
 
 ## Developing
