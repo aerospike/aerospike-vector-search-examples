@@ -1,6 +1,6 @@
 # TODO: Include exact versions
 # Aerospike dependencies
-aerospike-vector-search==2.0.0
+aerospike-vector-search==3.0.0
 
 
 # Flask framework
@@ -12,7 +12,7 @@ waitress
 
 # Quote processing
 numpy==1.26.4 # fix issues in dependencies after 2.0.0 release
-sentence-transformers==2.2.2
+sentence-transformers==3.2.1
 torch==2.0.1
 tqdm~=4.66.1
 
