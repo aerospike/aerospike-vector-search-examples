@@ -53,8 +53,8 @@ description.
 
 
 ## Install using docker compose
-If you have a license key, you can easily set up Aerospike, AVS, and the prism-image-search
-app using `docker-compose`. When using `docker-compose`, you'll need to place your images in `container-volumes/prism/images/static/data`
+If you have a license key, you can easily setup Aerospike, AVS, and the prism-image-search
+app using docker-compose. When using docker-compose, you'll need to place your images in `container-volumes/prism/images/static/data`
 
 ```shell
 ln -s ~/Pictures container-volumes/prism/images/static/data
@@ -72,7 +72,7 @@ Add your features.conf file to `container-volumes/avs/etc/aerospike-vector-searc
 
 ### 3. Start the environment
 ```
-docker-compose up
+docker compose up
 ```
 
 ## Developing

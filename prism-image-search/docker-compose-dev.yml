@@ -19,7 +19,7 @@ services:
       timeout: 20s
       retries: 10
   avs:
-    image: aerospike/aerospike-vector-search:0.10.0
+    image: aerospike/aerospike-vector-search:0.11.1
     depends_on:
       aerospike:
         condition: service_healthy
