@@ -35,7 +35,7 @@ services:
       timeout: 20s
       retries: 10
   app:
-    image: aerospike/quote-search-example:latest
+    image: quote-search:latest
     depends_on:
       avs:
         condition: service_healthy
