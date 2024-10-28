@@ -68,6 +68,7 @@ set_env_variables() {
     export REGION="eu-central-1"
     export FEATURES_CONF="$WORKSPACE/features.conf"
     export BUILD_DIR="$WORKSPACE/generated"
+    export REVERSE_DNS_AVS
 }
 
 reset_build() {
@@ -420,8 +421,8 @@ deploy_istio() {
  }
 
 get_reverse_dns() {
-    INGRESS_HOSTNAME=$(kubectl get svc istio-ingress -n istio-ingress -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
-    echo "Hostname DNS: $INGRESS_HOSTNAME"
+    REVERSE_DNS_AVS=$(kubectl get svc istio-ingress -n istio-ingress -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+    echo "Hostname DNS: $REVERSE_DNS_AVS"
 }
 # Function to deploy AVS Helm chart
 deploy_avs_helm_chart() {
@@ -450,7 +451,7 @@ setup_monitoring() {
 
 print_final_instructions() {
     
-    echo Your new deployment is available at $INGRESS_HOSTNAME.
+    echo Your new deployment is available at $REVERSE_DNS_AVS.
     echo Check your deployment using our command line tool asvec available at https://github.com/aerospike/asvec.
 
  
@@ -458,7 +459,7 @@ print_final_instructions() {
         echo "connect with asvec using cert "
         cat $BUILD_DIR/certs/ca.aerospike.com.pem
         echo Use the asvec tool to change your password with 
-        echo asvec  -h  $INGRESS_HOSTNAME:5000  --tls-cafile path/to/tls/file  -U admin -P admin  user new-password --name admin --new-password your-new-password
+        echo asvec  -h  $REVERSE_DNS_AVS:5000  --tls-cafile path/to/tls/file  -U admin -P admin  user new-password --name admin --new-password your-new-password
     fi
 
 
