@@ -72,7 +72,7 @@ Add your features.conf file to `container-volumes/avs/etc/aerospike-vector-searc
 
 ### 3. Start the environment
 ```
-docker compose up
+docker compose -f docker-compose-dev.yml up
 ```
 
 ## Developing
