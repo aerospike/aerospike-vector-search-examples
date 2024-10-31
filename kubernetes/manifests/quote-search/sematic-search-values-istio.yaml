@@ -3,4 +3,3 @@ quoteSearchConfig:
   avsIsLoadbalancer: "True"
   avsNamespace: "test"
   avsIndexName: "istio-witticisms"
-

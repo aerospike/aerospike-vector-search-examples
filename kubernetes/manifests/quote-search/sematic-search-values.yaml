@@ -1,5 +1,4 @@
 quoteSearchConfig:
-  avsHost: "avs-gke-aerospike-vector-search-lb.svc.cluster.local"
+  avsHost: "avs-app-aerospike-vector-search-lb.svc.cluster.local"
   avsIsLoadbalancer: "True"
   avsNamespace: "test"
-

@@ -16,7 +16,7 @@ aerospikeVectorSearchConfig:
 
   heartbeat:
     seeds:
-      - address: avs-gke-aerospike-vector-search-0.avs-gke-aerospike-vector-search.avs.svc.cluster.local
+      - address: avs-app-aerospike-vector-search-0.avs-app-aerospike-vector-search.avs.svc.cluster.local
         port: 5001
   interconnect:
     # client-tls-id: interconnect-tls

@@ -79,10 +79,10 @@ reset_build() {
     mkdir -p "$BUILD_DIR/input" "$BUILD_DIR/output" "$BUILD_DIR/secrets" "$BUILD_DIR/certs" "$BUILD_DIR/manifests"
     cp "$FEATURES_CONF" "$BUILD_DIR/secrets/features.conf"
     if [[ "${RUN_INSECURE}" == 1 ]]; then
-        cp $WORKSPACE/manifests/avs-gke-values.yaml $BUILD_DIR/manifests/avs-gke-values.yaml
+        cp $WORKSPACE/manifests/avs-values.yaml $BUILD_DIR/manifests/avs-values.yaml
         cp $WORKSPACE/manifests/aerospike-cr.yaml $BUILD_DIR/manifests/aerospike-cr.yaml
     else
-        cp $WORKSPACE/manifests/avs-gke-values-auth.yaml $BUILD_DIR/manifests/avs-gke-values.yaml
+        cp $WORKSPACE/manifests/avs-values-auth.yaml $BUILD_DIR/manifests/avs-values.yaml
         cp $WORKSPACE/manifests/aerospike-cr-auth.yaml $BUILD_DIR/manifests/aerospike-cr.yaml
     fi
 }
@@ -116,7 +116,7 @@ generate_certs() {
     -keyout "$BUILD_DIR/output/asd.aerospike.com.key" \
     -subj "/C=UK/ST=London/L=London/O=abs/OU=Server/CN=asd.aerospike.com"
 
-    SVC_NAME="avs-gke-aerospike-vector-search.aerospike.svc.cluster.local" COMMON_NAME="avs.aerospike.com" openssl req \
+    SVC_NAME="avs-app-aerospike-vector-search.aerospike.svc.cluster.local" COMMON_NAME="avs.aerospike.com" openssl req \
     -new \
     -nodes \
     -config "$WORKSPACE/ssl/openssl.conf" \
@@ -125,7 +125,7 @@ generate_certs() {
     -keyout "$BUILD_DIR/output/avs.aerospike.com.key" \
     -subj "/C=UK/ST=London/L=London/O=abs/OU=Client/CN=avs.aerospike.com" \
 
-    SVC_NAME="avs-gke-aerospike-vector-search.aerospike.svc.cluster.local" COMMON_NAME="svc.aerospike.com" openssl req \
+    SVC_NAME="avs-app-aerospike-vector-search.aerospike.svc.cluster.local" COMMON_NAME="svc.aerospike.com" openssl req \
     -new \
     -nodes \
     -config "$WORKSPACE/ssl/openssl_svc.conf" \
@@ -147,7 +147,7 @@ generate_certs() {
     -out "$BUILD_DIR/output/asd.aerospike.com.pem" \
     -set_serial 110 \
 
-    SVC_NAME="avs-gke-aerospike-vector-search.aerospike.svc.cluster.local" COMMON_NAME="avs.aerospike.com" openssl x509 \
+    SVC_NAME="avs-app-aerospike-vector-search.aerospike.svc.cluster.local" COMMON_NAME="avs.aerospike.com" openssl x509 \
     -req \
     -extfile "$WORKSPACE/ssl/openssl.conf" \
     -in "$BUILD_DIR/input/avs.aerospike.com.req" \
@@ -159,7 +159,7 @@ generate_certs() {
     -out "$BUILD_DIR/output/avs.aerospike.com.pem" \
     -set_serial 210 \
 
-    SVC_NAME="avs-gke-aerospike-vector-search.aerospike.svc.cluster.local" COMMON_NAME="svc.aerospike.com" openssl x509 \
+    SVC_NAME="avs-app-aerospike-vector-search.aerospike.svc.cluster.local" COMMON_NAME="svc.aerospike.com" openssl x509 \
     -req \
     -extfile "$WORKSPACE/ssl/openssl_svc.conf" \
     -in "$BUILD_DIR/input/svc.aerospike.com.req" \
@@ -417,9 +417,9 @@ deploy_avs_helm_chart() {
     helm repo add aerospike-helm https://artifact.aerospike.io/artifactory/api/helm/aerospike-helm
     helm repo update
     if [ -z "$CHART_LOCATION" ]; then
-        helm install avs-gke --values $BUILD_DIR/manifests/avs-gke-values.yaml --namespace avs aerospike-helm/aerospike-vector-search --version 0.4.1 --wait
+        helm install avs-app --values $BUILD_DIR/manifests/avs-values.yaml --namespace avs aerospike-helm/aerospike-vector-search --version 0.6.0 --wait
     else
-        helm install avs-gke --values $BUILD_DIR/manifests/avs-gke-values.yaml --namespace avs "$CHART_LOCATION" --wait
+        helm install avs-app --values $BUILD_DIR/manifests/avs-values.yaml --namespace avs "$CHART_LOCATION" --wait
     fi
 }
 
