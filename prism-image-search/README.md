@@ -10,7 +10,7 @@ Aerospike Vector Search (AVS) performs Approximate Nearest Neighbor(ANN) search 
 You don't have to know Aerospike to get started, but you do need the following:
 
 1. A Python 3.10 - 3.11 environment and familiarity with the Python programming language (see [Setup Python Virtual Environment](./README.md#setup-python-virtual-environment)).
-1. An Aerospike Vector Search host (preview environment or local) running AVS 0.10.0 or newer.
+2. An Aerospike Vector Search host (preview environment or local) running AVS 0.11.1 or newer.
 
 ## Configure AVS host
 
@@ -54,7 +54,7 @@ description.
 
 ## Install using docker compose
 If you have a license key, you can easily setup Aerospike, AVS, and the prism-image-search
-app using docker-compose. When using docker-compose, you'll need to place your images in `container-volumes`
+app using docker-compose. When using docker-compose, you'll need to place your images in `container-volumes/prism/images/static/data`
 
 ```shell
 ln -s ~/Pictures container-volumes/prism/images/static/data
@@ -68,7 +68,7 @@ docker build -t prism . -f Dockerfile-prism
 
 ### 2. Add features.conf
 AVS needs an Aerospike features.conf file with the vector-search feature enabled.
-Add your features.conf file to container-volumes/avs/etc/avs.
+Add your features.conf file to `container-volumes/avs/etc/aerospike-vector-search`.
 
 ### 3. Start the environment
 ```
