@@ -24,13 +24,28 @@ spec:
             size: 1Gi
       - name: avs-meta
         aerospike:
-          path: /avs/dev/xvdf
+          path: /avs-meta/dev/xvdf
+        source:
+          persistentVolume:
+            storageClass: ssd
+            volumeMode: Block
+            size: 2Gi
+      - name: avs-index
+        aerospike:
+          path: /avs-index/dev/xvdf
         source:
           persistentVolume:
             storageClass: ssd
             volumeMode: Block
             size: 20Gi
-
+      - name: avs-data
+        aerospike:
+          path: /avs-data/dev/xvdf
+        source:
+          persistentVolume:
+            storageClass: ssd
+            volumeMode: Block
+            size: 20Gi
       - name: ns
         aerospike:
           path: /test/dev/xvdf
@@ -38,7 +53,7 @@ spec:
           persistentVolume:
             storageClass: ssd
             volumeMode: Block
-            size: 20Gi
+            size: 1Gi
       - name: aerospike-config-secret
         source:
           secret:
@@ -90,7 +105,18 @@ spec:
           type: device
           devices:
             - /test/dev/xvdf
-
+      - name: avs-index
+        replication-factor: 2
+        storage-engine:
+          type: device
+          devices:
+            - /avs-index/dev/xvdf
+      - name: avs-data
+        replication-factor: 2
+        storage-engine:
+          type: device
+          devices:
+            - /avs-data/dev/xvdf
       - name: avs-meta
         nsup-period: 600
         nsup-threads: 2
@@ -99,4 +125,4 @@ spec:
         storage-engine:
           type: device
           devices:
-            - /avs/dev/xvdf
+            - /avs-meta/dev/xvdf
