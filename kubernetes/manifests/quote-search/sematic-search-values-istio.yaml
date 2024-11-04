@@ -1,6 +1,0 @@
-quoteSearchConfig:
-  avsHost: "istio-ingress.istio-ingress.svc.cluster.local"
-  avsIsLoadbalancer: "True"
-  avsNamespace: "test"
-  avsIndexName: "istio-witticisms"
-
