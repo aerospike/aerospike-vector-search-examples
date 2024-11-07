@@ -46,7 +46,7 @@ services:
       - avs-demo
     environment:
       AVS_HOST: avs
-      AVS_PORT: "10000"
+      AVS_PORT: "5000"
       APP_NUM_QUOTES: "5000"
       GRPC_DNS_RESOLVER: native
     volumes:
