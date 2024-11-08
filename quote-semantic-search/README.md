@@ -57,12 +57,16 @@ docker build -t quote-search . -f Dockerfile-quote-search
 
 ### 2. Add features.conf
 AVS needs an Aerospike features.conf file with the vector-search feature enabled.
-Add your features.conf file to container-volumes/avs/etc/aerospike-vector-search.
+Optionally set `FEATURE_KEY` environment variable with the location of your `features.conf` file.
+
+If no variable is set it will expect the features.conf to be in  `container-volumes/avs/etc/aerospike-vector-search`
+
 
 
 ### 3. Start the environment
 ```
-docker compose -f docker-compose-dev.yml up
+FEATURE_KEY=/path/to/features.conf docker compose -f docker-compose-dev.yml up
+
 ```
 
 ## Developing
