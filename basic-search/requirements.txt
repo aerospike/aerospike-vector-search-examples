@@ -1,1 +1,1 @@
-aerospike-vector-search==3.0.0
+aerospike-vector-search==3.0.1
