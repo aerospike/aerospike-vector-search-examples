@@ -11,12 +11,18 @@ Locate valid `features.conf` in the `./config` directory:
 ```shell
 docker compose -f docker-compose.yaml up -d
 ```
+To run AVS using Aerospike 6.4 server
+```shell
+docker compose -f docker-compose-asdb-6.4.yml up -d
+```
 ## Installation Aerospike and AVS Clusters (as separate docker images)
 ## Create Docker Network
 ```shell
 docker network create svc
 ```
 ## Run Aerospike Cluster
+
+### Using Aerospike 7.0
 ```shell
 docker run -d \
 --name aerospike-cluster \
@@ -25,6 +31,16 @@ docker run -d \
 -v ./config:/etc/aerospike aerospike/aerospike-server-enterprise:7.0.0.5 \
 --config-file /etc/aerospike/aerospike.conf
 ```
+### Using Aerospike 6.4 
+```shell
+docker run -d \
+--name aerospike-cluster \
+--network svc \
+-p 3000-3003:3000-3003 \
+-v ./config:/etc/aerospike aerospike/aerospike-server-enterprise:6.4.0.26 \
+--config-file /etc/aerospike/aerospike-6.4.conf
+```
+
 ## Run AVS Cluster
 ```shell
 docker run -d \

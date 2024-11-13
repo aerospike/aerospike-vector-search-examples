@@ -64,10 +64,17 @@ If no variable is set it will expect the features.conf to be in  `container-volu
 
 
 ### 3. Start the environment
+#### Using Aerospike 7.0
 ```
 FEATURE_KEY=/path/to/features.conf docker compose -f docker-compose-dev.yml up
 
 ```
+#### Using Aerospike 6.4
+```
+FEATURE_KEY=/path/to/features.conf docker compose -f docker-compose-asdb-6.4.yml up
+
+```
+
 
 ## Developing
 This demo is build using [Python Flask](https://flask.palletsprojects.com/en/2.3.x/)
