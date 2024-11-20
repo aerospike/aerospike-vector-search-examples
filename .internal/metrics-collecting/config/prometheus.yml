@@ -1,0 +1,15 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'proximus'
+    file_sd_configs:
+      - files:
+          - '/etc/prometheus/targets.json'
+    metrics_path: '/manage/rest/v1/prometheus'
+
+remote_write:
+  - url: 'https://avs-prometheus.aerospike.com/api/v1/write'
+    basic_auth:
+      username: 'avs-metrics'
+      password: 'avs-metrics-reporting'

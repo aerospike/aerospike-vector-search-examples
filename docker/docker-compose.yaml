@@ -1,4 +1,5 @@
 version: "3.9"
+
 services:
   aerospike-cluster:
     image: aerospike/aerospike-server-enterprise:7.0.0.5
@@ -17,8 +18,6 @@ services:
       interval: 30s
       timeout: 20s
       retries: 3
-    networks:
-      - svc
   aerospike-vector-search:
     image: aerospike/aerospike-vector-search:0.11.1
     container_name: "aerospike-vector-search"
@@ -28,8 +27,6 @@ services:
     ports:
      - "5000:5000"
      - "5040:5040"
-    networks:
-      - svc
     volumes:
       - ${PWD}/config:/etc/aerospike-vector-search
     healthcheck:
@@ -53,11 +50,8 @@ services:
 #      "-h", "aerospike-cluster",
 #      "-p", "3000"
 #    ]
-#    networks:
-#      - svc
 
-networks:
-  svc:
-    name: svc
+include:
+  - ${PWD}/../.internal/metrics-collecting/docker-compose.yaml
 
 

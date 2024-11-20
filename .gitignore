@@ -163,7 +163,11 @@ cython_debug/
 .vscode/
 .DS_Store
 
+# Aerospike specific
 features.conf
+
+# Example metadata
+targets.json
 
 # Kubernetes default generated dir
 /kubernetes/generated
