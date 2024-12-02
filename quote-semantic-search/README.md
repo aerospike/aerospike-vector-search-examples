@@ -11,7 +11,7 @@ Aerospike Vector Search (AVS) performs Approximate Nearest Neighbor(ANN) search 
 You don't have to know Aerospike to get started, but you do need the following:
 
 1. A Python 3.10 - 3.11 environment and familiarity with the Python programming language (see [Setup Python Virtual Environment](../prism-image-search/README.md#setup-python-virtual-environment)).
-2. An Aerospike Vector Search host (preview or local) running AVS 0.11.1.
+2. An Aerospike Vector Search host (preview or local) running AVS 0.11.1 or newer.
 
 ## Configure AVS host
 
