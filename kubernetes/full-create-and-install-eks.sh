@@ -64,7 +64,7 @@ set_env_variables() {
 
     export NODE_POOL_NAME_AEROSPIKE="aerospike-pool"
     export NODE_POOL_NAME_AVS="avs-pool"
-    export REGION="eu-central-1"
+    export REGION="us-east-1"
     export FEATURES_CONF="$WORKSPACE/features.conf"
     export BUILD_DIR="$WORKSPACE/generated"
     export REVERSE_DNS_AVS
