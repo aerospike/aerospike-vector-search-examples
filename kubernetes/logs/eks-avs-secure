@@ -1,0 +1,654 @@
+SHELL=/usr/bin/fish
+SESSION_MANAGER=local/pop-os:@/tmp/.ICE-unix/1993,unix/pop-os:/tmp/.ICE-unix/1993
+WINDOWID=304087055
+QT_ACCESSIBILITY=1
+COLORTERM=truecolor
+XDG_CONFIG_DIRS=/etc/xdg/xdg-regolith-x11:/etc/xdg
+XDG_MENU_PREFIX=gnome-flashback-
+rvm_delete_flag=0
+GNOME_DESKTOP_SESSION_ID=this-is-deprecated
+GTK_IM_MODULE=ibus
+rvm_prefix=/home/joem
+I3SOCK=/run/user/1000/i3/ipc-socket.2399
+SBT_HOME=/home/joem/.sdkman/candidates/sbt/current
+JAVA_HOME=/usr/lib/jvm/zulu21/
+SSH_AUTH_SOCK=/run/user/1000/keyring/ssh
+SDKMAN_CANDIDATES_DIR=/home/joem/.sdkman/candidates
+XMODIFIERS=@im=ibus
+DESKTOP_SESSION=regolith-x11
+EDITOR=vim
+GOBIN=/usr/joem/src/GO/bin
+GTK_MODULES=gail:atk-bridge:gail:atk-bridge
+PWD=/home/joem/src/aerospike-vector/kubernetes
+XDG_SESSION_DESKTOP=regolith-x11
+LOGNAME=joem
+XDG_SESSION_TYPE=x11
+rvm_version=1.29.12 latest
+MANPATH=/home/joem/.local/kitty.app/share/man
+GPG_AGENT_INFO=/run/user/1000/gnupg/S.gpg-agent:0:1
+SYSTEMD_EXEC_PID=1934
+OMF_PATH=/home/joem/.local/share/omf
+XAUTHORITY=/run/user/1000/gdm/Xauthority
+WINDOWPATH=2
+HOME=/home/joem
+USERNAME=joem
+LANG=en_US.UTF-8
+XDG_CURRENT_DESKTOP=Regolith:GNOME-Flashback:GNOME
+STARSHIP_SHELL=fish
+KITTY_WINDOW_ID=1
+INVOCATION_ID=d7041ecbf64545b386eb5fd9c7b12453
+STARSHIP_SESSION_KEY=2492563991011428
+rvm_bin_path=/home/joem/.rvm/bin
+GEM_PATH=
+XDG_SESSION_CLASS=user
+TERM=xterm-kitty
+TERMINFO=/home/joem/.local/kitty.app/lib/kitty/terminfo
+SCALA_HOME=/home/joem/.sdkman/candidates/scala/current
+USER=joem
+MANPAGER=less -X
+SDKMAN_DIR=/home/joem/.sdkman
+DISPLAY=:1
+SHLVL=3
+SPARK_HOME=/home/joem/.sdkman/candidates/spark/3.0.0/
+QT_IM_MODULE=ibus
+SDKMAN_CANDIDATES_API=https://api.sdkman.io/2
+DESKTOP_AUTOSTART_ID=10e57284c3427c254c173144456866459900000019930016
+EEREPO=/home/joem/src/citrusleaf/aerospike-server-enterprise
+rvm_ruby_string=system
+AWS_SDK_LOAD_CONFIG=1
+XDG_RUNTIME_DIR=/run/user/1000
+COMPIZ_CONFIG_PROFILE=gnome-flashback
+XDG_DATA_DIRS=/usr/share/regolith-x11:/usr/share/gnome:/home/joem/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share/:/usr/share/
+PATH=/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/joem/.local/bin:/home/joem/.cargo/bin:/home/joem/.local/kitty.app/bin:/usr/joem/src/GO/bin:~/bin:/home/joem/.yarn/bin:~kafka/kafka/bin:/usr/local/bin/bin:/home/joem/.rvm/bin:/home/joem/.krew/bin
+GDMSESSION=regolith-x11
+DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+SDKMAN_PLATFORM=linuxx64
+DEBUG=true
+CPATH=/usr/include/lua5.2
+OMF_CONFIG=/home/joem/.config/omf
+GIO_LAUNCHED_DESKTOP_FILE_PID=2324
+GIO_LAUNCHED_DESKTOP_FILE=/usr/share/applications/regolith-x11.desktop
+rvm_path=/home/joem/.rvm
+GOPATH=/usr/joem/src/GO
+_=/bin/printenv
++ trap 'echo "Error: $? at line $LINENO" >&2' ERR
+++ pwd
++ WORKSPACE=/home/joem/src/aerospike-vector/kubernetes
+++ whoami
++ USERNAME=joem
++ PROFILE=default
++ DEFAULT_CLUSTER_NAME_SUFFIX=avs
++ [[ 2 -gt 0 ]]
++ case $1 in
++ CLUSTER_NAME_OVERRIDE=avs-secure
++ shift 2
++ [[ 0 -gt 0 ]]
++ main
++ set_env_variables
++ '[' -n avs-secure ']'
++ export CLUSTER_NAME=joem-avs-secure
++ CLUSTER_NAME=joem-avs-secure
++ export NODE_POOL_NAME_AEROSPIKE=aerospike-pool
++ NODE_POOL_NAME_AEROSPIKE=aerospike-pool
++ export NODE_POOL_NAME_AVS=avs-pool
++ NODE_POOL_NAME_AVS=avs-pool
++ export REGION=eu-central-1
++ REGION=eu-central-1
++ export FEATURES_CONF=/home/joem/src/aerospike-vector/kubernetes/features.conf
++ FEATURES_CONF=/home/joem/src/aerospike-vector/kubernetes/features.conf
++ export BUILD_DIR=/home/joem/src/aerospike-vector/kubernetes/generated
++ BUILD_DIR=/home/joem/src/aerospike-vector/kubernetes/generated
++ export REVERSE_DNS_AVS
++ print_env
++ echo 'Environment Variables:'
+Environment Variables:
++ echo 'export CLUSTER_NAME=joem-avs-secure'
+export CLUSTER_NAME=joem-avs-secure
++ echo 'export NODE_POOL_NAME_AEROSPIKE=aerospike-pool'
+export NODE_POOL_NAME_AEROSPIKE=aerospike-pool
++ echo 'export NODE_POOL_NAME_AVS=avs-pool'
+export NODE_POOL_NAME_AVS=avs-pool
++ echo 'export REGION=eu-central-1'
+export REGION=eu-central-1
++ echo 'export FEATURES_CONF=/home/joem/src/aerospike-vector/kubernetes/features.conf'
+export FEATURES_CONF=/home/joem/src/aerospike-vector/kubernetes/features.conf
++ echo 'export CHART_LOCATION='
+export CHART_LOCATION=
++ echo 'export RUN_INSECURE='
+export RUN_INSECURE=
++ reset_build
++ '[' -d /home/joem/src/aerospike-vector/kubernetes/generated ']'
+++ mktemp -d /tmp/avs-deploy-previous.XXXXXX
++ temp_dir=/tmp/avs-deploy-previous.XylEiA
++ mv -f /home/joem/src/aerospike-vector/kubernetes/generated /tmp/avs-deploy-previous.XylEiA
++ mkdir -p /home/joem/src/aerospike-vector/kubernetes/generated/input /home/joem/src/aerospike-vector/kubernetes/generated/output /home/joem/src/aerospike-vector/kubernetes/generated/secrets /home/joem/src/aerospike-vector/kubernetes/generated/certs /home/joem/src/aerospike-vector/kubernetes/generated/manifests
++ cp /home/joem/src/aerospike-vector/kubernetes/features.conf /home/joem/src/aerospike-vector/kubernetes/generated/secrets/features.conf
++ [[ '' == 1 ]]
++ cp /home/joem/src/aerospike-vector/kubernetes/manifests/avs-values-auth.yaml /home/joem/src/aerospike-vector/kubernetes/generated/manifests/avs-values.yaml
++ cp /home/joem/src/aerospike-vector/kubernetes/manifests/aerospike-cr-auth.yaml /home/joem/src/aerospike-vector/kubernetes/generated/manifests/aerospike-cr.yaml
++ create_eks_cluster
+++ date '+%Y-%m-%d %H:%M:%S'
++ echo '2024-11-12 17:23:05 - Starting EKS cluster creation...'
+2024-11-12 17:23:05 - Starting EKS cluster creation...
++ set -x
++ eksctl create cluster --name joem-avs-secure --region eu-central-1 --profile default --with-oidc --without-nodegroup --alb-ingress-access --external-dns-access --set-kubeconfig-context
+2024-11-12 17:23:06 [ℹ]  eksctl version 0.194.0
+2024-11-12 17:23:06 [ℹ]  using region eu-central-1
+2024-11-12 17:23:08 [ℹ]  setting availability zones to [eu-central-1c eu-central-1b eu-central-1a]
+2024-11-12 17:23:08 [ℹ]  subnets for eu-central-1c - public:192.168.0.0/19 private:192.168.96.0/19
+2024-11-12 17:23:08 [ℹ]  subnets for eu-central-1b - public:192.168.32.0/19 private:192.168.128.0/19
+2024-11-12 17:23:08 [ℹ]  subnets for eu-central-1a - public:192.168.64.0/19 private:192.168.160.0/19
+2024-11-12 17:23:08 [ℹ]  using Kubernetes version 1.30
+2024-11-12 17:23:08 [ℹ]  creating EKS cluster "joem-avs-secure" in "eu-central-1" region with 
+2024-11-12 17:23:08 [ℹ]  if you encounter any issues, check CloudFormation console or try 'eksctl utils describe-stacks --region=eu-central-1 --cluster=joem-avs-secure'
+2024-11-12 17:23:08 [ℹ]  Kubernetes API endpoint access will use default of {publicAccess=true, privateAccess=false} for cluster "joem-avs-secure" in "eu-central-1"
+2024-11-12 17:23:08 [ℹ]  CloudWatch logging will not be enabled for cluster "joem-avs-secure" in "eu-central-1"
+2024-11-12 17:23:08 [ℹ]  you can enable it with 'eksctl utils update-cluster-logging --enable-types={SPECIFY-YOUR-LOG-TYPES-HERE (e.g. all)} --region=eu-central-1 --cluster=joem-avs-secure'
+2024-11-12 17:23:08 [ℹ]  default addons kube-proxy, coredns, vpc-cni were not specified, will install them as EKS addons
+2024-11-12 17:23:08 [ℹ]  
+2 sequential tasks: { create cluster control plane "joem-avs-secure", 
+    5 sequential sub-tasks: { 
+        1 task: { create addons },
+        wait for control plane to become ready,
+        associate IAM OIDC provider,
+        no tasks,
+        update VPC CNI to use IRSA if required,
+    } 
+}
+2024-11-12 17:23:08 [ℹ]  building cluster stack "eksctl-joem-avs-secure-cluster"
+2024-11-12 17:23:09 [ℹ]  deploying stack "eksctl-joem-avs-secure-cluster"
+2024-11-12 17:23:39 [ℹ]  waiting for CloudFormation stack "eksctl-joem-avs-secure-cluster"
+2024-11-12 17:24:10 [ℹ]  waiting for CloudFormation stack "eksctl-joem-avs-secure-cluster"
+2024-11-12 17:25:11 [ℹ]  waiting for CloudFormation stack "eksctl-joem-avs-secure-cluster"
+2024-11-12 17:26:12 [ℹ]  waiting for CloudFormation stack "eksctl-joem-avs-secure-cluster"
+2024-11-12 17:27:13 [ℹ]  waiting for CloudFormation stack "eksctl-joem-avs-secure-cluster"
+2024-11-12 17:28:14 [ℹ]  waiting for CloudFormation stack "eksctl-joem-avs-secure-cluster"
+2024-11-12 17:29:15 [ℹ]  waiting for CloudFormation stack "eksctl-joem-avs-secure-cluster"
+2024-11-12 17:30:16 [ℹ]  waiting for CloudFormation stack "eksctl-joem-avs-secure-cluster"
+2024-11-12 17:31:17 [ℹ]  waiting for CloudFormation stack "eksctl-joem-avs-secure-cluster"
+2024-11-12 17:32:18 [ℹ]  waiting for CloudFormation stack "eksctl-joem-avs-secure-cluster"
+2024-11-12 17:32:23 [ℹ]  creating addon
+2024-11-12 17:32:23 [ℹ]  successfully created addon
+2024-11-12 17:32:24 [ℹ]  creating addon
+2024-11-12 17:32:24 [ℹ]  successfully created addon
+2024-11-12 17:32:25 [!]  recommended policies were found for "vpc-cni" addon, but since OIDC is disabled on the cluster, eksctl cannot configure the requested permissions; the recommended way to provide IAM permissions for "vpc-cni" addon is via pod identity associations; after addon creation is completed, add all recommended policies to the config file, under `addon.PodIdentityAssociations`, and run `eksctl update addon`
+2024-11-12 17:32:25 [ℹ]  creating addon
+2024-11-12 17:32:26 [ℹ]  successfully created addon
+2024-11-12 17:34:32 [ℹ]  deploying stack "eksctl-joem-avs-secure-addon-vpc-cni"
+2024-11-12 17:34:33 [ℹ]  waiting for CloudFormation stack "eksctl-joem-avs-secure-addon-vpc-cni"
+2024-11-12 17:35:04 [ℹ]  waiting for CloudFormation stack "eksctl-joem-avs-secure-addon-vpc-cni"
+2024-11-12 17:35:04 [ℹ]  updating addon
+2024-11-12 17:35:15 [ℹ]  addon "vpc-cni" active
+2024-11-12 17:35:15 [ℹ]  waiting for the control plane to become ready
+2024-11-12 17:35:15 [✔]  saved kubeconfig as "/home/joem/.kube/config"
+2024-11-12 17:35:15 [ℹ]  no tasks
+2024-11-12 17:35:15 [✔]  all EKS cluster resources for "joem-avs-secure" have been created
+2024-11-12 17:35:15 [✔]  created 0 nodegroup(s) in cluster "joem-avs-secure"
+2024-11-12 17:35:15 [✔]  created 0 managed nodegroup(s) in cluster "joem-avs-secure"
+2024-11-12 17:35:16 [ℹ]  kubectl command should work with "/home/joem/.kube/config", try 'kubectl get nodes'
+2024-11-12 17:35:16 [✔]  EKS cluster "joem-avs-secure" in "eu-central-1" region is ready
++ echo 'EKS cluster created successfully.'
+EKS cluster created successfully.
++ eksctl create addon --name aws-ebs-csi-driver --cluster joem-avs-secure --region eu-central-1 --profile default --force
+2024-11-12 17:35:19 [ℹ]  Kubernetes version "1.30" in use by cluster "joem-avs-secure"
+2024-11-12 17:35:19 [!]  IRSA has been deprecated; the recommended way to provide IAM permissions for "aws-ebs-csi-driver" addon is via pod identity associations; after addon creation is completed, run `eksctl utils migrate-to-pod-identity`
+2024-11-12 17:35:19 [ℹ]  creating role using recommended policies for "aws-ebs-csi-driver" addon
+2024-11-12 17:35:20 [ℹ]  deploying stack "eksctl-joem-avs-secure-addon-aws-ebs-csi-driver"
+2024-11-12 17:35:21 [ℹ]  waiting for CloudFormation stack "eksctl-joem-avs-secure-addon-aws-ebs-csi-driver"
+2024-11-12 17:35:51 [ℹ]  waiting for CloudFormation stack "eksctl-joem-avs-secure-addon-aws-ebs-csi-driver"
+2024-11-12 17:36:49 [ℹ]  waiting for CloudFormation stack "eksctl-joem-avs-secure-addon-aws-ebs-csi-driver"
+2024-11-12 17:36:49 [ℹ]  creating addon
++ echo 'Creating Aerospike node pool...'
+Creating Aerospike node pool...
++ eksctl create nodegroup --cluster joem-avs-secure --name aerospike-pool --node-type m5dn.xlarge --nodes 3 --nodes-min 3 --nodes-max 3 --region eu-central-1 --profile default --node-volume-size 100 --node-volume-type gp2 --managed
+2024-11-12 17:36:52 [ℹ]  will use version 1.30 for new nodegroup(s) based on control plane version
+2024-11-12 17:36:57 [ℹ]  nodegroup "aerospike-pool" will use "" [AmazonLinux2/1.30]
+2024-11-12 17:36:59 [ℹ]  1 nodegroup (aerospike-pool) was included (based on the include/exclude rules)
+2024-11-12 17:36:59 [ℹ]  will create a CloudFormation stack for each of 1 managed nodegroups in cluster "joem-avs-secure"
+2024-11-12 17:37:00 [ℹ]  
+2 sequential tasks: { fix cluster compatibility, 1 task: { 1 task: { create managed nodegroup "aerospike-pool" } } 
+}
+2024-11-12 17:37:00 [ℹ]  checking cluster stack for missing resources
+2024-11-12 17:37:01 [ℹ]  cluster stack has all required resources
+2024-11-12 17:37:03 [ℹ]  building managed nodegroup stack "eksctl-joem-avs-secure-nodegroup-aerospike-pool"
+2024-11-12 17:37:03 [ℹ]  deploying stack "eksctl-joem-avs-secure-nodegroup-aerospike-pool"
+2024-11-12 17:37:04 [ℹ]  waiting for CloudFormation stack "eksctl-joem-avs-secure-nodegroup-aerospike-pool"
+2024-11-12 17:37:34 [ℹ]  waiting for CloudFormation stack "eksctl-joem-avs-secure-nodegroup-aerospike-pool"
+2024-11-12 17:38:15 [ℹ]  waiting for CloudFormation stack "eksctl-joem-avs-secure-nodegroup-aerospike-pool"
+2024-11-12 17:39:23 [ℹ]  waiting for CloudFormation stack "eksctl-joem-avs-secure-nodegroup-aerospike-pool"
+2024-11-12 17:39:23 [ℹ]  no tasks
+2024-11-12 17:39:23 [✔]  created 0 nodegroup(s) in cluster "joem-avs-secure"
+2024-11-12 17:39:24 [ℹ]  nodegroup "aerospike-pool" has 3 node(s)
+2024-11-12 17:39:24 [ℹ]  node "ip-192-168-30-3.eu-central-1.compute.internal" is ready
+2024-11-12 17:39:24 [ℹ]  node "ip-192-168-55-125.eu-central-1.compute.internal" is ready
+2024-11-12 17:39:24 [ℹ]  node "ip-192-168-64-180.eu-central-1.compute.internal" is ready
+2024-11-12 17:39:24 [ℹ]  waiting for at least 3 node(s) to become ready in "aerospike-pool"
+2024-11-12 17:39:25 [ℹ]  nodegroup "aerospike-pool" has 3 node(s)
+2024-11-12 17:39:25 [ℹ]  node "ip-192-168-30-3.eu-central-1.compute.internal" is ready
+2024-11-12 17:39:25 [ℹ]  node "ip-192-168-55-125.eu-central-1.compute.internal" is ready
+2024-11-12 17:39:25 [ℹ]  node "ip-192-168-64-180.eu-central-1.compute.internal" is ready
+2024-11-12 17:39:25 [✔]  created 1 managed nodegroup(s) in cluster "joem-avs-secure"
+2024-11-12 17:39:26 [ℹ]  checking security group configuration for all nodegroups
+2024-11-12 17:39:26 [ℹ]  all nodegroups have up-to-date cloudformation templates
++ echo 'Aerospike node pool added successfully.'
+Aerospike node pool added successfully.
++ echo 'Labeling Aerospike nodes...'
+Labeling Aerospike nodes...
++ kubectl get nodes -l eks.amazonaws.com/nodegroup=aerospike-pool -o name
++ xargs -I '{}' kubectl label '{}' aerospike.com/node-pool=default-rack --overwrite
+node/ip-192-168-30-3.eu-central-1.compute.internal labeled
+node/ip-192-168-55-125.eu-central-1.compute.internal labeled
+node/ip-192-168-64-180.eu-central-1.compute.internal labeled
++ echo 'Adding AVS node pool...'
+Adding AVS node pool...
++ eksctl create nodegroup --cluster joem-avs-secure --name avs-pool --node-type m5dn.xlarge --nodes 3 --nodes-min 3 --nodes-max 3 --region eu-central-1 --profile default --node-volume-size 100 --node-volume-type gp2 --managed
+2024-11-12 17:39:37 [ℹ]  will use version 1.30 for new nodegroup(s) based on control plane version
+2024-11-12 17:39:43 [ℹ]  nodegroup "avs-pool" will use "" [AmazonLinux2/1.30]
+2024-11-12 17:39:47 [ℹ]  1 existing nodegroup(s) (aerospike-pool) will be excluded
+2024-11-12 17:39:47 [ℹ]  1 nodegroup (avs-pool) was included (based on the include/exclude rules)
+2024-11-12 17:39:47 [ℹ]  will create a CloudFormation stack for each of 1 managed nodegroups in cluster "joem-avs-secure"
+2024-11-12 17:39:48 [ℹ]  
+2 sequential tasks: { fix cluster compatibility, 1 task: { 1 task: { create managed nodegroup "avs-pool" } } 
+}
+2024-11-12 17:39:48 [ℹ]  checking cluster stack for missing resources
+2024-11-12 17:39:49 [ℹ]  cluster stack has all required resources
+2024-11-12 17:39:51 [ℹ]  building managed nodegroup stack "eksctl-joem-avs-secure-nodegroup-avs-pool"
+2024-11-12 17:39:52 [ℹ]  deploying stack "eksctl-joem-avs-secure-nodegroup-avs-pool"
+2024-11-12 17:39:52 [ℹ]  waiting for CloudFormation stack "eksctl-joem-avs-secure-nodegroup-avs-pool"
+2024-11-12 17:40:23 [ℹ]  waiting for CloudFormation stack "eksctl-joem-avs-secure-nodegroup-avs-pool"
+2024-11-12 17:40:55 [ℹ]  waiting for CloudFormation stack "eksctl-joem-avs-secure-nodegroup-avs-pool"
+2024-11-12 17:42:06 [ℹ]  waiting for CloudFormation stack "eksctl-joem-avs-secure-nodegroup-avs-pool"
+2024-11-12 17:42:08 [ℹ]  no tasks
+2024-11-12 17:42:08 [✔]  created 0 nodegroup(s) in cluster "joem-avs-secure"
+2024-11-12 17:42:09 [ℹ]  nodegroup "avs-pool" has 3 node(s)
+2024-11-12 17:42:09 [ℹ]  node "ip-192-168-18-214.eu-central-1.compute.internal" is ready
+2024-11-12 17:42:09 [ℹ]  node "ip-192-168-60-46.eu-central-1.compute.internal" is ready
+2024-11-12 17:42:09 [ℹ]  node "ip-192-168-82-234.eu-central-1.compute.internal" is ready
+2024-11-12 17:42:09 [ℹ]  waiting for at least 3 node(s) to become ready in "avs-pool"
+2024-11-12 17:42:09 [ℹ]  nodegroup "avs-pool" has 3 node(s)
+2024-11-12 17:42:09 [ℹ]  node "ip-192-168-18-214.eu-central-1.compute.internal" is ready
+2024-11-12 17:42:09 [ℹ]  node "ip-192-168-60-46.eu-central-1.compute.internal" is ready
+2024-11-12 17:42:09 [ℹ]  node "ip-192-168-82-234.eu-central-1.compute.internal" is ready
+2024-11-12 17:42:09 [✔]  created 1 managed nodegroup(s) in cluster "joem-avs-secure"
+2024-11-12 17:42:16 [ℹ]  checking security group configuration for all nodegroups
+2024-11-12 17:42:16 [ℹ]  all nodegroups have up-to-date cloudformation templates
++ echo 'AVS node pool added successfully.'
+AVS node pool added successfully.
++ echo 'Labeling AVS nodes...'
+Labeling AVS nodes...
++ kubectl get nodes -l eks.amazonaws.com/nodegroup=avs-pool -o name
++ xargs -I '{}' kubectl label '{}' aerospike.com/node-pool=avs --overwrite
+node/ip-192-168-18-214.eu-central-1.compute.internal labeled
+node/ip-192-168-60-46.eu-central-1.compute.internal labeled
+node/ip-192-168-82-234.eu-central-1.compute.internal labeled
++ echo 'Setting up namespaces...'
+Setting up namespaces...
++ kubectl create namespace aerospike
+namespace/aerospike created
++ kubectl create namespace avs
+namespace/avs created
++ deploy_istio
++ echo 'Deploying Istio'
+Deploying Istio
++ helm repo add istio https://istio-release.storage.googleapis.com/charts
+"istio" already exists with the same configuration, skipping
++ helm repo update
+Hang tight while we grab the latest from your chart repositories...
+...Successfully got an update from the "istio" chart repository
+...Successfully got an update from the "aerospike-helm" chart repository
+...Successfully got an update from the "jetstack" chart repository
+...Successfully got an update from the "prometheus-community" chart repository
+...Successfully got an update from the "stable" chart repository
+Update Complete. ⎈Happy Helming!⎈
++ helm install istio-base istio/base --namespace istio-system --set defaultRevision=default --create-namespace --wait
+NAME: istio-base
+LAST DEPLOYED: Tue Nov 12 17:42:34 2024
+NAMESPACE: istio-system
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+Istio base successfully installed!
+
+To learn more about the release, try:
+  $ helm status istio-base -n istio-system
+  $ helm get all istio-base -n istio-system
++ helm install istiod istio/istiod --namespace istio-system --create-namespace --wait
+NAME: istiod
+LAST DEPLOYED: Tue Nov 12 17:42:54 2024
+NAMESPACE: istio-system
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+"istiod" successfully installed!
+
+To learn more about the release, try:
+  $ helm status istiod -n istio-system
+  $ helm get all istiod -n istio-system
+
+Next steps:
+  * Deploy a Gateway: https://istio.io/latest/docs/setup/additional-setup/gateway/
+  * Try out our tasks to get started on common configurations:
+    * https://istio.io/latest/docs/tasks/traffic-management
+    * https://istio.io/latest/docs/tasks/security/
+    * https://istio.io/latest/docs/tasks/policy-enforcement/
+  * Review the list of actively supported releases, CVE publications and our hardening guide:
+    * https://istio.io/latest/docs/releases/supported-releases/
+    * https://istio.io/latest/news/security/
+    * https://istio.io/latest/docs/ops/best-practices/security/
+
+For further documentation see https://istio.io website
++ helm install istio-ingress istio/gateway --values ./manifests/istio/istio-ingressgateway-values.yaml --namespace istio-ingress --create-namespace --wait
+NAME: istio-ingress
+LAST DEPLOYED: Tue Nov 12 17:43:15 2024
+NAMESPACE: istio-ingress
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+"istio-ingress" successfully installed!
+
+To learn more about the release, try:
+  $ helm status istio-ingress -n istio-ingress
+  $ helm get all istio-ingress -n istio-ingress
+
+Next steps:
+  * Deploy an HTTP Gateway: https://istio.io/latest/docs/tasks/traffic-management/ingress/ingress-control/
+  * Deploy an HTTPS Gateway: https://istio.io/latest/docs/tasks/traffic-management/ingress/secure-ingress/
++ kubectl apply -f manifests/istio/gateway.yaml
+gateway.networking.istio.io/avs-gw created
++ kubectl apply -f manifests/istio/avs-virtual-service.yaml
+virtualservice.networking.istio.io/avs-vs created
++ get_reverse_dns
+++ kubectl get svc istio-ingress -n istio-ingress -o 'jsonpath={.status.loadBalancer.ingress[0].hostname}'
++ REVERSE_DNS_AVS=a392672ac93974ff7aff90ce248a0daf-a96448fff4f0cc23.elb.eu-central-1.amazonaws.com
++ echo 'Hostname DNS: a392672ac93974ff7aff90ce248a0daf-a96448fff4f0cc23.elb.eu-central-1.amazonaws.com'
+Hostname DNS: a392672ac93974ff7aff90ce248a0daf-a96448fff4f0cc23.elb.eu-central-1.amazonaws.com
++ [[ '' != 1 ]]
++ generate_certs
++ echo 'Generating certificates...'
+Generating certificates...
++ echo 'Generate Root'
+Generate Root
++ openssl genrsa -out /home/joem/src/aerospike-vector/kubernetes/generated/output/ca.aerospike.com.key 2048
++ openssl req -x509 -new -nodes -config /home/joem/src/aerospike-vector/kubernetes/ssl/openssl_ca.conf -extensions v3_ca -key /home/joem/src/aerospike-vector/kubernetes/generated/output/ca.aerospike.com.key -sha256 -days 3650 -out /home/joem/src/aerospike-vector/kubernetes/generated/output/ca.aerospike.com.pem -subj /C=UK/ST=London/L=London/O=abs/OU=Support/CN=ca.aerospike.com
++ echo 'Generate Requests & Private Key'
+Generate Requests & Private Key
++ SVC_NAME=aerospike-cluster.aerospike.svc.cluster.local
++ COMMON_NAME=asd.aerospike.com
++ openssl req -new -nodes -config /home/joem/src/aerospike-vector/kubernetes/ssl/openssl.conf -extensions v3_req -out /home/joem/src/aerospike-vector/kubernetes/generated/input/asd.aerospike.com.req -keyout /home/joem/src/aerospike-vector/kubernetes/generated/output/asd.aerospike.com.key -subj /C=UK/ST=London/L=London/O=abs/OU=Server/CN=asd.aerospike.com
+.......+.....+............+......+..........+..+.......+........+.+......+.....+....+..+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*.....+.+.....+....+............+.........+...+........+.......+......+.....+....+..+....+......+........+...+...+....+..+...+......+............+...+................+...+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*.........+.....+...+....+........+.......+...........+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+.......+.........+..........+..+.......+...+..+......+................+...+..+.+.....+...+......+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*.........+..+..........+.....+....+...+......+.....+....+.....+..........+........+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*..+.........+....+......+.........+......+..+..........+.........+.....+..........+.....+..............................+.....................+.........+...+...+.......+......+.........+..+.+........+.+.....+.+............+...........+....+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+-----
++ SVC_NAME=avs-app-aerospike-vector-search.aerospike.svc.cluster.local
++ COMMON_NAME=avs.aerospike.com
++ openssl req -new -nodes -config /home/joem/src/aerospike-vector/kubernetes/ssl/openssl.conf -extensions v3_req -out /home/joem/src/aerospike-vector/kubernetes/generated/input/avs.aerospike.com.req -keyout /home/joem/src/aerospike-vector/kubernetes/generated/output/avs.aerospike.com.key -subj /C=UK/ST=London/L=London/O=abs/OU=Client/CN=avs.aerospike.com
+.+...........+....+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*...+....+...+...+........+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*........+.....+...+.+.........+...+.....+....+.....+.........+......+...+......+.+.....+.+..+...+...+....+...+............+...+..+.......+...........+....+...+......+.....+.......+..+.......+......+..+...+...+......+.+..................+..+.............+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+.....+...+......+....+..+.......+.....+.......+...+......+..+....+......+..+.+.....+......+....+.....+.+.....+...+...+.............+.....+....+..+...+.+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*...+...............+............+...+......+...+.......+...+......+............+...+..+....+......+..+.......+.........+.....+....+.....+..........+........+.......+........+.......+.....+.+......+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*......+..+......+...+......+...................+.........+..+......+....+......+..+.+..+...+...............+.+.........+.................+...+...............+.......+...+......+........+...+.......+...+..+................+...........+.+..+.+......+.....+......+...+....+...........+............+.............+..+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+-----
++ SVC_NAME=avs-app-aerospike-vector-search.aerospike.svc.cluster.local
++ COMMON_NAME=svc.aerospike.com
++ openssl req -new -nodes -config /home/joem/src/aerospike-vector/kubernetes/ssl/openssl_svc.conf -extensions v3_req -out /home/joem/src/aerospike-vector/kubernetes/generated/input/svc.aerospike.com.req -keyout /home/joem/src/aerospike-vector/kubernetes/generated/output/svc.aerospike.com.key -subj /C=UK/ST=London/L=London/O=abs/OU=Client/CN=svc.aerospike.com
+.....+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*...+....+.....+....+...+..+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*..+..+......+............+.......+.....+...+.......+...........+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+.........+.....+.+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*..+......+.........+...+..+.........+....+...+............+........+.........+...+...+....+......+..+......+.........+.+......+.....+.+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*......+.....+...+.+..+..........+.....+.........+...+.+......+.....+.+............+...+..+......+....+......+.........+...+...+...........+..........+...+.....+......+.......+..+.+.....+.+.........+..+...+.+.....+......+.........+.+.....+.........+.............+..+......+...+.+...........+...+....+...+...+...........+.............+..+...............+...............+.............+..+.........+.+......+...+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+-----
++ echo 'Generate Certificates'
+Generate Certificates
++ SVC_NAME=aerospike-cluster.aerospike.svc.cluster.local
++ COMMON_NAME=asd.aerospike.com
++ openssl x509 -req -extfile /home/joem/src/aerospike-vector/kubernetes/ssl/openssl.conf -in /home/joem/src/aerospike-vector/kubernetes/generated/input/asd.aerospike.com.req -CA /home/joem/src/aerospike-vector/kubernetes/generated/output/ca.aerospike.com.pem -CAkey /home/joem/src/aerospike-vector/kubernetes/generated/output/ca.aerospike.com.key -extensions v3_req -days 3649 -outform PEM -out /home/joem/src/aerospike-vector/kubernetes/generated/output/asd.aerospike.com.pem -set_serial 110
+Certificate request self-signature ok
+subject=C = UK, ST = London, L = London, O = abs, OU = Server, CN = asd.aerospike.com
++ SVC_NAME=avs-app-aerospike-vector-search.aerospike.svc.cluster.local
++ COMMON_NAME=avs.aerospike.com
++ openssl x509 -req -extfile /home/joem/src/aerospike-vector/kubernetes/ssl/openssl.conf -in /home/joem/src/aerospike-vector/kubernetes/generated/input/avs.aerospike.com.req -CA /home/joem/src/aerospike-vector/kubernetes/generated/output/ca.aerospike.com.pem -CAkey /home/joem/src/aerospike-vector/kubernetes/generated/output/ca.aerospike.com.key -extensions v3_req -days 3649 -outform PEM -out /home/joem/src/aerospike-vector/kubernetes/generated/output/avs.aerospike.com.pem -set_serial 210
+Certificate request self-signature ok
+subject=C = UK, ST = London, L = London, O = abs, OU = Client, CN = avs.aerospike.com
++ SVC_NAME=avs-app-aerospike-vector-search.aerospike.svc.cluster.local
++ COMMON_NAME=svc.aerospike.com
++ openssl x509 -req -extfile /home/joem/src/aerospike-vector/kubernetes/ssl/openssl_svc.conf -in /home/joem/src/aerospike-vector/kubernetes/generated/input/svc.aerospike.com.req -CA /home/joem/src/aerospike-vector/kubernetes/generated/output/ca.aerospike.com.pem -CAkey /home/joem/src/aerospike-vector/kubernetes/generated/output/ca.aerospike.com.key -extensions v3_req -days 3649 -outform PEM -out /home/joem/src/aerospike-vector/kubernetes/generated/output/svc.aerospike.com.pem -set_serial 310
+Certificate request self-signature ok
+subject=C = UK, ST = London, L = London, O = abs, OU = Client, CN = svc.aerospike.com
++ echo 'Verify Certificate signed by root'
+Verify Certificate signed by root
++ openssl verify -verbose -CAfile /home/joem/src/aerospike-vector/kubernetes/generated/output/ca.aerospike.com.pem /home/joem/src/aerospike-vector/kubernetes/generated/output/asd.aerospike.com.pem
+/home/joem/src/aerospike-vector/kubernetes/generated/output/asd.aerospike.com.pem: OK
++ openssl verify -verbose -CAfile /home/joem/src/aerospike-vector/kubernetes/generated/output/ca.aerospike.com.pem /home/joem/src/aerospike-vector/kubernetes/generated/output/asd.aerospike.com.pem
+/home/joem/src/aerospike-vector/kubernetes/generated/output/asd.aerospike.com.pem: OK
++ openssl verify -verbose -CAfile /home/joem/src/aerospike-vector/kubernetes/generated/output/ca.aerospike.com.pem /home/joem/src/aerospike-vector/kubernetes/generated/output/svc.aerospike.com.pem
+/home/joem/src/aerospike-vector/kubernetes/generated/output/svc.aerospike.com.pem: OK
++ PASSWORD=citrusstore
++ echo -n citrusstore
++ tee /home/joem/src/aerospike-vector/kubernetes/generated/output/storepass /home/joem/src/aerospike-vector/kubernetes/generated/output/keypass
++ ADMIN_PASSWORD=admin123
++ echo -n admin123
++ keytool -import -file /home/joem/src/aerospike-vector/kubernetes/generated/output/ca.aerospike.com.pem --storepass citrusstore -keystore /home/joem/src/aerospike-vector/kubernetes/generated/output/ca.aerospike.com.truststore.jks -alias ca.aerospike.com -noprompt
+Certificate was added to keystore
++ openssl pkcs12 -export -out /home/joem/src/aerospike-vector/kubernetes/generated/output/avs.aerospike.com.p12 -in /home/joem/src/aerospike-vector/kubernetes/generated/output/avs.aerospike.com.pem -inkey /home/joem/src/aerospike-vector/kubernetes/generated/output/avs.aerospike.com.key -password file:/home/joem/src/aerospike-vector/kubernetes/generated/output/storepass
+++ cat /home/joem/src/aerospike-vector/kubernetes/generated/output/storepass
+++ cat /home/joem/src/aerospike-vector/kubernetes/generated/output/storepass
++ keytool -importkeystore -srckeystore /home/joem/src/aerospike-vector/kubernetes/generated/output/avs.aerospike.com.p12 -destkeystore /home/joem/src/aerospike-vector/kubernetes/generated/output/avs.aerospike.com.keystore.jks -srcstoretype pkcs12 -srcstorepass citrusstore -deststorepass citrusstore -noprompt
+Importing keystore /home/joem/src/aerospike-vector/kubernetes/generated/output/avs.aerospike.com.p12 to /home/joem/src/aerospike-vector/kubernetes/generated/output/avs.aerospike.com.keystore.jks...
+Entry for alias 1 successfully imported.
+Import command completed:  1 entries successfully imported, 0 entries failed or cancelled
++ openssl pkcs12 -export -out /home/joem/src/aerospike-vector/kubernetes/generated/output/svc.aerospike.com.p12 -in /home/joem/src/aerospike-vector/kubernetes/generated/output/svc.aerospike.com.pem -inkey /home/joem/src/aerospike-vector/kubernetes/generated/output/svc.aerospike.com.key -password file:/home/joem/src/aerospike-vector/kubernetes/generated/output/storepass
+++ cat /home/joem/src/aerospike-vector/kubernetes/generated/output/storepass
+++ cat /home/joem/src/aerospike-vector/kubernetes/generated/output/storepass
++ keytool -importkeystore -srckeystore /home/joem/src/aerospike-vector/kubernetes/generated/output/svc.aerospike.com.p12 -destkeystore /home/joem/src/aerospike-vector/kubernetes/generated/output/svc.aerospike.com.keystore.jks -srcstoretype pkcs12 -srcstorepass citrusstore -deststorepass citrusstore -noprompt
+Importing keystore /home/joem/src/aerospike-vector/kubernetes/generated/output/svc.aerospike.com.p12 to /home/joem/src/aerospike-vector/kubernetes/generated/output/svc.aerospike.com.keystore.jks...
+Entry for alias 1 successfully imported.
+Import command completed:  1 entries successfully imported, 0 entries failed or cancelled
++ mv /home/joem/src/aerospike-vector/kubernetes/generated/output/svc.aerospike.com.keystore.jks /home/joem/src/aerospike-vector/kubernetes/generated/certs/svc.aerospike.com.keystore.jks
++ mv /home/joem/src/aerospike-vector/kubernetes/generated/output/avs.aerospike.com.keystore.jks /home/joem/src/aerospike-vector/kubernetes/generated/certs/avs.aerospike.com.keystore.jks
++ mv /home/joem/src/aerospike-vector/kubernetes/generated/output/ca.aerospike.com.truststore.jks /home/joem/src/aerospike-vector/kubernetes/generated/certs/ca.aerospike.com.truststore.jks
++ mv /home/joem/src/aerospike-vector/kubernetes/generated/output/asd.aerospike.com.pem /home/joem/src/aerospike-vector/kubernetes/generated/certs/asd.aerospike.com.pem
++ mv /home/joem/src/aerospike-vector/kubernetes/generated/output/avs.aerospike.com.pem /home/joem/src/aerospike-vector/kubernetes/generated/certs/avs.aerospike.com.pem
++ mv /home/joem/src/aerospike-vector/kubernetes/generated/output/svc.aerospike.com.pem /home/joem/src/aerospike-vector/kubernetes/generated/certs/svc.aerospike.com.pem
++ mv /home/joem/src/aerospike-vector/kubernetes/generated/output/asd.aerospike.com.key /home/joem/src/aerospike-vector/kubernetes/generated/certs/asd.aerospike.com.key
++ mv /home/joem/src/aerospike-vector/kubernetes/generated/output/ca.aerospike.com.pem /home/joem/src/aerospike-vector/kubernetes/generated/certs/ca.aerospike.com.pem
++ mv /home/joem/src/aerospike-vector/kubernetes/generated/output/keypass /home/joem/src/aerospike-vector/kubernetes/generated/certs/keypass
++ mv /home/joem/src/aerospike-vector/kubernetes/generated/output/storepass /home/joem/src/aerospike-vector/kubernetes/generated/certs/storepass
++ echo 'Generate Auth Keys'
+Generate Auth Keys
++ openssl genpkey -algorithm RSA -out /home/joem/src/aerospike-vector/kubernetes/generated/secrets/private_key.pem -pkeyopt rsa_keygen_bits:2048 -pass pass:citrusstore
+....+......+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*.......+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*.....+........+.........+......+....+...+..+.........+....+......+..+.........+.+...+.....+............+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+.+............+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*...+.......+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*......+....+......+.....+......+.......+.....+.+..+...................+...............+...+.....+............+....+..+...+........................+...+.......+...+..+.......+...+..+.+..+.+...........+....+............+.....+...+.+.....+......+...+.......+..+...+.........+...+...+...+....+...+........+.......+.........+...........+...+.+.....+.+..+...+...........................+...............+................+.....+....+......+...........+.+...+.....+.+........+...+...+.+...+...+..............+...+............+....+....................+....+...+..+............+.....................+....+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ openssl rsa -pubout -in /home/joem/src/aerospike-vector/kubernetes/generated/secrets/private_key.pem -out /home/joem/src/aerospike-vector/kubernetes/generated/secrets/public_key.pem -passin pass:citrusstore
+writing RSA key
++ setup_aerospike
++ echo 'Deploying Aerospike Kubernetes Operator (AKO)...'
+Deploying Aerospike Kubernetes Operator (AKO)...
++ curl -sL https://github.com/operator-framework/operator-lifecycle-manager/releases/download/v0.25.0/install.sh
++ bash -s v0.25.0
+customresourcedefinition.apiextensions.k8s.io/catalogsources.operators.coreos.com created
+customresourcedefinition.apiextensions.k8s.io/clusterserviceversions.operators.coreos.com created
+customresourcedefinition.apiextensions.k8s.io/installplans.operators.coreos.com created
+customresourcedefinition.apiextensions.k8s.io/olmconfigs.operators.coreos.com created
+customresourcedefinition.apiextensions.k8s.io/operatorconditions.operators.coreos.com created
+customresourcedefinition.apiextensions.k8s.io/operatorgroups.operators.coreos.com created
+customresourcedefinition.apiextensions.k8s.io/operators.operators.coreos.com created
+customresourcedefinition.apiextensions.k8s.io/subscriptions.operators.coreos.com created
+customresourcedefinition.apiextensions.k8s.io/catalogsources.operators.coreos.com condition met
+customresourcedefinition.apiextensions.k8s.io/clusterserviceversions.operators.coreos.com condition met
+customresourcedefinition.apiextensions.k8s.io/installplans.operators.coreos.com condition met
+customresourcedefinition.apiextensions.k8s.io/olmconfigs.operators.coreos.com condition met
+customresourcedefinition.apiextensions.k8s.io/operatorconditions.operators.coreos.com condition met
+customresourcedefinition.apiextensions.k8s.io/operatorgroups.operators.coreos.com condition met
+customresourcedefinition.apiextensions.k8s.io/operators.operators.coreos.com condition met
+customresourcedefinition.apiextensions.k8s.io/subscriptions.operators.coreos.com condition met
+namespace/olm created
+namespace/operators created
+serviceaccount/olm-operator-serviceaccount created
+clusterrole.rbac.authorization.k8s.io/system:controller:operator-lifecycle-manager created
+clusterrolebinding.rbac.authorization.k8s.io/olm-operator-binding-olm created
+olmconfig.operators.coreos.com/cluster created
+deployment.apps/olm-operator created
+deployment.apps/catalog-operator created
+clusterrole.rbac.authorization.k8s.io/aggregate-olm-edit created
+clusterrole.rbac.authorization.k8s.io/aggregate-olm-view created
+operatorgroup.operators.coreos.com/global-operators created
+operatorgroup.operators.coreos.com/olm-operators created
+clusterserviceversion.operators.coreos.com/packageserver created
+catalogsource.operators.coreos.com/operatorhubio-catalog created
+Waiting for deployment "olm-operator" rollout to finish: 0 of 1 updated replicas are available...
+deployment "olm-operator" successfully rolled out
+deployment "catalog-operator" successfully rolled out
+Package server phase: Installing
+Package server phase: Succeeded
+Waiting for deployment "packageserver" rollout to finish: 1 of 2 updated replicas are available...
+deployment "packageserver" successfully rolled out
++ kubectl create -f https://operatorhub.io/install/aerospike-kubernetes-operator.yaml
+subscription.operators.coreos.com/my-aerospike-kubernetes-operator created
++ echo 'Waiting for AKO to be ready...'
+Waiting for AKO to be ready...
++ true
++ kubectl --namespace operators get deployment/aerospike-operator-controller-manager
++ echo 'AKO setup is still in progress...'
+AKO setup is still in progress...
++ sleep 10
++ true
++ kubectl --namespace operators get deployment/aerospike-operator-controller-manager
++ echo 'AKO setup is still in progress...'
+AKO setup is still in progress...
++ sleep 10
++ true
++ kubectl --namespace operators get deployment/aerospike-operator-controller-manager
++ echo 'AKO setup is still in progress...'
+AKO setup is still in progress...
++ sleep 10
++ true
++ kubectl --namespace operators get deployment/aerospike-operator-controller-manager
++ echo 'AKO setup is still in progress...'
+AKO setup is still in progress...
++ sleep 10
++ true
++ kubectl --namespace operators get deployment/aerospike-operator-controller-manager
++ echo 'AKO is ready.'
+AKO is ready.
++ kubectl --namespace operators wait --for=condition=available --timeout=180s deployment/aerospike-operator-controller-manager
+deployment.apps/aerospike-operator-controller-manager condition met
++ break
++ echo 'Granting permissions to the target namespace...'
+Granting permissions to the target namespace...
++ kubectl --namespace aerospike create serviceaccount aerospike-operator-controller-manager
+serviceaccount/aerospike-operator-controller-manager created
++ kubectl create clusterrolebinding aerospike-cluster --clusterrole=aerospike-cluster --serviceaccount=aerospike:aerospike-operator-controller-manager
+clusterrolebinding.rbac.authorization.k8s.io/aerospike-cluster created
++ echo 'Setting secrets for Aerospike cluster...'
+Setting secrets for Aerospike cluster...
++ kubectl --namespace aerospike create secret generic aerospike-secret --from-file=/home/joem/src/aerospike-vector/kubernetes/generated/secrets
+secret/aerospike-secret created
++ kubectl --namespace aerospike create secret generic auth-secret --from-literal=password=admin123
+secret/auth-secret created
++ kubectl --namespace aerospike create secret generic aerospike-tls --from-file=/home/joem/src/aerospike-vector/kubernetes/generated/certs
+secret/aerospike-tls created
++ echo 'Adding storage class...'
+Adding storage class...
++ kubectl apply -f https://raw.githubusercontent.com/aerospike/aerospike-kubernetes-operator/refs/heads/master/config/samples/storage/eks_ssd_storage_class.yaml
+storageclass.storage.k8s.io/ssd created
++ echo 'Deploying Aerospike cluster...'
+Deploying Aerospike cluster...
++ kubectl apply -f /home/joem/src/aerospike-vector/kubernetes/generated/manifests/aerospike-cr.yaml
+aerospikecluster.asdb.aerospike.com/aerocluster created
++ setup_avs
++ echo 'Setting secrets for AVS cluster...'
+Setting secrets for AVS cluster...
++ kubectl --namespace avs create secret generic auth-secret --from-literal=password=admin123
+secret/auth-secret created
++ kubectl --namespace avs create secret generic aerospike-tls --from-file=/home/joem/src/aerospike-vector/kubernetes/generated/certs
+secret/aerospike-tls created
++ kubectl --namespace avs create secret generic aerospike-secret --from-file=/home/joem/src/aerospike-vector/kubernetes/generated/secrets
+secret/aerospike-secret created
++ deploy_avs_helm_chart
++ echo 'Deploying AVS Helm chart...'
+Deploying AVS Helm chart...
++ helm repo add aerospike-helm https://artifact.aerospike.io/artifactory/api/helm/aerospike-helm
+"aerospike-helm" already exists with the same configuration, skipping
++ helm repo update
+Hang tight while we grab the latest from your chart repositories...
+...Successfully got an update from the "istio" chart repository
+...Successfully got an update from the "aerospike-helm" chart repository
+...Successfully got an update from the "prometheus-community" chart repository
+...Successfully got an update from the "stable" chart repository
+...Successfully got an update from the "jetstack" chart repository
+Update Complete. ⎈Happy Helming!⎈
++ '[' -z '' ']'
++ helm install avs-app --values /home/joem/src/aerospike-vector/kubernetes/generated/manifests/avs-values.yaml --namespace avs aerospike-helm/aerospike-vector-search --version 0.6.0 --wait
+NAME: avs-app
+LAST DEPLOYED: Tue Nov 12 17:45:28 2024
+NAMESPACE: avs
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+
++ setup_monitoring
++ echo 'Adding monitoring setup...'
+Adding monitoring setup...
++ helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+"prometheus-community" already exists with the same configuration, skipping
++ helm repo update
+Hang tight while we grab the latest from your chart repositories...
+...Successfully got an update from the "istio" chart repository
+...Successfully got an update from the "aerospike-helm" chart repository
+...Successfully got an update from the "jetstack" chart repository
+...Successfully got an update from the "prometheus-community" chart repository
+...Successfully got an update from the "stable" chart repository
+Update Complete. ⎈Happy Helming!⎈
++ helm install monitoring-stack prometheus-community/kube-prometheus-stack --namespace monitoring --create-namespace
+NAME: monitoring-stack
+LAST DEPLOYED: Tue Nov 12 17:46:12 2024
+NAMESPACE: monitoring
+STATUS: deployed
+REVISION: 1
+NOTES:
+kube-prometheus-stack has been installed. Check its status by running:
+  kubectl --namespace monitoring get pods -l "release=monitoring-stack"
+
+Visit https://github.com/prometheus-operator/kube-prometheus for instructions on how to create & configure Alertmanager and Prometheus instances using the Operator.
++ echo 'Applying additional monitoring manifests...'
+Applying additional monitoring manifests...
++ kubectl apply -f manifests/monitoring/aerospike-exporter-service.yaml
+service/aerospike-exporter created
++ kubectl apply -f manifests/monitoring/aerospike-servicemonitor.yaml
+servicemonitor.monitoring.coreos.com/aerospike-monitor created
++ kubectl apply -f manifests/monitoring/avs-servicemonitor.yaml
+servicemonitor.monitoring.coreos.com/avs-monitor created
++ print_final_instructions
++ echo Your new deployment is available at a392672ac93974ff7aff90ce248a0daf-a96448fff4f0cc23.elb.eu-central-1.amazonaws.com.
+Your new deployment is available at a392672ac93974ff7aff90ce248a0daf-a96448fff4f0cc23.elb.eu-central-1.amazonaws.com.
++ echo Check your deployment using our command line tool asvec available at https://github.com/aerospike/asvec.
+Check your deployment using our command line tool asvec available at https://github.com/aerospike/asvec.
++ [[ '' != 1 ]]
++ echo 'connect with asvec using cert '
+connect with asvec using cert 
++ cat /home/joem/src/aerospike-vector/kubernetes/generated/certs/ca.aerospike.com.pem
+-----BEGIN CERTIFICATE-----
+MIIDtTCCAp2gAwIBAgIUcJKnpGvliqTVvUfw/gp4hDDltigwDQYJKoZIhvcNAQEL
+BQAwajELMAkGA1UEBhMCVUsxDzANBgNVBAgMBkxvbmRvbjEPMA0GA1UEBwwGTG9u
+ZG9uMQwwCgYDVQQKDANhYnMxEDAOBgNVBAsMB1N1cHBvcnQxGTAXBgNVBAMMEGNh
+LmFlcm9zcGlrZS5jb20wHhcNMjQxMTEzMDE0MzMyWhcNMzQxMTExMDE0MzMyWjBq
+MQswCQYDVQQGEwJVSzEPMA0GA1UECAwGTG9uZG9uMQ8wDQYDVQQHDAZMb25kb24x
+DDAKBgNVBAoMA2FiczEQMA4GA1UECwwHU3VwcG9ydDEZMBcGA1UEAwwQY2EuYWVy
+b3NwaWtlLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKr3cU8X
+8pGbVv48DMWctDYW1sGv/GCX7Cb7NJQNtFOmPV6atZKXcPsaaGq0RVtwcluwOQZm
+LKTT9Nwc52OFqTlLrHr2siSwMAURMPPT/RsTabu/rqs5nXbucH5bpmWj8nLf5zxa
+lRQjUY1VJJz0apLJKedq5PeFHeIqBSDjSSvQEhUD7ulo/fgWn4Lwrlwji5cy2H1b
+OAamGO5POG2QEKB6CjgeoasZfptLA0pkLoT4KeAQky36+1v6yv422lpRidfkLgaF
+u/vD33BaptxPdbskYEiOPUJ0RsWmiu5By4ey95YILnu2oXwkpPxxDQgwpcmEMZjv
+kznXffSuOt3yTmcCAwEAAaNTMFEwHQYDVR0OBBYEFC2tQmqe+AvB/D2IFK0bGWSm
+DcuXMB8GA1UdIwQYMBaAFC2tQmqe+AvB/D2IFK0bGWSmDcuXMA8GA1UdEwEB/wQF
+MAMBAf8wDQYJKoZIhvcNAQELBQADggEBAJ3sACmNGHktNAt5XzBrgmNr9eIGzglZ
+8sWrrV5Gpr550iShOXbmePUAEK5xrMHNriBw7r0/XeJxrZpNoJPDaWsbP9kbyhJP
+IFV7GY8v/j0G68xbj6BfIMzIXJ2AdaAei1BFXUpYfT+uCKNT0zNtCzXyrxPwBvHv
+Um+elrFq75rS5Ds7d7haP3sl8wNkmr+Yqjf97wPBvKfFoNOCIfp6bBHCFzKRJGzf
+EeGyjbvEXWycWVO4PIAa0KiM/Bcd0Giced+sjD6fq6QbGveg55Kg49Be3cmwVZAO
+AJMw0W7eURKvSg5cCBQtOI8+3T9xFmYOuQnpu4YDoykVeFOdIkuvAwU=
+-----END CERTIFICATE-----
++ echo Use the asvec tool to change your password with
+Use the asvec tool to change your password with
++ echo asvec -h a392672ac93974ff7aff90ce248a0daf-a96448fff4f0cc23.elb.eu-central-1.amazonaws.com:5000 --tls-cafile path/to/tls/file -U admin -P admin user new-password --name admin --new-password your-new-password
+asvec -h a392672ac93974ff7aff90ce248a0daf-a96448fff4f0cc23.elb.eu-central-1.amazonaws.com:5000 --tls-cafile path/to/tls/file -U admin -P admin user new-password --name admin --new-password your-new-password
++ echo 'Setup Complete!'
+Setup Complete!

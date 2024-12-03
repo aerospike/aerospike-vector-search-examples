@@ -8,7 +8,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: avs-gke-aerospike-vector-search
+      app: avs-app-aerospike-vector-search
   namespaceSelector:
     matchNames:
       - avs
