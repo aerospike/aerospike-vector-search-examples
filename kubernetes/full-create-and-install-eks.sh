@@ -16,6 +16,7 @@ PROFILE="default"
 
 # Default values
 DEFAULT_CLUSTER_NAME_SUFFIX="avs"
+RUN_INSECURE=1  # Default value for insecure mode (false meaning secure with auth + tls)
 
 # Function to display the script usage
 usage() {
