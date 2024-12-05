@@ -44,14 +44,14 @@ services:
       - svc
 
 # Services used to monitor the Aerospike Vector Search cluster.
-# This collects basic usage metrics so that Aerospike can better understand AAVS is being used.
+# This collects basic usage metrics so that Aerospike can better understand AVS is being used.
 # If you would like to disable this, you can remove the following services.
 
   update-targets:
     image: python:3.9-alpine
     volumes:
-      - ./scripts/update_targets.py:/scripts/update_targets.py
-      - ./config:/config
+      - ../.internal/metrics/scripts/update_targets.py:/scripts/update_targets.py
+      - ../.internal/metrics/config:/config
     entrypoint: ["sh", "-c", "python3 /scripts/update_targets.py"]
     networks:
       - svc
@@ -59,7 +59,7 @@ services:
   prometheus:
     image: prom/prometheus:v2.45.0
     volumes:
-      - ./config:/etc/prometheus
+      - ../.internal/metrics/config:/etc/prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
     ports:
