@@ -12,10 +12,9 @@ WORKSPACE="$(pwd)"
 PROJECT_ID="$(gcloud config get-value project)"
 # Prepend the current username to the cluster name
 USERNAME=$(whoami)
-
+CHART_VERSION="0.7.0"
 # Default values
 DEFAULT_CLUSTER_NAME_SUFFIX="avs"
-RUN_INSECURE=1  # Default value for insecure mode (false meaning secure with auth + tls)
 
 # Function to display the script usage
 usage() {
@@ -23,7 +22,7 @@ usage() {
     echo "Options:"
     echo "  --chart-location, -l <path>  If specified expects a local directory for AVS Helm chart (default: official repo)"
     echo "  --cluster-name, -c <name>    Override the default cluster name (default: ${USERNAME}-${PROJECT_ID}-${DEFAULT_CLUSTER_NAME_SUFFIX})"
-    echo "  --run-insecure, -r           Run setup cluster without auth or tls. No argument required."
+    echo "  --run-insecure, -i           Run setup cluster without auth or tls. No argument required."
     echo "  --help, -h                   Show this help message"
     exit 1
 }
@@ -33,7 +32,7 @@ while [[ "$#" -gt 0 ]]; do
     case $1 in
         --chart-location|-l) CHART_LOCATION="$2"; shift 2 ;;
         --cluster-name|-c) CLUSTER_NAME_OVERRIDE="$2"; shift 2 ;;
-        --run-insecure|-r) RUN_INSECURE=1; shift ;;   # just flag no argument
+        --run-insecure|-i) RUN_INSECURE=1; shift ;;   # just flag no argument
         --help|-h) usage ;;  # Display the help/usage if --help or -h is passed
         *) echo "Unknown parameter passed: $1"; usage ;;  # Unknown parameter triggers usage
     esac
@@ -77,12 +76,22 @@ reset_build() {
         mv -f "$BUILD_DIR" "$temp_dir"
     fi
     mkdir -p "$BUILD_DIR/input" "$BUILD_DIR/output" "$BUILD_DIR/secrets" "$BUILD_DIR/certs" "$BUILD_DIR/manifests"
-    cp "$FEATURES_CONF" "$BUILD_DIR/secrets/features.conf"
-    if [[ "${RUN_INSECURE}" == 1 ]]; then
-        cp $WORKSPACE/manifests/avs-values.yaml $BUILD_DIR/manifests/avs-values.yaml
-        cp $WORKSPACE/manifests/aerospike-cr.yaml $BUILD_DIR/manifests/aerospike-cr.yaml
-    else
-        cp $WORKSPACE/manifests/avs-values-auth.yaml $BUILD_DIR/manifests/avs-values.yaml
+    cp "$FEATURES_CONF" "$BUILD_DIR/secrets/features.conf"   
+    # Using yq through docker so we don't need to install it locally
+    # Create avs-values-query.yaml 
+    docker run --rm -v "$PWD:/workdir" -w /workdir mikefarah/yq e \
+        '.aerospikeVectorSearchConfig.cluster *= (load("manifests/avs-values-role-query.yaml"))' \
+        /workdir/manifests/avs-values.yaml > "$BUILD_DIR/manifests/avs-values-query.yaml"
+
+
+    # Create avs-values-update.yaml (using yq merge - corrected)
+    docker run --rm -v "$PWD:/workdir" -w /workdir mikefarah/yq e \
+        '.aerospikeVectorSearchConfig.cluster *= (load("manifests/avs-values-role-update.yaml"))' \
+        /workdir/manifests/avs-values.yaml > "$BUILD_DIR/manifests/avs-values-update.yaml"
+    cp $WORKSPACE/manifests/aerospike-cr.yaml $BUILD_DIR/manifests/
+
+# override aerospike-cr.yaml with secure version if run insecure not specified
+    if [[ "${RUN_INSECURE}" != 1 ]]; then
         cp $WORKSPACE/manifests/aerospike-cr-auth.yaml $BUILD_DIR/manifests/aerospike-cr.yaml
     fi
 }
@@ -281,6 +290,12 @@ generate_certs() {
 
 # Function to create GKE cluster
 create_gke_cluster() {
+    if ! gcloud container clusters describe "$CLUSTER_NAME" --zone "$ZONE" &> /dev/null; then
+        echo "Cluster $CLUSTER_NAME does not exist. Creating..."
+    else
+        echo "Cluster $CLUSTER_NAME already exists. Skipping creation."
+        return
+    fi
     echo "$(date '+%Y-%m-%d %H:%M:%S') - Starting GKE cluster creation..."
     if ! gcloud container clusters create "$CLUSTER_NAME" \
         --project "$PROJECT_ID" \
@@ -334,16 +349,29 @@ create_gke_cluster() {
         xargs -I {} kubectl label {} aerospike.com/node-pool=avs --overwrite
     
     echo "Setting up namespaces..."
-    kubectl create namespace aerospike
-    kubectl create namespace avs
 }
 
-# Function to create Aerospike node pool and deploy AKO
+
 setup_aerospike() {
+    kubectl create namespace aerospike || true  # Idempotent namespace creation
 
     echo "Deploying Aerospike Kubernetes Operator (AKO)..."
-    curl -sL https://github.com/operator-framework/operator-lifecycle-manager/releases/download/v0.25.0/install.sh | bash -s v0.25.0
-    kubectl create -f https://operatorhub.io/install/aerospike-kubernetes-operator.yaml
+
+    if ! kubectl get ns olm &> /dev/null; then
+        echo "Installing OLM..."
+        curl -sL https://github.com/operator-framework/operator-lifecycle-manager/releases/download/v0.25.0/install.sh | bash -s v0.25.0
+    else
+        echo "OLM is already installed in olm namespace. Skipping installation."
+    fi
+
+    # Check if the subscription already exists
+    if ! kubectl get subscription my-aerospike-kubernetes-operator --namespace operators &> /dev/null; then
+        echo "Installing AKO subscription..."
+        kubectl create -f https://operatorhub.io/install/aerospike-kubernetes-operator.yaml
+    else
+        echo "AKO subscription already exists. Skipping installation."
+    fi
+
 
     echo "Waiting for AKO to be ready..."
     while true; do
@@ -378,7 +406,7 @@ setup_aerospike() {
 
 # Function to setup AVS node pool and namespace
 setup_avs() {
-
+    kubectl create namespace avs
 
     echo "Setting secrets for AVS cluster..."
     kubectl --namespace avs create secret generic auth-secret --from-literal=password='admin123'
@@ -386,6 +414,7 @@ setup_avs() {
         --from-file="$BUILD_DIR/certs"
     kubectl --namespace avs create secret generic aerospike-secret \
         --from-file="$BUILD_DIR/secrets"
+
 }
 
 # Function to optionally deploy Istio
@@ -404,23 +433,26 @@ deploy_istio() {
 
     kubectl apply -f manifests/istio/gateway.yaml
     kubectl apply -f manifests/istio/avs-virtual-service.yaml
- }
+}
 
 get_reverse_dns() {
     INGRESS_IP=$(kubectl get svc istio-ingress -n istio-ingress -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
     REVERSE_DNS_AVS=$(dig +short -x $INGRESS_IP)
     echo "Reverse DNS: $REVERSE_DNS_AVS"
 }
+
 # Function to deploy AVS Helm chart
 deploy_avs_helm_chart() {
     echo "Deploying AVS Helm chart..."
     helm repo add aerospike-helm https://artifact.aerospike.io/artifactory/api/helm/aerospike-helm
     helm repo update
-    if [ -z "$CHART_LOCATION" ]; then
-        helm install avs-app --values $BUILD_DIR/manifests/avs-values.yaml --namespace avs aerospike-helm/aerospike-vector-search --version 0.6.0 --wait
-    else
-        helm install avs-app --values $BUILD_DIR/manifests/avs-values.yaml --namespace avs "$CHART_LOCATION" --wait
-    fi
+    # if [ -z "$CHART_LOCATION" ]; then
+        helm install avs-app-query --set replicaCount=2 --values $BUILD_DIR/manifests/avs-values-query.yaml --namespace avs aerospike-helm/aerospike-vector-search --version $CHART_VERSION  --atomic --wait 
+        helm install avs-app-update --set replicaCount=1 --values $BUILD_DIR/manifests/avs-values-update.yaml --namespace avs aerospike-helm/aerospike-vector-search --version $CHART_VERSION  --atomic --wait
+    # else
+    #     helm install avs-app-query --set replicaCount=2 --values $BUILD_DIR/manifests/avs-values.yaml --values $BUILD_DIR/manifests/avs-values-role-query.yaml --namespace avs "$CHART_LOCATION" --wait
+    #     helm install avs-app-update --set replicaCount=1 --values $BUILD_DIR/manifests/avs-values.yaml --values $BUILD_DIR/manifests/avs-values-role-update.yaml --namespace avs "$CHART_LOCATION" --wait
+    # fi
 }
 
 # Function to setup monitoring
@@ -461,12 +493,12 @@ main() {
     print_env
     reset_build
     create_gke_cluster
+    setup_aerospike
     deploy_istio
     get_reverse_dns
     if [[ "${RUN_INSECURE}" != 1 ]]; then
         generate_certs
     fi
-    setup_aerospike
     setup_avs
     deploy_avs_helm_chart
     setup_monitoring

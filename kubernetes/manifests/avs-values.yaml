@@ -16,7 +16,7 @@ aerospikeVectorSearchConfig:
 
   heartbeat:
     seeds:
-      - address: avs-app-aerospike-vector-search-0.avs-app-aerospike-vector-search.avs.svc.cluster.local
+      - address: avs-app-query-aerospike-vector-search-0.avs-app-query-aerospike-vector-search.avs.svc.cluster.local
         port: 5001
   interconnect:
     # client-tls-id: interconnect-tls
@@ -47,7 +47,7 @@ image:
   repository: "aerospike/aerospike-vector-search"
   pullPolicy: "IfNotPresent"
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "0.11.1"
+  tag: "1.0.0"
 extraSecretVolumeMounts:
   - name: aerospike-tls
     mountPath: "/etc/ssl/certs"
