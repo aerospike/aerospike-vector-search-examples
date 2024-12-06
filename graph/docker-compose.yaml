@@ -19,8 +19,24 @@ services:
       retries: 3
     networks:
       - svc
+  aerospike-graph:
+    image: aerospike/aerospike-graph-service
+    container_name: aerospike-graph
+      #    restart: always
+    depends_on:
+     aerospike-cluster:
+       condition: service_healthy
+    ports:
+      - '8182:8182'
+      - '9090:9090'
+    environment:
+      - aerospike.client.namespace=test
+      - aerospike.client.host=aerospike-cluster
+      - aerospike.graph.index.vertex.label.enabled=true
+    networks:
+      - svc
   aerospike-vector-search:
-    image: aerospike/aerospike-vector-search:0.11.1
+    image: aerospike/aerospike-vector-search:1.0.0
     container_name: "aerospike-vector-search"
     depends_on:
       aerospike-cluster:
@@ -59,3 +75,5 @@ services:
 networks:
   svc:
     name: svc
+
+
