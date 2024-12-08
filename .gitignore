@@ -167,3 +167,4 @@ features.conf
 
 # Kubernetes default generated dir
 /kubernetes/generated
+/kubernetes/logs/*

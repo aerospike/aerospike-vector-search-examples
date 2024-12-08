@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# This script uninstalls the resources created by the full-create-and-install-gke.sh script.
+# It handles the removal of deployments, services, namespaces, node pools, and optionally the GKE cluster itself.
+
 set -eo pipefail
 if [ -n "$DEBUG" ]; then set -x; fi
 trap 'echo "Error: $? at line $LINENO" >&2' ERR
@@ -11,7 +14,27 @@ USERNAME=$(whoami)
 
 # Default values
 DEFAULT_CLUSTER_NAME_SUFFIX="avs"
-RUN_INSECURE=1  # Default value for insecure mode (false meaning secure with auth + tls)
+DESTROY_CLUSTER=1  # Default is to destroy the cluster
+
+# Function to display the script usage
+usage() {
+    echo "Usage: $0 [options]"
+    echo "Options:"
+    echo "  --cluster-name, -c <name>    Override the default cluster name (default: ${USERNAME}-${PROJECT_ID}-${DEFAULT_CLUSTER_NAME_SUFFIX})"
+    echo "  --keep-cluster, -k           Do not destroy the GKE cluster. No argument required."
+    echo "  --help, -h                   Show this help message"
+    exit 1
+}
+
+# Parse command line arguments
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --cluster-name|-c) CLUSTER_NAME_OVERRIDE="$2"; shift 2 ;;
+        --keep-cluster|-k) DESTROY_CLUSTER=0; shift ;;
+        --help|-h) usage ;;
+        *) echo "Unknown parameter passed: $1"; usage ;;
+    esac
+done
 
 # Function to print environment variables for verification
 print_env() {
@@ -21,15 +44,10 @@ print_env() {
     echo "export NODE_POOL_NAME_AEROSPIKE=$NODE_POOL_NAME_AEROSPIKE"
     echo "export NODE_POOL_NAME_AVS=$NODE_POOL_NAME_AVS"
     echo "export ZONE=$ZONE"
-    echo "export FEATURES_CONF=$FEATURES_CONF"
-    echo "export CHART_LOCATION=$CHART_LOCATION"
-    echo "export RUN_INSECURE=$RUN_INSECURE"
 }
-
 
 # Function to set environment variables
 set_env_variables() {
-
     # Use provided cluster name or fallback to the default
     if [ -n "$CLUSTER_NAME_OVERRIDE" ]; then
         export CLUSTER_NAME="${USERNAME}-${CLUSTER_NAME_OVERRIDE}"
@@ -40,98 +58,93 @@ set_env_variables() {
     export NODE_POOL_NAME_AEROSPIKE="aerospike-pool"
     export NODE_POOL_NAME_AVS="avs-pool"
     export ZONE="us-central1-c"
-    export FEATURES_CONF="$WORKSPACE/features.conf"
     export BUILD_DIR="$WORKSPACE/generated"
-    export REVERSE_DNS_AVS
 }
+
 
 destroy_monitoring() {
-    echo "Removing monitoring setup..."
-    kubectl delete -f manifests/monitoring/avs-servicemonitor.yaml
-    kubectl delete -f manifests/monitoring/aerospike-servicemonitor.yaml
-    kubectl delete -f manifests/monitoring/aerospike-exporter-service.yaml
-
-    echo "Uninstalling monitoring stack..."
-    helm uninstall monitoring-stack --namespace monitoring
-    kubectl delete namespace monitoring
-    helm repo remove prometheus-community
+    if kubectl get ns monitoring &> /dev/null; then
+        kubectl delete -f manifests/monitoring/avs-servicemonitor.yaml --namespace monitoring || true
+        kubectl delete -f manifests/monitoring/aerospike-servicemonitor.yaml --namespace monitoring || true
+        kubectl delete -f manifests/monitoring/aerospike-exporter-service.yaml --namespace monitoring || true
+        helm uninstall monitoring-stack --namespace monitoring || true
+        kubectl delete ns monitoring || true
+    fi
+    helm repo remove prometheus-community || true
 }
 
+
 destroy_avs_helm_chart() {
-    echo "Destroying AVS Helm chart..."
-    helm uninstall avs-app --namespace avs
-    helm repo remove aerospike-helm
+    helm uninstall avs-app-query --namespace avs || true
+    helm uninstall avs-app-update --namespace avs || true
+    helm uninstall avs-gke --namespace avs || true # For backwards compatibility
+    helm repo remove aerospike-helm || true
 }
 
 destroy_istio() {
-    echo "Destroying Istio setup..."
+    kubectl delete -f manifests/istio/avs-virtual-service.yaml --namespace istio-ingress || true
+    kubectl delete -f manifests/istio/gateway.yaml || true
 
-    kubectl delete -f manifests/istio/avs-virtual-service.yaml
-    kubectl delete -f manifests/istio/gateway.yaml
+    helm uninstall istio-ingress --namespace istio-ingress || true
+    helm uninstall istiod --namespace istio-system || true
+    helm uninstall istio-base --namespace istio-system || true
 
-    helm uninstall istio-ingress --namespace istio-ingress
-    helm uninstall istiod --namespace istio-system
-    helm uninstall istio-base --namespace istio-system
-
-    kubectl delete namespace istio-ingress
-    kubectl delete namespace istio-system
-
-    helm repo remove istio
+    kubectl delete ns istio-ingress || true
+    kubectl delete ns istio-system || true
+    helm repo remove istio || true
 }
 
 destroy_avs() {
-    echo "Destroying AVS secrets..."
-
-    kubectl delete secret auth-secret --namespace avs
-    kubectl delete secret aerospike-tls --namespace avs
-    kubectl delete secret aerospike-secret --namespace avs
-    kubectl delete namespace avs
+    kubectl delete secret auth-secret --namespace avs || true
+    kubectl delete secret aerospike-tls --namespace avs || true
+    kubectl delete secret aerospike-secret --namespace avs || true
+    kubectl delete ns avs || true
 }
 
 destroy_aerospike() {
-    echo "Destroying Aerospike setup..."
+    kubectl delete -f "$BUILD_DIR/manifests/aerospike-cr.yaml" --namespace aerospike || true
+    kubectl delete -f "https://raw.githubusercontent.com/aerospike/aerospike-kubernetes-operator/master/config/samples/storage/gce_ssd_storage_class.yaml" || true
 
-    kubectl delete -f $BUILD_DIR/manifests/aerospike-cr.yaml
+    kubectl delete secret aerospike-secret --namespace aerospike || true
+    kubectl delete secret auth-secret --namespace aerospike || true
+    kubectl delete secret aerospike-tls --namespace aerospike || true
 
-    kubectl delete -f https://raw.githubusercontent.com/aerospike/aerospike-kubernetes-operator/refs/heads/master/config/samples/storage/eks_ssd_storage_class.yaml
+    kubectl delete serviceaccount aerospike-operator-controller-manager --namespace aerospike || true
+    kubectl delete clusterrolebinding aerospike-cluster || true
 
-    kubectl delete secret aerospike-secret --namespace aerospike
-    kubectl delete secret auth-secret --namespace aerospike
-    kubectl delete secret aerospike-tls --namespace aerospike
-
-    kubectl delete serviceaccount aerospike-operator-controller-manager --namespace aerospike
-    kubectl delete clusterrolebinding aerospike-cluster
-
-    kubectl delete -f https://operatorhub.io/install/aerospike-kubernetes-operator.yaml
-
-    kubectl delete namespace aerospike
+    kubectl delete -f "https://operatorhub.io/install/aerospike-kubernetes-operator.yaml" || true
+    kubectl delete ns aerospike || true
 }
 
 destroy_gke_cluster() {
-    echo "GKE cluster destruction..."
+    if [[ "$DESTROY_CLUSTER" -eq 1 ]]; then
+        echo "GKE cluster destruction..."
 
-    gcloud container node-pools delete "$NODE_POOL_NAME_AVS" \
-        --cluster "$CLUSTER_NAME" \
-        --project "$PROJECT_ID" \
-        --zone "$ZONE" \
-        --quiet
+        gcloud container node-pools delete "$NODE_POOL_NAME_AVS" \
+            --cluster "$CLUSTER_NAME" \
+            --project "$PROJECT_ID" \
+            --zone "$ZONE" \
+            --quiet || true
 
-    gcloud container node-pools delete "$NODE_POOL_NAME_AEROSPIKE" \
-        --cluster "$CLUSTER_NAME" \
-        --project "$PROJECT_ID" \
-        --zone "$ZONE" \
-        --quiet
+        gcloud container node-pools delete "$NODE_POOL_NAME_AEROSPIKE" \
+            --cluster "$CLUSTER_NAME" \
+            --project "$PROJECT_ID" \
+            --zone "$ZONE" \
+            --quiet || true
 
-    gcloud container clusters delete "$CLUSTER_NAME" \
-        --project "$PROJECT_ID" \
-        --zone "$ZONE" \
-        --quiet
+        gcloud container clusters delete "$CLUSTER_NAME" \
+            --project "$PROJECT_ID" \
+            --zone "$ZONE" \
+            --quiet || true
+    else
+        echo "Skipping GKE cluster destruction due to --keep-cluster flag."
+    fi
 }
-
 
 main() {
     set_env_variables
     print_env
+
     destroy_monitoring
     destroy_avs_helm_chart
     destroy_istio
@@ -141,3 +154,4 @@ main() {
 }
 
 main
+
