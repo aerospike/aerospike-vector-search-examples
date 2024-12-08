@@ -77,18 +77,8 @@ reset_build() {
     fi
     mkdir -p "$BUILD_DIR/input" "$BUILD_DIR/output" "$BUILD_DIR/secrets" "$BUILD_DIR/certs" "$BUILD_DIR/manifests"
     cp "$FEATURES_CONF" "$BUILD_DIR/secrets/features.conf"   
-    # Using yq through docker so we don't need to install it locally
-    # Create avs-values-query.yaml 
-    docker run --rm -v "$PWD:/workdir" -w /workdir mikefarah/yq e \
-        '.aerospikeVectorSearchConfig.cluster *= (load("manifests/avs-values-role-query.yaml"))' \
-        /workdir/manifests/avs-values.yaml > "$BUILD_DIR/manifests/avs-values-query.yaml"
-
-
-    # Create avs-values-update.yaml (using yq merge - corrected)
-    docker run --rm -v "$PWD:/workdir" -w /workdir mikefarah/yq e \
-        '.aerospikeVectorSearchConfig.cluster *= (load("manifests/avs-values-role-update.yaml"))' \
-        /workdir/manifests/avs-values.yaml > "$BUILD_DIR/manifests/avs-values-update.yaml"
-    cp $WORKSPACE/manifests/aerospike-cr.yaml $BUILD_DIR/manifests/
+    cp "$WORKSPACE/manifests/avs-values.yaml" "$BUILD_DIR/manifests/avs-values.yaml"    
+    cp "$WORKSPACE/manifests/aerospike-cr.yaml" "$BUILD_DIR/manifests/aerospike-cr.yaml"
 
 # override aerospike-cr.yaml with secure version if run insecure not specified
     if [[ "${RUN_INSECURE}" != 1 ]]; then
@@ -446,13 +436,22 @@ deploy_avs_helm_chart() {
     echo "Deploying AVS Helm chart..."
     helm repo add aerospike-helm https://artifact.aerospike.io/artifactory/api/helm/aerospike-helm
     helm repo update
-    # if [ -z "$CHART_LOCATION" ]; then
-        helm install avs-app-query --set replicaCount=2 --values $BUILD_DIR/manifests/avs-values-query.yaml --namespace avs aerospike-helm/aerospike-vector-search --version $CHART_VERSION  --atomic --wait 
-        helm install avs-app-update --set replicaCount=1 --values $BUILD_DIR/manifests/avs-values-update.yaml --namespace avs aerospike-helm/aerospike-vector-search --version $CHART_VERSION  --atomic --wait
-    # else
-    #     helm install avs-app-query --set replicaCount=2 --values $BUILD_DIR/manifests/avs-values.yaml --values $BUILD_DIR/manifests/avs-values-role-query.yaml --namespace avs "$CHART_LOCATION" --wait
-    #     helm install avs-app-update --set replicaCount=1 --values $BUILD_DIR/manifests/avs-values.yaml --values $BUILD_DIR/manifests/avs-values-role-update.yaml --namespace avs "$CHART_LOCATION" --wait
-    # fi
+# Installs AVS query nodes    
+    helm install avs-app aerospike-helm/aerospike-vector-search\
+        --set replicaCount=2 \
+        --set aerospikeVectorSearchConfig.cluster.node-roles[0]=INDEX_QUERY \
+        --values $BUILD_DIR/manifests/avs-values.yaml \
+        --namespace avs\
+        --version $CHART_VERSION\
+        --atomic --wait
+# Install AVS update node
+    helm install avs-app-update aerospike-helm/aerospike-vector-search\
+        --set replicaCount=1 \
+        --set aerospikeVectorSearchConfig.cluster.node-roles[0]=INDEX_UPDATE \
+        --values $BUILD_DIR/manifests/avs-values.yaml \
+        --namespace avs\
+        --version $CHART_VERSION\
+        --atomic --wait
 }
 
 # Function to setup monitoring

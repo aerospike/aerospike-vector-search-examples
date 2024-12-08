@@ -1,13 +1,30 @@
+replicaCount: 3
 aerospikeVectorSearchConfig:
+  cluster:
+    cluster-name: "avs-db-1"
+  feature-key-file: "/etc/aerospike-vector-search/secrets/features.conf"
+  service:
+    metadata-namespace: "avs-meta"
+    ports:
+      5000:
+        addresses:
+          "0.0.0.0"
+        tls-id: service-tls
+  manage:
+    ports:
+      5040: { }
+
+  heartbeat:
+    seeds:
+      - address: avs-app-aerospike-vector-search-0.avs-app-aerospike-vector-search.avs.svc.cluster.local
+        port: 5001
   interconnect:
     client-tls-id: interconnect-tls
     ports:
       5001:
+        addresses:
+          "0.0.0.0"
         tls-id: interconnect-tls
-  service:
-    ports:
-      5000:
-        tls-id: service-tls
   storage:
     client-policy:
       tls-id: aerospike-tls
@@ -16,7 +33,8 @@ aerospikeVectorSearchConfig:
         password-file: "/etc/aerospike-vector-search/secrets/aerospike-password.txt"
     seeds:
       - aerocluster-0-0.aerocluster.aerospike.svc.cluster.local:
-          port: 4333 # This port is different in the base file
+#          port: 3000
+          port: 4333
           tls-name: "asd.aerospike.com"
   security:
     auth-token:
@@ -33,6 +51,8 @@ aerospikeVectorSearchConfig:
         store-file: /etc/ssl/certs/svc.aerospike.com.keystore.jks
         store-password-file: /etc/ssl/certs/storepass
         key-password-file: /etc/ssl/certs/keypass
+#      override-tls-hostname: avs-app-aerospike-vector-search-0.avs-app-aerospike-vector-search.aerospike.svc.cluster.local
+
     interconnect-tls:
       trust-store:
         store-file: /etc/ssl/certs/ca.aerospike.com.truststore.jks
@@ -43,6 +63,7 @@ aerospikeVectorSearchConfig:
         store-password-file: /etc/ssl/certs/storepass
         key-password-file: /etc/ssl/certs/keypass
       override-tls-hostname: avs.aerospike.com
+
     aerospike-tls:
       trust-store:
         store-file: "/etc/ssl/certs/ca.aerospike.com.truststore.jks"
@@ -52,3 +73,50 @@ aerospikeVectorSearchConfig:
         store-file: "/etc/ssl/certs/avs.aerospike.com.keystore.jks"
         store-password-file: "/etc/ssl/certs/storepass"
         key-password-file: "/etc/ssl/certs/keypass"
+#      override-tls-hostname: "asd.aerospike.com"
+  logging:
+    #    file: /var/log/aerospike-vector-search/aerospike-vector-search.log
+    enable-console-logging: false
+    format: simple
+    max-history: 30
+    levels:
+      metrics-ticker: debug
+      root: info
+    ticker-interval: 10
+
+securityContext:
+  allowPrivilegeEscalation: false
+  runAsUser: 0
+image:
+  repository: "aerospike/aerospike-vector-search"
+  pullPolicy: "IfNotPresent"
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "0.11.1"
+extraSecretVolumeMounts:
+  - name: aerospike-tls
+    mountPath: "/etc/ssl/certs"
+    readOnly: true
+
+extraVolumes:
+  - name: aerospike-tls
+    secret:
+      secretName: aerospike-tls
+      optional: false
+affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: aerospike.com/node-pool
+            operator: In
+            values:
+            - "avs"
+# podAntiAffinity:
+#     requiredDuringSchedulingIgnoredDuringExecution:
+#       - topologyKey: "kubernetes.io/hostname"
+#         labelSelector:
+#           matchExpressions:
+#             - key: "app.kubernetes.io/name"
+#               operator: In
+#               values:
+#                 - "aerospike-vector-search"
