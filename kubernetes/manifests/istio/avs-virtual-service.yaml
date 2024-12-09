@@ -15,6 +15,6 @@ spec:
             - "*"
       route:
         - destination:
-            host: avs-gke-aerospike-vector-search.avs.svc.cluster.local
+            host: avs-app-aerospike-vector-search.avs.svc.cluster.local
             port:
               number: 5000

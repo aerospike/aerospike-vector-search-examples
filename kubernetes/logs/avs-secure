@@ -1,0 +1,69 @@
++ trap 'echo "Error: $? at line $LINENO" >&2' ERR
+++ pwd
++ WORKSPACE=/home/joem/src/aerospike-vector/kubernetes
+++ gcloud config get-value project
++ PROJECT_ID=performance-eco
+++ whoami
++ USERNAME=joem
++ DEFAULT_CLUSTER_NAME_SUFFIX=avs
++ [[ 2 -gt 0 ]]
++ case $1 in
++ CLUSTER_NAME_OVERRIDE=avs-secure
++ shift 2
++ [[ 0 -gt 0 ]]
++ main
++ set_env_variables
++ '[' -n avs-secure ']'
++ export CLUSTER_NAME=joem-avs-secure
++ CLUSTER_NAME=joem-avs-secure
++ export NODE_POOL_NAME_AEROSPIKE=aerospike-pool
++ NODE_POOL_NAME_AEROSPIKE=aerospike-pool
++ export NODE_POOL_NAME_AVS=avs-pool
++ NODE_POOL_NAME_AVS=avs-pool
++ export ZONE=us-central1-c
++ ZONE=us-central1-c
++ export FEATURES_CONF=/home/joem/src/aerospike-vector/kubernetes/features.conf
++ FEATURES_CONF=/home/joem/src/aerospike-vector/kubernetes/features.conf
++ export BUILD_DIR=/home/joem/src/aerospike-vector/kubernetes/generated
++ BUILD_DIR=/home/joem/src/aerospike-vector/kubernetes/generated
++ export REVERSE_DNS_AVS
++ print_env
++ echo 'Environment Variables:'
+Environment Variables:
++ echo 'export PROJECT_ID=performance-eco'
+export PROJECT_ID=performance-eco
++ echo 'export CLUSTER_NAME=joem-avs-secure'
+export CLUSTER_NAME=joem-avs-secure
++ echo 'export NODE_POOL_NAME_AEROSPIKE=aerospike-pool'
+export NODE_POOL_NAME_AEROSPIKE=aerospike-pool
++ echo 'export NODE_POOL_NAME_AVS=avs-pool'
+export NODE_POOL_NAME_AVS=avs-pool
++ echo 'export ZONE=us-central1-c'
+export ZONE=us-central1-c
++ echo 'export FEATURES_CONF=/home/joem/src/aerospike-vector/kubernetes/features.conf'
+export FEATURES_CONF=/home/joem/src/aerospike-vector/kubernetes/features.conf
++ echo 'export CHART_LOCATION='
+export CHART_LOCATION=
++ echo 'export RUN_INSECURE='
+export RUN_INSECURE=
++ reset_build
++ '[' -d /home/joem/src/aerospike-vector/kubernetes/generated ']'
+++ mktemp -d /tmp/avs-deploy-previous.XXXXXX
++ temp_dir=/tmp/avs-deploy-previous.360dzx
++ mv -f /home/joem/src/aerospike-vector/kubernetes/generated /tmp/avs-deploy-previous.360dzx
++ mkdir -p /home/joem/src/aerospike-vector/kubernetes/generated/input /home/joem/src/aerospike-vector/kubernetes/generated/output /home/joem/src/aerospike-vector/kubernetes/generated/secrets /home/joem/src/aerospike-vector/kubernetes/generated/certs /home/joem/src/aerospike-vector/kubernetes/generated/manifests
++ cp /home/joem/src/aerospike-vector/kubernetes/features.conf /home/joem/src/aerospike-vector/kubernetes/generated/secrets/features.conf
++ [[ '' == 1 ]]
++ cp /home/joem/src/aerospike-vector/kubernetes/manifests/avs-values-auth.yaml /home/joem/src/aerospike-vector/kubernetes/generated/manifests/avs-values.yaml
++ cp /home/joem/src/aerospike-vector/kubernetes/manifests/aerospike-cr-auth.yaml /home/joem/src/aerospike-vector/kubernetes/generated/manifests/aerospike-cr.yaml
++ create_gke_cluster
+++ date '+%Y-%m-%d %H:%M:%S'
++ echo '2024-11-12 17:22:11 - Starting GKE cluster creation...'
+2024-11-12 17:22:11 - Starting GKE cluster creation...
++ gcloud container clusters create joem-avs-secure --project performance-eco --zone us-central1-c --num-nodes 1 --disk-type pd-standard --disk-size 100
+Note: The Kubelet readonly port (10255) is now deprecated. Please update your workloads to use the recommended alternatives. See https://cloud.google.com/kubernetes-engine/docs/how-to/disable-kubelet-readonly-port for ways to check usage and for migration instructions.
+Note: Your Pod address range (`--cluster-ipv4-cidr`) can accommodate at most 1008 node(s).
+ERROR: (gcloud.container.clusters.create) ResponseError: code=409, message=Already exists: projects/performance-eco/zones/us-central1-c/clusters/joem-avs-secure.
++ echo 'Failed to create GKE cluster'
+Failed to create GKE cluster
++ exit 1
