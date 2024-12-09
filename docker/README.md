@@ -49,7 +49,7 @@ docker run -d \
 -p 5000:5000 \
 -p 5040:5040 \
 -v ./config:/etc/aerospike-vector-search \
-aerospike/aerospike-vector-search:0.11.1
+aerospike/aerospike-vector-search:1.0.0
 ```
 
 

@@ -18,8 +18,8 @@ services:
       interval: 5s
       timeout: 20s
       retries: 10
-  aerospike-vector-search:
-    image: aerospike/aerospike-vector-search:0.11.1
+  avs:
+    image: aerospike/aerospike-vector-search:1.0.0
     environment:
       FEATURE_KEY: "${FEATURE_KEY:-./container-volumes/avs/etc/aerospike-vector-search/features.conf}"
     depends_on:
