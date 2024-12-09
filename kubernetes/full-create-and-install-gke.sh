@@ -439,7 +439,7 @@ deploy_avs_helm_chart() {
 # Installs AVS query nodes    
     helm install avs-app aerospike-helm/aerospike-vector-search\
         --set replicaCount=2 \
-        --set aerospikeVectorSearchConfig.cluster.node-roles[0]=INDEX_QUERY \
+        --set aerospikeVectorSearchConfig.cluster.node-roles[0]=query \
         --values $BUILD_DIR/manifests/avs-values.yaml \
         --namespace avs\
         --version $CHART_VERSION\
