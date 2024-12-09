@@ -444,10 +444,10 @@ deploy_avs_helm_chart() {
         --namespace avs\
         --version $CHART_VERSION\
         --atomic --wait
-# Install AVS update node
+# Install AVS index-update node
     helm install avs-app-update aerospike-helm/aerospike-vector-search\
         --set replicaCount=1 \
-        --set aerospikeVectorSearchConfig.cluster.node-roles[0]=INDEX_UPDATE \
+        --set aerospikeVectorSearchConfig.cluster.node-roles[0]=index-update \
         --values $BUILD_DIR/manifests/avs-values.yaml \
         --namespace avs\
         --version $CHART_VERSION\
