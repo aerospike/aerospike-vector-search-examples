@@ -7,8 +7,12 @@ metadata:
     release: monitoring-stack  # Ensure this matches the Helm release name
 spec:
   selector:
-    matchLabels:
-      app: avs-app-aerospike-vector-search
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - avs-app-aerospike-vector-search
+          - avs-app-update-aerospike-vector-search
   namespaceSelector:
     matchNames:
       - avs
