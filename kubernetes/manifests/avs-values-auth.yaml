@@ -16,7 +16,7 @@ aerospikeVectorSearchConfig:
 
   heartbeat:
     seeds:
-      - address: avs-gke-aerospike-vector-search-0.avs-gke-aerospike-vector-search.avs.svc.cluster.local
+      - address: avs-app-aerospike-vector-search-0.avs-app-aerospike-vector-search.avs.svc.cluster.local
         port: 5001
   interconnect:
     client-tls-id: interconnect-tls
@@ -51,7 +51,7 @@ aerospikeVectorSearchConfig:
         store-file: /etc/ssl/certs/svc.aerospike.com.keystore.jks
         store-password-file: /etc/ssl/certs/storepass
         key-password-file: /etc/ssl/certs/keypass
-#      override-tls-hostname: avs-gke-aerospike-vector-search-0.avs-gke-aerospike-vector-search.aerospike.svc.cluster.local
+#      override-tls-hostname: avs-app-aerospike-vector-search-0.avs-app-aerospike-vector-search.aerospike.svc.cluster.local
 
     interconnect-tls:
       trust-store:

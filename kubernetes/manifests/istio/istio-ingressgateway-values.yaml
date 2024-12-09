@@ -2,6 +2,7 @@ service:
   type: LoadBalancer
   annotations:
     cloud.google.com/l4-rbs: "enabled"
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
   ports:
     - name: http
       port: 80
