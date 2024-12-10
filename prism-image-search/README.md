@@ -53,6 +53,10 @@ description.
 
 
 ## Install using docker compose
+
+**Note**
+The docker compose in this folder collects basic AVS usage metrics including network information. To disable metrics collection, remove the prometheus service from the example docker compose file.
+
 If you have a license key, you can easily setup Aerospike, AVS, and the prism-image-search
 app using docker-compose. When using docker-compose, you'll need to place your images in `container-volumes/prism/images/static/data`
 

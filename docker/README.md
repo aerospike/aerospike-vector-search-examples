@@ -8,6 +8,10 @@ Locate valid `features.conf` in the `./config` directory:
 > port 5002 in your docker compose file and aerospike-vector-search.yml file.
 
 ## Installation Aerospike and AVS Clusters (docker-compose)
+
+**Note**
+The docker compose in this folder collects basic AVS usage metrics including network information. To disable metrics collection, remove the prometheus service from the example docker compose file.
+
 ```shell
 docker compose -f docker-compose.yaml up -d
 ```
