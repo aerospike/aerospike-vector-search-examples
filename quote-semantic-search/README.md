@@ -47,6 +47,10 @@ Navigate to http://127.0.0.1:8080/search and perform a search for quotes based o
 
 
 ## Install using docker compose
+
+**Note**
+The docker compose in this folder collects basic AVS usage metrics including network information. To disable metrics collection, remove the prometheus service from the example docker compose file.
+
 If you have a license key, you can easily set up Aerospike, AVS, and the quote-semantic-search
 app using docker-compose. 
 
