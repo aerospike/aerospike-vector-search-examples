@@ -33,21 +33,21 @@ services:
       - ./container-volumes/avs/etc/aerospike-vector-search:/etc/aerospike-vector-search
       - ${FEATURE_KEY:-./container-volumes/avs/etc/aerospike-vector-search/features.conf}:/etc/aerospike-vector-search/features.conf:ro
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://aerospike-vector-search:5040/manage/rest/v1"]
+      test: ["CMD", "curl", "-f", "http://avs:5040/manage/rest/v1"]
       interval: 5s
       timeout: 20s
       retries: 10
   app:
     image: "prism:latest"
     depends_on: 
-      aerospike-vector-search:
+      avs:
         condition: service_healthy
     ports:
       - "8080:8080"
     networks:
       - avs-demo
     environment:
-      AVS_HOST: aerospike-vector-search
+      AVS_HOST: avs
       AVS_PORT: "5000"
       APP_NUM_QUOTES: "5000"
       GRPC_DNS_RESOLVER: native
@@ -78,7 +78,7 @@ services:
     depends_on:
       update-targets:
         condition: service_completed_successfully
-      aerospike-vector-search:
+      avs:
         condition: service_healthy
     networks:
       - avs-demo
