@@ -43,7 +43,7 @@ ln -s ~/Pictures static/images/data
 > likely not be in your path. 
 
 ```shell
- waitress-serve --host 127.0.0.1 --port 8080 --threads 32 prism:app
+AVS_PORT=5555 waitress-serve --host 127.0.0.1 --port 8080 --threads 32 prism:app
 ```
 
 ## Performing an image search

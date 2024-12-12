@@ -54,5 +54,5 @@ python3 search.py --help
 
 Run the example.
 ```shell
-python3 search.py
+python3 search.py --port 5555
 ```
