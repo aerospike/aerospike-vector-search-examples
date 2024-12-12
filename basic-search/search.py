@@ -61,24 +61,28 @@ arg_parser.add_argument(
 )
 args = arg_parser.parse_args()
 
-with AdminClient(
-    seeds=types.HostPort(host=args.host, port=args.port),
-    listener_name=listener_name,
-    is_loadbalancer=args.load_balancer,
-) as adminClient:
-    try:
-        print("creating index")
-        adminClient.index_create(
-            namespace=args.namespace,
-            name=index_name,
-            vector_field="vector",
-            dimensions=2,
-            sets=args.set,
-            index_storage=types.IndexStorage(namespace=args.index_namespace, set_name=args.index_set),
-        )
-    except Exception as e:
-        print("failed creating index " + str(e))
-        pass
+try:
+    with AdminClient(
+        seeds=types.HostPort(host=args.host, port=args.port),
+        listener_name=listener_name,
+        is_loadbalancer=args.load_balancer,
+    ) as adminClient:
+        try:
+            print("creating index")
+            adminClient.index_create(
+                namespace=args.namespace,
+                name=index_name,
+                vector_field="vector",
+                dimensions=2,
+                sets=args.set,
+                index_storage=types.IndexStorage(namespace=args.index_namespace, set_name=args.index_set),
+            )
+        except Exception as e:
+            print("failed creating index " + str(e))
+            pass
+except Exception as e:
+    raise Exception(f"you are trying to connect to AVS on port {args.port}, "
+          "on MacOS airplay uses port 5000 by default, make sure there is not a conflict") from e
 
 with Client(
     seeds=types.HostPort(host=args.host, port=args.port),

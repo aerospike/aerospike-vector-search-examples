@@ -141,7 +141,7 @@ shown [here](https://dev.to/thetrebelcc/how-to-run-a-flask-app-over-https-using-
 #### Start the application
 
 ```shell
-waitress-serve --host 127.0.0.1 --port 8080 --threads 32 quote_search:app
+AVS_PORT=5555 waitress-serve --host 127.0.0.1 --port 8080 --threads 32 quote_search:app
 ```
 
 #### Run for development
