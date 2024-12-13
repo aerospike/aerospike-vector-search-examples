@@ -12,8 +12,8 @@ WORKSPACE="$(pwd)"
 PROJECT_ID="$(gcloud config get-value project)"
 # Prepend the current username to the cluster name
 USERNAME=$(whoami)
-CHART_VERSION="0.7.0"
-
+CHART_VERSION="0.7.1"
+REVERSE_DNS_AVS=""
 # Default values
 DEFAULT_CLUSTER_NAME_SUFFIX="avs"
 DEFAULT_MACHINE_TYPE="n2d-standard-4"
@@ -101,6 +101,7 @@ set_env_variables() {
     export ZONE="us-central1-c"
     export FEATURES_CONF="$WORKSPACE/features.conf"
     export BUILD_DIR="$WORKSPACE/generated"
+    export REVERSE_DNS_AVS="does.not.exist"
     export MACHINE_TYPE="${MACHINE_TYPE:-${DEFAULT_MACHINE_TYPE}}"
     export NUM_AVS_NODES="${NUM_AVS_NODES:-${DEFAULT_NUM_AVS_NODES}}"
     export NUM_QUERY_NODES="${NUM_QUERY_NODES:-${DEFAULT_NUM_QUERY_NODES}}"
@@ -362,6 +363,9 @@ create_gke_cluster() {
     kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_AVS" -o name | \
         xargs -I {} kubectl label {} aerospike.com/node-pool=avs --overwrite
     
+        kubectl create namespace aerospike || true
+        kubectl create namespace avs || true
+    
 }
 
 
@@ -421,7 +425,7 @@ setup_aerospike() {
 
 # Function to setup AVS node pool and namespace
 setup_avs() {
-    kubectl create namespace avs
+    kubectl create namespace avs || true 
 
     echo "Setting secrets for AVS cluster..."
     kubectl --namespace avs create secret generic auth-secret --from-literal=password='admin123'
@@ -521,22 +525,23 @@ print_final_instructions() {
     echo "Setup Complete!"
     
 }
-
+#This script runs in this order.
 main() {
     set_env_variables
     print_env
     reset_build
     create_gke_cluster
-    setup_aerospike
     deploy_istio
     get_reverse_dns
     if [[ "${RUN_INSECURE}" != 1 ]]; then
         generate_certs
     fi
+    setup_aerospike
     setup_avs
     deploy_avs_helm_chart
     setup_monitoring
     print_final_instructions
 }
+
 
 main
