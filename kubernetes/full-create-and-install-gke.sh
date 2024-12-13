@@ -13,8 +13,14 @@ PROJECT_ID="$(gcloud config get-value project)"
 # Prepend the current username to the cluster name
 USERNAME=$(whoami)
 CHART_VERSION="0.7.0"
+
 # Default values
 DEFAULT_CLUSTER_NAME_SUFFIX="avs"
+DEFAULT_MACHINE_TYPE="n2d-standard-4"
+DEFAULT_NUM_AVS_NODES=3
+DEFAULT_NUM_QUERY_NODES=0
+DEFAULT_NUM_INDEX_NODES=0
+DEFAULT_NUM_AEROSPIKE_NODES=3
 
 # Function to display the script usage
 usage() {
@@ -22,21 +28,39 @@ usage() {
     echo "Options:"
     echo "  --chart-location, -l <path>  If specified expects a local directory for AVS Helm chart (default: official repo)"
     echo "  --cluster-name, -c <name>    Override the default cluster name (default: ${USERNAME}-${PROJECT_ID}-${DEFAULT_CLUSTER_NAME_SUFFIX})"
-    echo "  --run-insecure, -i           Run setup cluster without auth or tls. No argument required."
+    echo "  --machine-type, -m <type>    Specify the machine type (default: ${DEFAULT_MACHINE_TYPE})"
+    echo "  --num-avs-nodes, -a <num>     Specify the number of AVS nodes (default: ${DEFAULT_NUM_AVS_NODES})"
+    echo "  --num-query-nodes, -q <num>  Specify the number of AVS query nodes (default: ${DEFAULT_NUM_QUERY_NODES})"
+    echo "  --num-index-nodes, -i <num>  Specify the number of AVS index nodes (default: ${DEFAULT_NUM_INDEX_NODES})"
+    echo "  --num-aerospike-nodes, -s <num>  Specify the number of Aerospike nodes (default: ${DEFAULT_NUM_AEROSPIKE_NODES})"
+    echo "  --run-insecure, -I           Run setup cluster without auth or tls. No argument required."
     echo "  --help, -h                   Show this help message"
     exit 1
 }
 
 # Parse command line arguments
-while [[ "$#" -gt 0 ]]; do
+while [[ "$#" -gt 0 ]];
+do
     case $1 in
         --chart-location|-l) CHART_LOCATION="$2"; shift 2 ;;
         --cluster-name|-c) CLUSTER_NAME_OVERRIDE="$2"; shift 2 ;;
-        --run-insecure|-i) RUN_INSECURE=1; shift ;;   # just flag no argument
-        --help|-h) usage ;;  # Display the help/usage if --help or -h is passed
-        *) echo "Unknown parameter passed: $1"; usage ;;  # Unknown parameter triggers usage
+        --machine-type|-m) MACHINE_TYPE="$2"; shift 2 ;;
+        --num-avs-nodes|-a) NUM_AVS_NODES="$2"; shift 2 ;;
+        --num-query-nodes|-q) NUM_QUERY_NODES="$2"; NODE_TYPES=1; shift 2 ;;
+        --num-index-nodes|-i) NUM_INDEX_NODES="$2"; NODE_TYPES=1; shift 2 ;;
+        --num-aerospike-nodes|-s) NUM_AEROSPIKE_NODES="$2"; shift 2 ;;
+        --run-insecure|-I) RUN_INSECURE=1; shift ;;
+        --help|-h) usage ;;
+        *) echo "Unknown parameter passed: $1";
+           usage ;;
     esac
 done
+
+if [ -n "$NODE_TYPES" ]
+then
+    echo "setting number of nodes equal to query + index nodes"
+    NUM_AVS_NODES=$((NUM_QUERY_NODES + NUM_INDEX_NODES))
+fi
 
 # Function to print environment variables for verification
 print_env() {
@@ -49,12 +73,15 @@ print_env() {
     echo "export FEATURES_CONF=$FEATURES_CONF"
     echo "export CHART_LOCATION=$CHART_LOCATION"
     echo "export RUN_INSECURE=$RUN_INSECURE"
+    echo "export MACHINE_TYPE=$MACHINE_TYPE"
+    echo "export NUM_AVS_NODES=$NUM_AVS_NODES"
+    echo "export NUM_QUERY_NODES=$NUM_QUERY_NODES"
+    echo "export NUM_INDEX_NODES=$NUM_INDEX_NODES"
+    echo "export NUM_AEROSPIKE_NODES=$NUM_AEROSPIKE_NODES"
 }
-
 
 # Function to set environment variables
 set_env_variables() {
-   
     # Use provided cluster name or fallback to the default
     if [ -n "$CLUSTER_NAME_OVERRIDE" ]; then
         export CLUSTER_NAME="${USERNAME}-${CLUSTER_NAME_OVERRIDE}"
@@ -67,7 +94,11 @@ set_env_variables() {
     export ZONE="us-central1-c"
     export FEATURES_CONF="$WORKSPACE/features.conf"
     export BUILD_DIR="$WORKSPACE/generated"
-    export REVERSE_DNS_AVS
+    export MACHINE_TYPE="${MACHINE_TYPE:-${DEFAULT_MACHINE_TYPE}}"
+    export NUM_AVS_NODES="${NUM_AVS_NODES:-${DEFAULT_NUM_AVS_NODES}}"
+    export NUM_QUERY_NODES="${NUM_QUERY_NODES:-${DEFAULT_NUM_QUERY_NODES}}"
+    export NUM_INDEX_NODES="${NUM_INDEX_NODES:-${DEFAULT_NUM_INDEX_NODES}}"
+    export NUM_AEROSPIKE_NODES="${NUM_AEROSPIKE_NODES:-${DEFAULT_NUM_AEROSPIKE_NODES}}"
 }
 
 reset_build() {
@@ -76,11 +107,11 @@ reset_build() {
         mv -f "$BUILD_DIR" "$temp_dir"
     fi
     mkdir -p "$BUILD_DIR/input" "$BUILD_DIR/output" "$BUILD_DIR/secrets" "$BUILD_DIR/certs" "$BUILD_DIR/manifests"
-    cp "$FEATURES_CONF" "$BUILD_DIR/secrets/features.conf"   
-    cp "$WORKSPACE/manifests/avs-values.yaml" "$BUILD_DIR/manifests/avs-values.yaml"    
+    cp "$FEATURES_CONF" "$BUILD_DIR/secrets/features.conf"
+    cp "$WORKSPACE/manifests/avs-values.yaml" "$BUILD_DIR/manifests/avs-values.yaml"
     cp "$WORKSPACE/manifests/aerospike-cr.yaml" "$BUILD_DIR/manifests/aerospike-cr.yaml"
 
-# override aerospike-cr.yaml with secure version if run insecure not specified
+    # override aerospike-cr.yaml with secure version if run insecure not specified
     if [[ "${RUN_INSECURE}" != 1 ]]; then
         cp $WORKSPACE/manifests/aerospike-cr-auth.yaml $BUILD_DIR/manifests/aerospike-cr.yaml
     fi
@@ -287,62 +318,48 @@ create_gke_cluster() {
         return
     fi
     echo "$(date '+%Y-%m-%d %H:%M:%S') - Starting GKE cluster creation..."
-    if ! gcloud container clusters create "$CLUSTER_NAME" \
+    gcloud container clusters create "$CLUSTER_NAME" \
         --project "$PROJECT_ID" \
         --zone "$ZONE" \
         --num-nodes 1 \
         --disk-type "pd-standard" \
-        --disk-size "100"; then
-        echo "Failed to create GKE cluster"
-        exit 1
-    else
-        echo "GKE cluster created successfully."
-    fi
+        --disk-size "100";
 
     echo "Creating Aerospike node pool..."
-    if ! gcloud container node-pools create "$NODE_POOL_NAME_AEROSPIKE" \
+    gcloud container node-pools create "$NODE_POOL_NAME_AEROSPIKE" \
         --cluster "$CLUSTER_NAME" \
         --project "$PROJECT_ID" \
         --zone "$ZONE" \
-        --num-nodes 3 \
+        --num-nodes "$NUM_AEROSPIKE_NODES" \
         --local-ssd-count 2 \
         --disk-type "pd-standard" \
         --disk-size "100" \
-        --machine-type "n2d-standard-32"; then
-        echo "Failed to create Aerospike node pool"
-        exit 1
-    else
-        echo "Aerospike node pool added successfully."
-    fi
+        --machine-type "$MACHINE_TYPE";
 
     echo "Labeling Aerospike nodes..."
     kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_AEROSPIKE" -o name | \
         xargs -I {} kubectl label {} aerospike.com/node-pool=default-rack --overwrite
 
     echo "Adding AVS node pool..."
-    if ! gcloud container node-pools create "$NODE_POOL_NAME_AVS" \
+    gcloud container node-pools create "$NODE_POOL_NAME_AVS" \
         --cluster "$CLUSTER_NAME" \
         --project "$PROJECT_ID" \
         --zone "$ZONE" \
-        --num-nodes 3 \
+        --num-nodes "$NUM_AVS_NODES" \
         --disk-type "pd-standard" \
         --disk-size "100" \
-        --machine-type "n2d-standard-32"; then
-        echo "Failed to create AVS node pool"
-        exit 1
-    else
-        echo "AVS node pool added successfully."
-    fi
+        --machine-type "$MACHINE_TYPE";
 
     echo "Labeling AVS nodes..."
     kubectl get nodes -l cloud.google.com/gke-nodepool="$NODE_POOL_NAME_AVS" -o name | \
         xargs -I {} kubectl label {} aerospike.com/node-pool=avs --overwrite
     
-    echo "Setting up namespaces..."
 }
 
 
 setup_aerospike() {
+    echo "Setting up namespaces..."
+
     kubectl create namespace aerospike || true  # Idempotent namespace creation
 
     echo "Deploying Aerospike Kubernetes Operator (AKO)..."
@@ -431,27 +448,39 @@ get_reverse_dns() {
     echo "Reverse DNS: $REVERSE_DNS_AVS"
 }
 
-# Function to deploy AVS Helm chart
 deploy_avs_helm_chart() {
     echo "Deploying AVS Helm chart..."
     helm repo add aerospike-helm https://artifact.aerospike.io/artifactory/api/helm/aerospike-helm
     helm repo update
-# Installs AVS query nodes    
-    helm install avs-app aerospike-helm/aerospike-vector-search\
-        --set replicaCount=2 \
-        --set aerospikeVectorSearchConfig.cluster.node-roles[0]=query \
-        --values $BUILD_DIR/manifests/avs-values.yaml \
-        --namespace avs\
-        --version $CHART_VERSION\
-        --atomic --wait
-# Install AVS index-update node
-    helm install avs-app-update aerospike-helm/aerospike-vector-search\
-        --set replicaCount=1 \
-        --set aerospikeVectorSearchConfig.cluster.node-roles[0]=index-update \
-        --values $BUILD_DIR/manifests/avs-values.yaml \
-        --namespace avs\
-        --version $CHART_VERSION\
-        --atomic --wait
+
+    # Installs AVS query nodes
+    if [ -n "$NODE_TYPES" ]; then
+         if (( NUM_QUERY_NODES > 0 )); then
+            helm install avs-app aerospike-helm/aerospike-vector-search \
+            --set replicaCount="$NUM_QUERY_NODES" \
+            --set aerospikeVectorSearchConfig.cluster.node-roles[0]=query \
+            --values $BUILD_DIR/manifests/avs-values.yaml \
+            --namespace avs \
+            --version $CHART_VERSION \
+            --atomic --wait
+        fi
+        if (( NUM_INDEX_NODES > 0 )); then
+            helm install avs-app-update aerospike-helm/aerospike-vector-search \
+            --set replicaCount="$NUM_INDEX_NODES" \
+            --set aerospikeVectorSearchConfig.cluster.node-roles[0]=index-update \
+            --values $BUILD_DIR/manifests/avs-values.yaml \
+            --namespace avs \
+            --version $CHART_VERSION \
+            --atomic --wait
+        fi
+    else 
+        helm install avs-app aerospike-helm/aerospike-vector-search \
+            --set replicaCount="$NUM_AVS_NODES" \
+            --values $BUILD_DIR/manifests/avs-values.yaml \
+            --namespace avs \
+            --version $CHART_VERSION \
+            --atomic --wait
+    fi
 }
 
 # Function to setup monitoring
@@ -485,8 +514,6 @@ print_final_instructions() {
     
 }
 
-
-#This script runs in this order.
 main() {
     set_env_variables
     print_env
@@ -504,5 +531,4 @@ main() {
     print_final_instructions
 }
 
-# Run the main function
 main
