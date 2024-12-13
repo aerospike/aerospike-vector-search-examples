@@ -58,9 +58,16 @@ done
 
 if [ -n "$NODE_TYPES" ]
 then
+    if ((RUN_INSECURE != 1 && NODE_TYPES == 1)); then
+        echo "Error: This script has a limitation that it cannot currently use both node types and secure mode. For secure deployments please do not set num-query-nodes nor num-index-nodes."
+        exit 1
+    fi
+
     echo "setting number of nodes equal to query + index nodes"
     NUM_AVS_NODES=$((NUM_QUERY_NODES + NUM_INDEX_NODES))
 fi
+
+
 
 # Function to print environment variables for verification
 print_env() {
@@ -314,7 +321,8 @@ create_gke_cluster() {
     if ! gcloud container clusters describe "$CLUSTER_NAME" --zone "$ZONE" &> /dev/null; then
         echo "Cluster $CLUSTER_NAME does not exist. Creating..."
     else
-        echo "Cluster $CLUSTER_NAME already exists. Skipping creation."
+        # currently erroring early if cluster already exists. If you would like to recreate remove this block
+        echo "Error: Cluster $CLUSTER_NAME already exists. Please use a new cluster name or delete the existing cluster."
         return
     fi
     echo "$(date '+%Y-%m-%d %H:%M:%S') - Starting GKE cluster creation..."
