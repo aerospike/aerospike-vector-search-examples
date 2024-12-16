@@ -1,0 +1,4 @@
+aerospike-vector-search==3.0.1
+gremlinpython 
+async_timeout
+Faker
