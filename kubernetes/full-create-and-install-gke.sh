@@ -12,7 +12,7 @@ WORKSPACE="$(pwd)"
 PROJECT_ID="$(gcloud config get-value project)"
 # Prepend the current username to the cluster name
 USERNAME=$(whoami)
-CHART_VERSION="0.7.1"
+CHART_VERSION="0.6.0"
 REVERSE_DNS_AVS=""
 # Default values
 DEFAULT_CLUSTER_NAME_SUFFIX="avs"
@@ -122,6 +122,7 @@ reset_build() {
     # override aerospike-cr.yaml with secure version if run insecure not specified
     if [[ "${RUN_INSECURE}" != 1 ]]; then
         cp $WORKSPACE/manifests/aerospike-cr-auth.yaml $BUILD_DIR/manifests/aerospike-cr.yaml
+        cp $WORKSPACE/manifests/avs-values-auth.yaml $BUILD_DIR/manifests/avs-values.yaml
     fi
 }
 
