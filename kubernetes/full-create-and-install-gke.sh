@@ -12,7 +12,7 @@ WORKSPACE="$(pwd)"
 PROJECT_ID="$(gcloud config get-value project)"
 # Prepend the current username to the cluster name
 USERNAME=$(whoami)
-CHART_VERSION="0.6.0"
+CHART_VERSION="0.7.1"
 REVERSE_DNS_AVS=""
 # Default values
 DEFAULT_CLUSTER_NAME_SUFFIX="avs"
